@@ -2,4 +2,3 @@ __pycache__/
 cache/
 *.pyc
 *.pyo
-output

@@ -57,6 +57,6 @@ STATIC_PATHS = ['static']
 
 # Uncomment following line if you want document-relative URLs when developing
 RELATIVE_URLS = True
-THEME = "pelican-bootstrap3"
+THEME = "../pelican-bootstrap3"
 DOCUTIL_CSS = True
 PYGMENTS_STYLE = 'monokai'
