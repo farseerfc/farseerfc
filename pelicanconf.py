@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*- #
 from __future__ import unicode_literals
 
-AUTHOR = 'farseerfc(Jiachen Yang)'
+AUTHOR = 'farseerfc'
 SITENAME = "Farseerfc's Blog"
 SITEURL = 'http://farseerfc.github.io'
 
@@ -32,14 +32,13 @@ TRANSLATION_FEED_ATOM = None
 LINKS =  (('Pelican', 'http://getpelican.com/'),
           ('Python.org', 'http://python.org/'),
           ('Jinja2', 'http://jinja.pocoo.org/'),
-          ('You can modify those links in your config file', '#'),)
+          )
 
 # Social widget
 SOCIAL = (('twitter', 'http://twitter.com/farseerfc'),
           ('github', 'https://github.com/farseerfc'),
           ('facebook', 'http://www.facebook.com/farseerfc'),
           ('weibo', 'http://weibo.com/farseerfc'),
-          ('renren', 'http://www.renren.com/farseer'),
           )
 
 
@@ -68,3 +67,4 @@ DISPLAY_ARTICLE_INFO_ON_INDEX = True
 DISPLAY_BREADCRUMBS = True
 DISPLAY_CATEGORY_IN_BREADCRUMBS = True
 CC_LICENSE = "CC-BY-NC-SA"
+DISPLAY_TAGS_INLINE = True
