@@ -58,6 +58,8 @@ STATIC_PATHS = ['static']
 # Uncomment following line if you want document-relative URLs when developing
 RELATIVE_URLS = True
 THEME = "../pelican-bootstrap3"
+
+# Theme options
 DOCUTIL_CSS = True
 PYGMENTS_STYLE = 'monokai'
 GITHUB_USER = 'farseerfc'
@@ -65,3 +67,4 @@ GITHUB_SHOW_USER_LINK = True
 DISPLAY_ARTICLE_INFO_ON_INDEX = True
 DISPLAY_BREADCRUMBS = True
 DISPLAY_CATEGORY_IN_BREADCRUMBS = True
+CC_LICENSE = "CC-BY-NC-SA"
