@@ -10,9 +10,10 @@ import sys
 sys.path.append(os.curdir)
 from pelicanconf import *
 
-SITEURL = 'http://farseerfc.github.io'
+SITEURL = "//farseerfc.github.io"
 RELATIVE_URLS = False
 
+FEED_DOMAIN = SITEURL
 FEED_ALL_ATOM = 'feeds/all.atom.xml'
 CATEGORY_FEED_ATOM = 'feeds/%s.atom.xml'
 

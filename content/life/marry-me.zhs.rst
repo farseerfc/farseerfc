@@ -5,6 +5,7 @@
 :lang: zhs
 :date: 2013-02-20 20:42
 :tags: will, you, marry, me
+:summary: 嫁给我好么
 
 .. raw:: html
     
