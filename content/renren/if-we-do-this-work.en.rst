@@ -1,4 +1,4 @@
-“…if we do this work … and the result is that Linux works great …” --Bill Gates
+“…if we do this work … ” --Bill Gates
 =========================================================================================
 
 :slug: if-we-do-this-work
@@ -8,6 +8,9 @@
 
 Imported from
 `renren <http://blog.renren.com/blog/230263946/716517729>`_
+
+“…if we do this work … and the result is that Linux works great …” --Bill Gates
+-------------------------------------------------------------------------------
 
 From: Bill Gates
 

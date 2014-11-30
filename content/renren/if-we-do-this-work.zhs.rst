@@ -1,4 +1,4 @@
-“…if we do this work … and the result is that Linux works great …” --Bill Gates
+“…if we do this work … ” --Bill Gates
 =========================================================================================
 
 :slug: if-we-do-this-work

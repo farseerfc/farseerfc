@@ -29,10 +29,10 @@ CATEGORY_FEED_ATOM = None
 TRANSLATION_FEED_ATOM = None
 
 # Blogroll
-LINKS =  (('Pelican', 'http://getpelican.com/'),
-          ('Python.org', 'http://python.org/'),
-          ('Jinja2', 'http://jinja.pocoo.org/'),
-          )
+LINKS = (('Pelican', 'http://getpelican.com/'),
+         ('Python.org', 'http://python.org/'),
+         ('Jinja2', 'http://jinja.pocoo.org/'),
+         )
 
 # Social widget
 SOCIAL = (('twitter', 'http://twitter.com/farseerfc'),
@@ -50,6 +50,8 @@ GOOGLE_CUSTOM_SEARCH_NAVBAR = "001578481551708017171:hxkva69brmg"
 
 DEFAULT_PAGINATION = 4
 
+PLUGIN_PATHS = ['../pelican-plugins']
+PLUGINS = ['tipue_search']
 
 STATIC_PATHS = ['static']
 
@@ -68,3 +70,10 @@ DISPLAY_BREADCRUMBS = True
 DISPLAY_CATEGORY_IN_BREADCRUMBS = True
 CC_LICENSE = "CC-BY-NC-SA"
 DISPLAY_TAGS_INLINE = True
+
+DIRECT_TEMPLATES = (('search', 'index', 'categories', 'authors', 'archives',
+                    'tags'))
+
+# TWITTER_CARDS = True
+# TWITTER_USERNAME = 'farseerfc'
+# TWITTER_WIDGET_ID = "538997172142759936"
