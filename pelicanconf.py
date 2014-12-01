@@ -28,7 +28,7 @@ CATEGORY_FEED_ATOM = 'feeds/%s.atom.xml'
 # Blogroll
 LINKS = (('lilydjwg',
           'http://lilydjwg.is-programmer.com/', 
-          'http://lilydjwg.is-programmer.com/user_files/lilydjwg/config/avatar.png',
+          'https://zh.wikipedia.org/wiki/File:Vulpes_vulpes_laying_in_snow.jpg',
           '依雲（aka. 仙子百合）'),
          ('felixonmars',
           'http://blog.felixc.at/',
