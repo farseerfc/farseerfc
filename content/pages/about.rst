@@ -6,7 +6,6 @@ About
 :date: 2012-05-30 19:21:34
 :tags: about
 
-`繁體中文 <../pages/about.html>`_ / `简体中文 <../pages/about-zhs.html>`_ / `日本語 <../pages/about-jp.html>`_ / `English <../pages/about-en.html>`_
 
 關於這個Blog
 -----------------------------------------------------------------------
@@ -27,7 +26,7 @@ About
 
         大阪大學大學院 情報科學研究科 計算機科學專攻 
 
-        研究生1年級 (http://sdl.ist.osaka-u.ac.jp/)
+        博士2年級 (http://sdl.ist.osaka-u.ac.jp/)
 
 本科畢業於
 

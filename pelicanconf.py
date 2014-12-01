@@ -26,9 +26,29 @@ FEED_ALL_ATOM = 'feeds/all.atom.xml'
 CATEGORY_FEED_ATOM = 'feeds/%s.atom.xml'
 
 # Blogroll
-LINKS = (('Pelican', 'http://getpelican.com/'),
-         ('Python.org', 'http://python.org/'),
-         ('Jinja2', 'http://jinja.pocoo.org/'),
+LINKS = (('lilydjwg',
+          'http://lilydjwg.is-programmer.com/', 
+          'http://lilydjwg.is-programmer.com/user_files/lilydjwg/config/avatar.png',
+          '依雲（aka. 仙子百合）'),
+         ('felixonmars',
+          'http://blog.felixc.at/',
+          'https://www.gravatar.com/avatar/48b2061f9e9a00023417bc1174532e81',
+          '火星貓大大'),
+         ('phoenixlzx',
+          'http://blog.phoenixlzx.com/',
+          'http://blog.phoenixlzx.com/static/img/avatar/avatar.jpg',
+          '鳳凰菊苣'
+          ),
+         ('fixme',
+          'https://fbq.github.io/',
+          'https://avatars3.githubusercontent.com/u/673448',
+          '水源技站'
+          ),
+         ('飲水思源',
+          'http://bbs.sjtu.edu.cn/',
+          'https://bbs.sjtu.edu.cn/favicon.ico',
+          '上海交通大學飲水思源BBS站'
+          ),
          )
 
 # Social widget

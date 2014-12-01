@@ -6,8 +6,6 @@ About
 :date: 2012-05-30 19:21:34
 :tags: about
 
-`繁體中文 <../pages/about.html>`_ / `简体中文 <../pages/about-zhs.html>`_ / 
-`日本語 <../pages/about-jp.html>`_ / `English <../pages/about-en.html>`_
 
 About This Blog
 -----------------------------------------------------------------------
@@ -26,7 +24,7 @@ My Name is YANG Jiachen(楊嘉晨)
 
 born in June 1989
 
-I am currently pursuing master degree in 
+I am currently pursuing PhD degree in 
         
         Graduate School of Information Science and Technology,
 

@@ -6,8 +6,6 @@ About
 :date: 2012-05-30 19:21:34
 :tags: about
 
-`繁體中文 <../pages/about.html>`_ / `简体中文 <../pages/about-zhs.html>`_ / 
-`日本語 <../pages/about-jp.html>`_ / `English <../pages/about-en.html>`_
 
 このBlogの言語
 -----------------------------------------------------------------------
@@ -30,7 +28,7 @@ OpenCC_ を使って繁体を簡体に自動的に変更します。
 
         大阪大学大学院 情報科学研究科 コンピューターサイエンス専攻 
         
-        修士1年生 (http://sdl.ist.osaka-u.ac.jp/)
+        博士後期課程2年生 (http://sdl.ist.osaka-u.ac.jp/)
 
 卒業した大学は 
 
