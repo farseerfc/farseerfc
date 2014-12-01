@@ -26,7 +26,6 @@ TAG_FEED_ATOM = 'feeds/tag-%s.atom.xml'
 FEED_ALL_ATOM = 'feeds/all.atom.xml'
 CATEGORY_FEED_ATOM = 'feeds/%s.atom.xml'
 
-# Blogroll
 LINKS = (('lilydjwg',
           'http://lilydjwg.is-programmer.com/', 
           'https://upload.wikimedia.org/wikipedia/commons/0/03/Vulpes_vulpes_laying_in_snow.jpg',
@@ -58,25 +57,21 @@ LINKS = (('lilydjwg',
          )
 
 # Social widget
-SOCIAL = (('twitter', 'http://twitter.com/farseerfc'),
-          ('github', 'https://github.com/farseerfc'),
-          ('facebook', 'http://www.facebook.com/farseerfc'),
-          ('weibo', 'http://weibo.com/farseerfc'),
-          )
+# SOCIAL = (('twitter', 'http://twitter.com/farseerfc'),
+#           ('github', 'https://github.com/farseerfc'),
+#           ('facebook', 'http://www.facebook.com/farseerfc'),
+#           ('weibo', 'http://weibo.com/farseerfc'),
+#           )
 
 
 TWITTER_USERNAME = 'farseerfc'
 
-GOOGLE_CUSTOM_SEARCH_SIDEBAR = "001578481551708017171:axpo6yvtdyg"
-GOOGLE_CUSTOM_SEARCH_NAVBAR = "001578481551708017171:hxkva69brmg"
-
-
-DEFAULT_PAGINATION = 4
+DEFAULT_PAGINATION = 5
 
 PLUGIN_PATHS = ['../pelican-plugins']
-PLUGINS = ['tipue_search']
+PLUGINS = ['tipue_search',]
 
-STATIC_PATHS = ['static']
+STATIC_PATHS = ['static', 'images']
 
 
 # Uncomment following line if you want document-relative URLs when developing
@@ -85,6 +80,7 @@ THEME = "../pelican-bootstrap3"
 
 # Theme options
 DOCUTIL_CSS = True
+TYPOGRIFY = True
 PYGMENTS_STYLE = 'monokai'
 GITHUB_USER = 'farseerfc'
 GITHUB_SHOW_USER_LINK = True
@@ -97,6 +93,23 @@ DISPLAY_TAGS_INLINE = True
 DIRECT_TEMPLATES = (('search', 'index', 'categories', 'authors', 'archives',
                     'tags'))
 
-# TWITTER_CARDS = True
-# TWITTER_USERNAME = 'farseerfc'
-# TWITTER_WIDGET_ID = "538997172142759936"
+TWITTER_USERNAME = 'farseerfc'
+TWITTER_WIDGET_ID = "538997172142759936"
+WEIBO_WIDGET = True
+
+AVATAR = 'images/avatar.jpg'
+ABOUT_ME = """<h2 style="text-align:center">
+<a href="https://twitter.com/farseerfc"                  target="_blank">
+<i class="fa fa-twitter" style="text-align:center"></i></a>
+<a href="https://github.com/farseerfc"                   target="_blank">
+<i class="fa fa-github" style="text-align:center"></i></a>
+<a href="http://weibo.com/farseerfc"                     target="_blank">
+<i class="fa fa-weibo" style="text-align:center"></i></a>
+<a href="http://www.facebook.com/farseerfc"              target="_blank">
+<i class="fa fa-facebook" style="text-align:center"></i></a>
+<a href="https://plus.google.com/u/0/+JiachenYang/posts" target="_blank">
+<i class="fa fa-google-plus" style="text-align:center"></i></a>
+<a href="mailto:farseerfc@gmail.com" target="_blank">
+<i class="mdi-communication-email" style="text-align:center"></i></a>
+</h2>
+"""
