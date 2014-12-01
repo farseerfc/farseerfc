@@ -29,7 +29,7 @@ CATEGORY_FEED_ATOM = 'feeds/%s.atom.xml'
 LINKS = (('lilydjwg',
           'http://lilydjwg.is-programmer.com/', 
           'https://upload.wikimedia.org/wikipedia/commons/0/03/Vulpes_vulpes_laying_in_snow.jpg',
-          '依雲（aka. 仙子百合）'),
+          '依雲（aka. 百合仙子）'),
          ('felixonmars',
           'http://blog.felixc.at/',
           'https://www.gravatar.com/avatar/48b2061f9e9a00023417bc1174532e81',
