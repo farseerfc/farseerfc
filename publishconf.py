@@ -15,7 +15,6 @@ RELATIVE_URLS = False
 
 FEED_DOMAIN = SITEURL
 
-
 DELETE_OUTPUT_DIRECTORY = False
 
 # Following items are often useful when publishing

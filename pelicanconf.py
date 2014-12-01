@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*- #
 from __future__ import unicode_literals
+from hashlib import md5
 
 AUTHOR = 'farseerfc'
 SITENAME = "Farseerfc's Blog"
@@ -43,6 +44,11 @@ LINKS = (('lilydjwg',
           'https://fbq.github.io/',
           'https://avatars3.githubusercontent.com/u/673448',
           '水源技站'
+          ),
+         ('quininer',
+          'http://quininer.github.io/',
+          'https://www.gravatar.com/avatar/' + md5("quininer@live.com").hexdigest(),
+          '純JavaScript的帥氣博客'
           ),
          ('飲水思源',
           'http://bbs.sjtu.edu.cn/',

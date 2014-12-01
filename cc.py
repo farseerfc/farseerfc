@@ -11,9 +11,6 @@ for root, dirs, filenames in os.walk('content'):
             continue
         zhposts.append((root, filename))
 
-
-print zhposts
-
 for root, post in zhposts:
     cpcmd = '%s %s opencc/input.txt'%(CP,os.path.join(root, post))
     print cpcmd
