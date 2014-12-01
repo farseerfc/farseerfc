@@ -11,13 +11,14 @@
 
 據說是一道微軟的面試題。如題，寫程序，讓Windows的任務管理器中的性能監視器呈現正弦曲線。
 
-.. figure:: http://fm531.img.xiaonei.com/pic001/20080602/23/14/large_10019p67.jpg
+.. image:: http://fm531.img.xiaonei.com/pic001/20080602/23/14/large_10019p67.jpg
    :align: center
-   :alt: 
+   :alt: 正弦曲線
 
-.. figure:: http://fm541.img.xiaonei.com/pic001/20080602/23/14/large_9935o67.jpg
+.. image:: http://fm541.img.xiaonei.com/pic001/20080602/23/14/large_9935o67.jpg
    :align: center
-   :alt: 
+   :alt: 正弦曲線
+
 
 潛心鑽研良久，得代碼：（java）
 
@@ -59,7 +60,6 @@
 
 
 
-.. figure:: http://fm411.img.xiaonei.com/pic001/20080602/23/14/large_9946k67.jpg
+.. image:: http://fm411.img.xiaonei.com/pic001/20080602/23/14/large_9946k67.jpg
    :align: center
-   :alt:
-
+   :alt: 多核CPU上測試

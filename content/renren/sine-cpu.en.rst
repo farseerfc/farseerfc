@@ -11,13 +11,15 @@ Imported from:
 
 It is said that this is a problem from interview of Microsoft. Write a program, which makes the CPU usage curve in Windows Task Manager shows a Sin function.
 
-.. figure:: http://fm531.img.xiaonei.com/pic001/20080602/23/14/large_10019p67.jpg
+.. image:: http://fm531.img.xiaonei.com/pic001/20080602/23/14/large_10019p67.jpg
    :align: center
-   :alt: 
+   :alt: Sine function 1
 
-.. figure:: http://fm541.img.xiaonei.com/pic001/20080602/23/14/large_9935o67.jpg
+
+.. image:: http://fm541.img.xiaonei.com/pic001/20080602/23/14/large_9935o67.jpg
    :align: center
-   :alt: 
+   :alt: Sine function 2
+
 
 The program below is written in java:
 
@@ -57,7 +59,6 @@ The program below is written in java:
 Be careful you need to turn off other cores if you have multi-core CPU.
 
 
-.. figure:: http://fm411.img.xiaonei.com/pic001/20080602/23/14/large_9946k67.jpg
+.. image:: http://fm411.img.xiaonei.com/pic001/20080602/23/14/large_9946k67.jpg
    :align: center
-   :alt:
-
+   :alt: multi-core CPU
