@@ -49,10 +49,19 @@ $(OUTPUTDIR)/%.html:
 clean:
 	[ ! -d $(OUTPUTDIR) ] || find $(OUTPUTDIR) -mindepth 1 -not -wholename "*/.git*" -delete
 
-cc:
-	python2 cc.py
+cleancc: clean
+	find -iname "*.zhs.rst" -delete ;
 
-regenerate: clean
+
+ZHs=$(shell find -iname "*.zh.rst")
+
+%.zhs.rst: %.zh.rst
+	opencc -c opencc/t2s.json -i $^ -o $@
+	sed -i 's/:lang: zh/:lang: zhs/g' $@
+
+cc: $(patsubst %.zh.rst,%.zhs.rst,$(ZHs))
+
+regenerate: cleancc
 	$(PELICAN) -r $(INPUTDIR) -o $(OUTPUTDIR) -s $(CONFFILE) $(PELICANOPTS)
 
 serve:
@@ -77,7 +86,7 @@ theme/static/css/material.min.css: theme/static/material/*.less
 theme/static/css/ripples.min.css: theme/static/material/ripples.less
 	lessc -x theme/static/material/ripples.less > theme/static/css/ripples.min.css
 
-publish: clean cc less
+publish: cc less
 	$(PELICAN) $(INPUTDIR) -o $(OUTPUTDIR) -s $(PUBLISHCONF) $(PELICANOPTS)
 
 ssh_upload: publish
@@ -98,4 +107,4 @@ s3_upload: publish
 github: publish
 	(cd output && git add . && git commit -m "update" && git push)
 
-.PHONY: html help clean regenerate serve devserver publish ssh_upload rsync_upload dropbox_upload ftp_upload s3_upload github cc less
+.PHONY: html help clean regenerate serve devserver publish ssh_upload rsync_upload dropbox_upload ftp_upload s3_upload github cc less cleancc
