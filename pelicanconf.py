@@ -20,6 +20,7 @@ DATE_FORMATS = {
 
 
 DISQUS_SITENAME = 'farseerfcgithub'
+DISQUS_DISPLAY_COUNTS = True
 GOOGLE_ANALYTICS = 'UA-29540705-1'
 
 TAG_FEED_ATOM = 'feeds/tag-%s.atom.xml'
