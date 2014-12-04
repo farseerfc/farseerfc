@@ -41,7 +41,7 @@ help:
 	@echo '                                                                       '
 
 
-html: clean cc $(OUTPUTDIR)/index.html
+html: clean $(OUTPUTDIR)/index.html
 
 $(OUTPUTDIR)/%.html:
 	$(PELICAN) $(INPUTDIR) -o $(OUTPUTDIR) -s $(CONFFILE) $(PELICANOPTS)
@@ -66,9 +66,19 @@ stopserver:
 	kill -9 `cat srv.pid`
 	@echo 'Stopped Pelican and SimpleHTTPServer processes running in background.'
 
-publish: clean cc
+less: theme/static/css/bootstrap.min.css theme/static/css/material.min.css
+
+theme/static/css/bootstrap.min.css: theme/static/bootstrap/*.less theme/static/bootstrap/mixins/*.less
+	lessc -x theme/static/bootstrap/bootstrap.less > theme/static/css/bootstrap.min.css
+
+theme/static/css/material.min.css: theme/static/material/*.less
+	lessc -x theme/static/material/material.less > theme/static/css/material.min.css
+
+theme/static/css/ripples.min.css: theme/static/material/ripples.less
+	lessc -x theme/static/material/ripples.less > theme/static/css/ripples.min.css
+
+publish: clean cc less
 	$(PELICAN) $(INPUTDIR) -o $(OUTPUTDIR) -s $(PUBLISHCONF) $(PELICANOPTS)
-	(cd output && git add . && git commit -m "update" && git push)
 
 ssh_upload: publish
 	scp -P $(SSH_PORT) -r $(OUTPUTDIR)/* $(SSH_USER)@$(SSH_HOST):$(SSH_TARGET_DIR)
@@ -86,7 +96,6 @@ s3_upload: publish
 	s3cmd sync $(OUTPUTDIR)/ s3://$(S3_BUCKET) --acl-public --delete-removed
 
 github: publish
-	ghp-import $(OUTPUTDIR)
-	git push origin gh-pages
+	(cd output && git add . && git commit -m "update" && git push)
 
-.PHONY: html help clean regenerate serve devserver publish ssh_upload rsync_upload dropbox_upload ftp_upload s3_upload github cc
+.PHONY: html help clean regenerate serve devserver publish ssh_upload rsync_upload dropbox_upload ftp_upload s3_upload github cc less

@@ -12,10 +12,9 @@ from pelicanconf import *
 
 SITEURL = "//farseerfc.github.io"
 RELATIVE_URLS = False
-
 FEED_DOMAIN = SITEURL
-
 DELETE_OUTPUT_DIRECTORY = False
+USE_LESS = False
 
 # Following items are often useful when publishing
 

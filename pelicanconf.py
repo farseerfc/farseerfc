@@ -73,6 +73,7 @@ PLUGINS = ['tipue_search']
 
 STATIC_PATHS = ['static', 'images']
 
+USE_LESS = True  # use less during development, generate css during publish
 
 # Uncomment following line if you want document-relative URLs when developing
 RELATIVE_URLS = True
