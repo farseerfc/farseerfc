@@ -56,7 +56,7 @@ cleancc: clean
 ZHs=$(shell find -iname "*.zh.rst")
 
 %.zhs.rst: %.zh.rst
-	opencc -c opencc/t2s.json -i $^ -o $@
+	opencc -c opencc-t2s.json -i $^ -o $@
 	sed -i 's/:lang: zh/:lang: zhs/g' $@
 
 cc: $(patsubst %.zh.rst,%.zhs.rst,$(ZHs))
