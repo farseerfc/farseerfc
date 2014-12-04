@@ -3,4 +3,4 @@ cache/
 *.pyc
 *.pyo
 output
-pelican-bootstrap3
+theme

@@ -66,10 +66,10 @@ LINKS = (('lilydjwg',
 
 TWITTER_USERNAME = 'farseerfc'
 
-DEFAULT_PAGINATION = 5
+DEFAULT_PAGINATION = 10
 
 PLUGIN_PATHS = ['../pelican-plugins']
-PLUGINS = ['tipue_search',]
+PLUGINS = ['tipue_search']
 
 STATIC_PATHS = ['static', 'images']
 
@@ -98,7 +98,7 @@ TWITTER_WIDGET_ID = "538997172142759936"
 WEIBO_WIDGET = True
 
 AVATAR = 'images/avatar.jpg'
-ABOUT_ME = """<h2 style="text-align:center">
+ABOUT_ME = """<h3 style="text-align:center">
 <a href="https://twitter.com/farseerfc"                  target="_blank">
 <i class="fa fa-twitter" style="text-align:center"></i></a>
 <a href="https://github.com/farseerfc"                   target="_blank">
@@ -111,5 +111,5 @@ ABOUT_ME = """<h2 style="text-align:center">
 <i class="fa fa-google-plus" style="text-align:center"></i></a>
 <a href="mailto:farseerfc@gmail.com" target="_blank">
 <i class="mdi-communication-email" style="text-align:center"></i></a>
-</h2>
+</h3>
 """
