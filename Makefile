@@ -53,13 +53,13 @@ cleancc: clean
 	find -iname "*.zhs.rst" -delete ;
 
 
-ZHs=$(shell find -iname "*.zh.rst")
+ZH=$(shell find -iname "*.zh.rst")
 
 %.zhs.rst: %.zh.rst
 	opencc -c opencc-t2s.json -i $^ -o $@
 	sed -i 's/:lang: zh/:lang: zhs/g' $@
 
-cc: $(patsubst %.zh.rst,%.zhs.rst,$(ZHs))
+cc: $(patsubst %.zh.rst,%.zhs.rst,$(ZH))
 
 regenerate: cleancc
 	$(PELICAN) -r $(INPUTDIR) -o $(OUTPUTDIR) -s $(CONFFILE) $(PELICANOPTS)
