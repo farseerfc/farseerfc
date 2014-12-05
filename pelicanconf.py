@@ -23,9 +23,10 @@ DISQUS_SITENAME = 'farseerfcgithub'
 DISQUS_DISPLAY_COUNTS = True
 GOOGLE_ANALYTICS = 'UA-29540705-1'
 
-TAG_FEED_ATOM = 'feeds/tag-%s.atom.xml'
-FEED_ALL_ATOM = 'feeds/all.atom.xml'
-CATEGORY_FEED_ATOM = 'feeds/%s.atom.xml'
+
+TAG_FEED_ATOM = None
+FEED_ALL_ATOM = None
+CATEGORY_FEED_ATOM = None
 
 LINKS = (('lilydjwg',
           'http://lilydjwg.is-programmer.com/',
@@ -69,10 +70,10 @@ TWITTER_USERNAME = 'farseerfc'
 
 DEFAULT_PAGINATION = 8
 
-PLUGIN_PATHS = ['../pelican-plugins']
-PLUGINS = ['tipue_search']
-
 STATIC_PATHS = ['static', 'images']
+
+PLUGIN_PATHS = ['../pelican-plugins']
+PLUGINS = ['tipue_search', 'cjk-auto-spacing', 'neighbors']
 
 USE_LESS = False
 

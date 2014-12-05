@@ -18,5 +18,10 @@ USE_LESS = False
 
 # Following items are often useful when publishing
 
+
 #DISQUS_SITENAME = ""
 #GOOGLE_ANALYTICS = ""
+
+TAG_FEED_ATOM = 'feeds/tag-%s.atom.xml'
+FEED_ALL_ATOM = 'feeds/all.atom.xml'
+CATEGORY_FEED_ATOM = 'feeds/%s.atom.xml'
