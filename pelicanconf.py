@@ -28,7 +28,7 @@ FEED_ALL_ATOM = 'feeds/all.atom.xml'
 CATEGORY_FEED_ATOM = 'feeds/%s.atom.xml'
 
 LINKS = (('lilydjwg',
-          'http://lilydjwg.is-programmer.com/', 
+          'http://lilydjwg.is-programmer.com/',
           'https://upload.wikimedia.org/wikipedia/commons/0/03/Vulpes_vulpes_laying_in_snow.jpg',
           '依雲（aka. 百合仙子）'),
          ('felixonmars',
@@ -74,7 +74,7 @@ PLUGINS = ['tipue_search']
 
 STATIC_PATHS = ['static', 'images']
 
-USE_LESS = True  # use less during development, generate css during publish
+USE_LESS = False
 
 # Uncomment following line if you want document-relative URLs when developing
 RELATIVE_URLS = True
@@ -86,7 +86,6 @@ TYPOGRIFY = True
 PYGMENTS_STYLE = 'monokai'
 GITHUB_USER = 'farseerfc'
 GITHUB_SHOW_USER_LINK = True
-DISPLAY_ARTICLE_INFO_ON_INDEX = True
 DISPLAY_BREADCRUMBS = True
 DISPLAY_CATEGORY_IN_BREADCRUMBS = True
 CC_LICENSE = "CC-BY-NC-SA"
