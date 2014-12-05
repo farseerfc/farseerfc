@@ -67,7 +67,7 @@ LINKS = (('lilydjwg',
 
 TWITTER_USERNAME = 'farseerfc'
 
-DEFAULT_PAGINATION = 10
+DEFAULT_PAGINATION = 8
 
 PLUGIN_PATHS = ['../pelican-plugins']
 PLUGINS = ['tipue_search']
