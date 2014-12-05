@@ -4,7 +4,7 @@
 :slug: discuss-cpp-template-downcast
 :lang: zh
 :date: 2012-02-26 05:54:57
-:tags: C++, template
+:tags: C++, template, C
 
 這兩天在飲水思源的C板，關於C++模板的類型轉換的一個討論，後面是我的解答。
 

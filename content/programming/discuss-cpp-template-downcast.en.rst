@@ -4,7 +4,7 @@ Discuss C++ Template Downcast
 :slug: discuss-cpp-template-downcast
 :lang: en
 :date: 2012-02-26 05:54:57
-:tags: C++, template
+:tags: C++, template, C
 
 This is a discuss in C board in bbs.sjtu.edu.cn, about type down-cast in C++ template.
 
