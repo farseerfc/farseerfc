@@ -3,7 +3,9 @@ C++ Tricks 3.1 左值右值與常量性(lvalue，rvalue & constant)
 :date: 2007-09-16 13:07
 :slug: c-tricks-3-1-lvalue-rvalue-constant
 :lang: zh
-:tags: C++Tricks
+:tags: C++
+:series: CPP_Tricks
+:series_index: 11
 
 從 `farseerfc.wordpress.com <http://farseerfc.wordpress.com/>`_ 導入
 

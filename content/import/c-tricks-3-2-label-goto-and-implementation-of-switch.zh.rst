@@ -3,7 +3,9 @@ C++ Tricks 3.2 標號、goto，以及switch的實現
 :date: 2007-09-16 13:08
 :slug: c-tricks-3-2-label-goto-and-implementation-of-switch
 :lang: zh
-:tags: C++Tricks
+:tags: C++
+:series: CPP_Tricks
+:series_index: 12
 
 從 `farseerfc.wordpress.com <http://farseerfc.wordpress.com/>`_ 導入
 

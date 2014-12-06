@@ -3,7 +3,9 @@ C++ Tricks 2.6 I386平臺C函數的可變參數表(Variable Arguments)
 :date: 2007-08-28 14:28
 :slug: c-tricks-2-6-i386-variable-arguments
 :lang: zh
-:tags: C++Tricks
+:tags: C++
+:series: CPP_Tricks
+:series_index: 09
 
 從 `farseerfc.wordpress.com <http://farseerfc.wordpress.com/>`_ 導入
 

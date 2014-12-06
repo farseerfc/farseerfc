@@ -3,7 +3,9 @@ C++ Tricks
 :date: 2007-08-28 14:28
 :slug: c-tricks
 :lang: zh
-:tags: C++Tricks
+:tags: C++
+:series: CPP_Tricks
+:series_index: 01
 
 從 `farseerfc.wordpress.com <http://farseerfc.wordpress.com/>`_ 導入
 

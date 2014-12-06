@@ -3,7 +3,9 @@ C++ Tricks 2.5 I386平臺的邊界對齊(Align)
 :date: 2007-08-28 14:28
 :slug: c-tricks-2-5-address-alignment
 :lang: zh
-:tags: C++Tricks
+:tags: C++
+:series: CPP_Tricks
+:series_index: 08
 
 從 `farseerfc.wordpress.com <http://farseerfc.wordpress.com/>`_ 導入
 

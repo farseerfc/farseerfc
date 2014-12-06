@@ -3,7 +3,9 @@ C++ Tricks 1.1	條件運算符(?:)
 :date: 2007-08-22 18:05
 :slug: c-tricks-1-1-conditional-operator
 :lang: zh
-:tags: C++Tricks
+:tags: C++
+:series: CPP_Tricks
+:series_index: 02
 
 從 `farseerfc.wordpress.com <http://farseerfc.wordpress.com/>`_ 導入
 

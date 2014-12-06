@@ -3,7 +3,9 @@ C++ Tricks 2.1 X86概述
 :date: 2007-08-27 16:33
 :slug: c-tricks-2-1-x86-architecture
 :lang: zh
-:tags: C++Tricks
+:tags: C++
+:series: CPP_Tricks
+:series_index: 04
 
 從 `farseerfc.wordpress.com <http://farseerfc.wordpress.com/>`_ 導入
 

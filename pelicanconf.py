@@ -73,7 +73,7 @@ DEFAULT_PAGINATION = 8
 STATIC_PATHS = ['static', 'images']
 
 PLUGIN_PATHS = ['../pelican-plugins']
-PLUGINS = ['tipue_search', 'cjk-auto-spacing', 'neighbors']
+PLUGINS = ['tipue_search', 'cjk-auto-spacing', 'neighbors', 'series']
 
 USE_LESS = False
 
