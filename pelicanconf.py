@@ -58,22 +58,24 @@ LINKS = (('lilydjwg',
           ),
          )
 
-# Social widget
-# SOCIAL = (('twitter', 'http://twitter.com/farseerfc'),
-#           ('github', 'https://github.com/farseerfc'),
-#           ('facebook', 'http://www.facebook.com/farseerfc'),
-#           ('weibo', 'http://weibo.com/farseerfc'),
-#           )
-
-
 TWITTER_USERNAME = 'farseerfc'
 
 DEFAULT_PAGINATION = 8
 
-STATIC_PATHS = ['static', 'images']
+STATIC_PATHS = ['static', 'images', 'images/favicon.ico']
+EXTRA_PATH_METADATA = {
+    'images/favicon.ico': {'path': 'favicon.ico'}
+}
 
 PLUGIN_PATHS = ['../pelican-plugins']
-PLUGINS = ['tipue_search', 'cjk-auto-spacing', 'neighbors', 'series']
+PLUGINS = ['tipue_search',
+          'neighbors',
+          'series',
+          'bootstrapify',
+          'twitter_bootstrap_rst_directives',
+          "render_math",
+          'summary',
+          "plantuml"]
 
 USE_LESS = False
 

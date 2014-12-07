@@ -5,6 +5,7 @@ Give a try to Pelican
 :lang: en
 :date: 2012-02-24 17:33
 :tags: python, pelican
+:series: pelican
 
 It seems in one night
 `all <http://blog.yxwang.me/2011/11/migrated-to-octopress/>`_

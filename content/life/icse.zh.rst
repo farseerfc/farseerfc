@@ -11,10 +11,12 @@ ICSE 2012
 June 6
 -----------------------------------------------------------------------
 
+
 Keynote 1
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-沒怎麼聽懂，只記得講到了finance is not money但是沒聽懂這個和軟件有什麼
-關係。
+沒怎麼聽懂，只記得講到了finance is not money但是沒聽懂這個和軟件有什麼關係。
+
+.. PELICAN_BEGIN_SUMMARY
 
 Cost Estimation for Distributed Software Project
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -33,6 +35,8 @@ Cost Estimation for Distributed Software Project
         Early user paticipation is key!
 
         早期用戶的參與是關鍵
+
+.. PELICAN_END_SUMMARY
 
 Characterizing Logging Practices in Open-Source Software
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

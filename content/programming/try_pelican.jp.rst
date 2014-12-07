@@ -5,6 +5,7 @@ Pelicanを試してみた
 :lang: jp
 :date: 2012-02-24 17:33
 :tags: python, pelican
+:series: pelican
 
 一日の間に全ての
 `ギーク <http://blog.yxwang.me/2011/11/migrated-to-octopress/>`_

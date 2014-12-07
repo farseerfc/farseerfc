@@ -5,6 +5,7 @@
 :lang: zh
 :date: 2012-02-24 17:33
 :tags: python, pelican
+:series: pelican
 
 似乎一夜之間所有的
 `極客們 <http://blog.yxwang.me/2011/11/migrated-to-octopress/>`_
