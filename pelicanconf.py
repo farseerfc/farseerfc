@@ -4,17 +4,18 @@ from __future__ import unicode_literals
 from hashlib import md5
 
 AUTHOR = 'farseerfc'
-SITENAME = "Farseerfc's Blog"
-SITEURL = ''
+SITENAME = "Farseerfc的小窩"
+SITEURL = '//localhost:8000'
 
 TIMEZONE = 'Asia/Tokyo'
 
 DEFAULT_LANG = 'zh'
+LOCALE = 'zh_HK.utf8'
 
 DATE_FORMATS = {
     'en': ((u'en_US', 'utf8'), u'%a, %d %b %Y',),
     'zh': ((u'zh_HK', 'utf8'), u'%Y年%m月%d日(週%a)',),
-    'zhs': ((u'zh_CN', 'utf8'), u'%Y年%m月%d日(周%a)',),
+    'zc': ((u'zh_CN', 'utf8'), u'%Y年%m月%d日(周%a)',),
     'jp': ((u'ja_JP', 'utf8'), u'%Y年%m月%d日(%a)',),
 }
 
@@ -48,7 +49,7 @@ LINKS = (('lilydjwg',
           ),
          ('quininer',
           'http://quininer.github.io/',
-          'https://www.gravatar.com/avatar/' + md5("quininer@live.com").hexdigest(),
+          'https://www.gravatar.com/avatar/' + md5(b"quininer@live.com").hexdigest(),
           '純JavaScript的帥氣博客'
           ),
          ('飲水思源',
@@ -68,27 +69,26 @@ EXTRA_PATH_METADATA = {
 }
 
 PLUGIN_PATHS = ['../pelican-plugins']
+THEME = "../pelican-bootstrap3"
 
-# I18N_SUBSITES = {
-#     'zhs': {
-#         'SITENAME': "Farseerfc's Blog",
-#         'LOCALE': 'zh_CN',
-#         },
-#     'zh': {
-#         'SITENAME': "Farseerfc's Blog",
-#         'LOCALE': 'zh_HK',
-#         },
-#     'jp': {
-#         'SITENAME': "Farseerfc's Blog",
-#         'LOCALE': 'ja_JP',
-#         },
-#     'en': {
-#         'SITENAME': "Farseerfc's Blog",
-#         'LOCALE': 'en_US',
-#         },
-#     }
 
-PLUGINS = [#"i18n_subsites",
+I18N_SUBSITES = {
+    'jp': dict(
+          LOCALE = 'ja_JP.utf8',
+          SITENAME = "Farseerfcの居場所"
+        ),
+    'en': dict(
+          LOCALE = 'en_US.utf8',
+          SITENAME = "Farseerfc's Blog"
+        ),
+    'zc': dict(
+          LOCALE = 'zh_CN.utf8',
+          SITENAME = "Farseerfc的小窝"
+    ),
+}
+I18N_UNTRANSLATED_ARTICLES = "remove"
+
+PLUGINS = ["i18n_subsites",
            "youku",
            "youtube",
            'tipue_search',
@@ -97,14 +97,12 @@ PLUGINS = [#"i18n_subsites",
            'bootstrapify',
            'twitter_bootstrap_rst_directives',
            "render_math",
-           'summary',
-           "plantuml"]
+           'summary']
 
 USE_LESS = False
 
 # Uncomment following line if you want document-relative URLs when developing
-RELATIVE_URLS = True
-THEME = "../pelican-bootstrap3"
+RELATIVE_URLS = False
 
 # Theme options
 DOCUTIL_CSS = True
@@ -125,6 +123,7 @@ TWITTER_WIDGET_ID = "538997172142759936"
 WEIBO_WIDGET = True
 
 AVATAR = 'images/avatar.jpg'
+ABOUT_PAGE = "pages/about.html"
 ABOUT_ME = """<h3 style="text-align:center">
 <a href="https://twitter.com/farseerfc"                  target="_blank">
 <i class="fa fa-twitter" style="text-align:center"></i></a>
