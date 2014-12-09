@@ -4,4 +4,5 @@ cache/
 *.pyo
 output
 theme
+plugins
 *.zhs.rst
