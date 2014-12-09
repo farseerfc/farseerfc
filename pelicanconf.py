@@ -69,7 +69,27 @@ EXTRA_PATH_METADATA = {
 
 PLUGIN_PATHS = ['../pelican-plugins']
 
-PLUGINS = ["youku",
+# I18N_SUBSITES = {
+#     'zhs': {
+#         'SITENAME': "Farseerfc's Blog",
+#         'LOCALE': 'zh_CN',
+#         },
+#     'zh': {
+#         'SITENAME': "Farseerfc's Blog",
+#         'LOCALE': 'zh_HK',
+#         },
+#     'jp': {
+#         'SITENAME': "Farseerfc's Blog",
+#         'LOCALE': 'ja_JP',
+#         },
+#     'en': {
+#         'SITENAME': "Farseerfc's Blog",
+#         'LOCALE': 'en_US',
+#         },
+#     }
+
+PLUGINS = [#"i18n_subsites",
+           "youku",
            "youtube",
            'tipue_search',
            'neighbors',
