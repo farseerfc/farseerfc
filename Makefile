@@ -41,9 +41,7 @@ help:
 	@echo '                                                                       '
 
 
-html: clean less $(OUTPUTDIR)/index.html
-
-$(OUTPUTDIR)/%.html:
+html: clean less
 	$(PELICAN) $(INPUTDIR) -o $(OUTPUTDIR) -s $(CONFFILE) $(PELICANOPTS)
 
 clean:
@@ -105,6 +103,6 @@ s3_upload: publish
 	s3cmd sync $(OUTPUTDIR)/ s3://$(S3_BUCKET) --acl-public --delete-removed
 
 github: publish
-	(cd output && git add . && git commit -m "update" && git push)
+	(cd $(OUTPUTDIR) && git add . && git commit -m "update" && git push)
 
 .PHONY: html help clean regenerate serve devserver publish ssh_upload rsync_upload dropbox_upload ftp_upload s3_upload github cc less cleancc

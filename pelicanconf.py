@@ -67,19 +67,18 @@ EXTRA_PATH_METADATA = {
     'images/favicon.ico': {'path': 'favicon.ico'}
 }
 
-PLUGIN_PATHS = [ '../pelican-plugins']
+PLUGIN_PATHS = ['../pelican-plugins']
 
-PLUGINS = [
-          "youku",
-          "youtube",
-          'tipue_search',
-          'neighbors',
-          'series',
-          'bootstrapify',
-          'twitter_bootstrap_rst_directives',
-          "render_math",
-          'summary',
-          "plantuml"]
+PLUGINS = ["youku",
+           "youtube",
+           'tipue_search',
+           'neighbors',
+           'series',
+           'bootstrapify',
+           'twitter_bootstrap_rst_directives',
+           "render_math",
+           'summary',
+           "plantuml"]
 
 USE_LESS = False
 
