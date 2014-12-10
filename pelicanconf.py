@@ -15,7 +15,7 @@ LOCALE = 'zh_HK.utf8'
 DATE_FORMATS = {
     'en': ((u'en_US', 'utf8'), u'%a, %d %b %Y',),
     'zh': ((u'zh_HK', 'utf8'), u'%Y年%m月%d日(週%a)',),
-    'zc': ((u'zh_CN', 'utf8'), u'%Y年%m月%d日(周%a)',),
+    'zhs': ((u'zh_CN', 'utf8'), u'%Y年%m月%d日(周%a)',),
     'jp': ((u'ja_JP', 'utf8'), u'%Y年%m月%d日(%a)',),
 }
 
