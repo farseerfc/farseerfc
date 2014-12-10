@@ -74,16 +74,16 @@ THEME = "../pelican-bootstrap3"
 
 I18N_SUBSITES = {
     'jp': dict(
-          LOCALE = 'ja_JP.utf8',
-          SITENAME = "Farseerfcの居場所"
+        LOCALE='ja_JP.utf8',
+        SITENAME="Farseerfcの居場所"
         ),
     'en': dict(
-          LOCALE = 'en_US.utf8',
-          SITENAME = "Farseerfc's Blog"
+        LOCALE='en_US.utf8',
+        SITENAME="Farseerfc's Blog"
         ),
-    'zc': dict(
-          LOCALE = 'zh_CN.utf8',
-          SITENAME = "Farseerfc的小窝"
+    'zhs': dict(
+        LOCALE='zh_CN.utf8',
+        SITENAME="Farseerfc的小窝"
     ),
 }
 I18N_UNTRANSLATED_ARTICLES = "remove"

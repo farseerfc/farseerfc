@@ -48,16 +48,16 @@ clean:
 	[ ! -d $(OUTPUTDIR) ] || find $(OUTPUTDIR) -mindepth 1 -not -wholename "*/.git*" -delete
 
 cleancc: clean
-	find -iname "*.zc.rst" -delete ;
+	find -iname "*.zhs.rst" -delete ;
 
 
 ZH=$(shell find -iname "*.zh.rst")
 
-%.zc.rst: %.zh.rst
+%.zhs.rst: %.zh.rst
 	opencc -c opencc-t2s.json -i $^ -o $@
-	sed -i 's/:lang: zh/:lang: zc/g' $@
+	sed -i 's/:lang: zh/:lang: zhs/g' $@
 
-cc: $(patsubst %.zh.rst,%.zc.rst,$(ZH))
+cc: $(patsubst %.zh.rst,%.zhs.rst,$(ZH))
 
 regenerate: cleancc
 	$(PELICAN) -r $(INPUTDIR) -o $(OUTPUTDIR) -s $(CONFFILE) $(PELICANOPTS)
