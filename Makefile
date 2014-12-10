@@ -1,6 +1,6 @@
 PY=python3
-PELICAN=pelican
-PELICANOPTS=
+PELICAN?=pelican
+PELICANOPTS?=
 
 BASEDIR=$(CURDIR)
 INPUTDIR=$(BASEDIR)/content
@@ -41,8 +41,14 @@ help:
 	@echo '                                                                       '
 
 
-html: clean theme
+html: clean theme drafts
 	$(PELICAN) $(INPUTDIR) -o $(OUTPUTDIR) -s $(CONFFILE) $(PELICANOPTS)
+
+drafts:
+	cp -r drafts content
+
+rmdraft:
+	[ ! -d content/drafts ] || rm -rf content/drafts
 
 clean:
 	[ ! -d $(OUTPUTDIR) ] || find $(OUTPUTDIR) -mindepth 1 -not -wholename "*/.git*" -delete
@@ -76,7 +82,7 @@ stopserver:
 theme: 
 	(cd theme && $(MAKE))
 
-publish: cc theme
+publish: cc theme rmdraft
 	$(PELICAN) $(INPUTDIR) -o $(OUTPUTDIR) -s $(PUBLISHCONF) $(PELICANOPTS)
 
 ssh_upload: publish
@@ -97,4 +103,4 @@ s3_upload: publish
 github: publish
 	(cd $(OUTPUTDIR) && git add . && git commit -m "update" && git push)
 
-.PHONY: html help clean regenerate serve devserver publish ssh_upload rsync_upload dropbox_upload ftp_upload s3_upload github cc theme cleancc
+.PHONY: html help clean regenerate serve devserver publish ssh_upload rsync_upload dropbox_upload ftp_upload s3_upload github cc theme cleancc drafts

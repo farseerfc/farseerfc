@@ -5,7 +5,6 @@
 :lang: zh
 :date: 2014-12-07 23:45
 :tags: python, pelican
-:status: draft
 
 不知不覺間放任這邊長草很久了，從上次 `折騰主題 <{filename}try_pelican.zh.rst>`_ 到現在都快三年了，
 而從上次 `寫了篇告白信 <{filename}/life/marry-me.zh.rst>`_ 到現在也有快兩年了。
