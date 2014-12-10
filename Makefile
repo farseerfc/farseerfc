@@ -41,7 +41,7 @@ help:
 	@echo '                                                                       '
 
 
-html: clean less
+html: clean theme
 	$(PELICAN) $(INPUTDIR) -o $(OUTPUTDIR) -s $(CONFFILE) $(PELICANOPTS)
 
 clean:
@@ -73,18 +73,10 @@ stopserver:
 	kill -9 `cat srv.pid`
 	@echo 'Stopped Pelican and SimpleHTTPServer processes running in background.'
 
-less: theme/static/css/bootstrap.min.css theme/static/css/material.min.css
+theme: 
+	(cd theme && $(MAKE))
 
-theme/static/css/bootstrap.min.css: theme/static/bootstrap/*.less theme/static/bootstrap/mixins/*.less
-	lessc -x theme/static/bootstrap/bootstrap.less > theme/static/css/bootstrap.min.css
-
-theme/static/css/material.min.css: theme/static/material/*.less
-	lessc -x theme/static/material/material.less > theme/static/css/material.min.css
-
-theme/static/css/ripples.min.css: theme/static/material/ripples.less
-	lessc -x theme/static/material/ripples.less > theme/static/css/ripples.min.css
-
-publish: cc less
+publish: cc theme
 	$(PELICAN) $(INPUTDIR) -o $(OUTPUTDIR) -s $(PUBLISHCONF) $(PELICANOPTS)
 
 ssh_upload: publish
@@ -105,4 +97,4 @@ s3_upload: publish
 github: publish
 	(cd $(OUTPUTDIR) && git add . && git commit -m "update" && git push)
 
-.PHONY: html help clean regenerate serve devserver publish ssh_upload rsync_upload dropbox_upload ftp_upload s3_upload github cc less cleancc
+.PHONY: html help clean regenerate serve devserver publish ssh_upload rsync_upload dropbox_upload ftp_upload s3_upload github cc theme cleancc

@@ -11,6 +11,8 @@ One can drag the activities button out of the edge of the screen,
 then it will jump back and forth at the edge.
 Here is a video: 
 
+.. PELICAN_END_SUMMARY
+
 .. youtube:: SSbf97jGSpI
 
 .. youku:: XODQ0NjM2MzQ4

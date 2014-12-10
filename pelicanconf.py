@@ -39,7 +39,7 @@ LINKS = (('lilydjwg',
           '火星貓大大'),
          ('phoenixlzx',
           'http://blog.phoenixlzx.com/',
-          'http://blog.phoenixlzx.com/static/img/avatar/avatar.jpg',
+          'https://www.gravatar.com/avatar/' + md5(b"i@phoenixlzx.com").hexdigest(),
           '鳳凰菊苣'
           ),
          ('fixme',
@@ -105,6 +105,9 @@ USE_LESS = False
 RELATIVE_URLS = False
 
 # Theme options
+
+JINJA_EXTENSIONS = ['jinja2.ext.i18n']
+
 DOCUTIL_CSS = True
 TYPOGRIFY = True
 PYGMENTS_STYLE = 'monokai'
@@ -120,7 +123,6 @@ DIRECT_TEMPLATES = (('search', 'index', 'categories', 'authors', 'archives',
 
 TWITTER_USERNAME = 'farseerfc'
 TWITTER_WIDGET_ID = "538997172142759936"
-WEIBO_WIDGET = True
 
 AVATAR = 'images/avatar.jpg'
 ABOUT_PAGE = "pages/about.html"
