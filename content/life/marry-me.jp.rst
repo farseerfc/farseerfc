@@ -5,7 +5,14 @@
 :lang: jp
 :date: 2013-02-20 20:42
 :tags: will, you, marry, me
-:summary: 嫁になってくれませんか？
+
+.. image:: /images/marry-me.png
+	:alt: 嫁になってくれませんか？
+
+.. PELICAN_END_SUMMARY
+
+
+上のは飾りだけ、遊べるのはこれ：
 
 .. raw:: html
     

@@ -5,7 +5,13 @@ Will You Marry Me?
 :lang: en
 :date: 2013-02-20 20:42
 :tags: will, you, marry, me
-:summary: will you marry me
+
+.. image:: /images/marry-me.png
+	:alt: will you marry me
+
+.. PELICAN_END_SUMMARY
+
+Above is a image, the playable version is below:
 
 .. raw:: html
     

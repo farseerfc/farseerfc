@@ -5,7 +5,13 @@
 :lang: zh
 :date: 2013-02-20 20:42
 :tags: will, you, marry, me
-:summary: 嫁給我好麼
+
+.. image:: /images/marry-me.png
+	:alt: 嫁給我好麼
+
+.. PELICAN_END_SUMMARY
+
+上面那個是裝飾……可以玩的是下面這個：
 
 .. raw:: html
     
