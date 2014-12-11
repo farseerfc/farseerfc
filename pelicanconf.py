@@ -97,6 +97,7 @@ PLUGINS = ["i18n_subsites",
            'bootstrapify',
            'twitter_bootstrap_rst_directives',
            "render_math",
+           "cjk-spacing",
            'summary']
 
 USE_LESS = False
@@ -117,6 +118,7 @@ DISPLAY_BREADCRUMBS = True
 DISPLAY_CATEGORY_IN_BREADCRUMBS = True
 CC_LICENSE = "CC-BY-NC-SA"
 DISPLAY_TAGS_INLINE = True
+OUTPUT_SOURCES = True
 
 DIRECT_TEMPLATES = (('search', 'index', 'categories', 'authors', 'archives',
                     'tags'))
