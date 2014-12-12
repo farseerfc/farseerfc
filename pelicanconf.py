@@ -2,11 +2,11 @@
 # -*- coding: utf-8 -*- #
 from __future__ import unicode_literals
 from hashlib import md5
-from os import environ
+from os import getenv
 
 AUTHOR = 'farseerfc'
 SITENAME = "Farseerfc的小窩"
-SITEURL = environ.get("SITEURL", default='//localhost:8000')
+SITEURL = getenv("SITEURL", default='//localhost:8000')
 
 TIMEZONE = 'Asia/Tokyo'
 

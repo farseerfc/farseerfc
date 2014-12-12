@@ -41,13 +41,13 @@ help:
 	@echo '                                                                       '
 
 
-html: drafts clean theme
+html: clean theme
 	$(PELICAN) $(INPUTDIR) -o $(OUTPUTDIR) -s $(CONFFILE) $(PELICANOPTS)
 
 drafts:
 	cp -r drafts content
 
-rmdraft:
+rmdrafts:
 	[ ! -d content/drafts ] || rm -rf content/drafts
 
 clean:
@@ -83,7 +83,7 @@ stopserver:
 theme: 
 	(cd theme && $(MAKE))
 
-publish: rmdraft cc theme 
+publish: rmdrafts cc theme 
 	$(PELICAN) $(INPUTDIR) -o $(OUTPUTDIR) -s $(PUBLISHCONF) $(PELICANOPTS)
 
 ssh_upload:
@@ -110,4 +110,4 @@ github:
 	env SITEURL="//farseerfc.github.io" $(MAKE) publish
 	(cd $(OUTPUTDIR) && git add . && git commit -m "update" && git push)
 
-.PHONY: html help clean regenerate serve devserver publish ssh_upload rsync_upload dropbox_upload ftp_upload s3_upload github cc theme cleancc drafts
+.PHONY: html help clean regenerate serve devserver publish ssh_upload rsync_upload dropbox_upload ftp_upload s3_upload github cc theme cleancc drafts rmdrafts

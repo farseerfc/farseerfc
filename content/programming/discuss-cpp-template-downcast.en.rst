@@ -4,7 +4,10 @@ Discuss C++ Template Downcast
 :slug: discuss-cpp-template-downcast
 :lang: en
 :date: 2012-02-26 05:54:57
-:tags: C++, template, C
+:tags: template, C
+:series: YSSY_C
+
+.. contents::
 
 This is a discuss in C board in bbs.sjtu.edu.cn, about type down-cast in C++ template.
 
@@ -61,9 +64,9 @@ Today I read a book about we can do cast-down in template, so I write this to te
         ff(dd);
     }
 
-It is strange when ``f`` it don't allow my specified ``f<A>``.
+It is strange when :code:`f` it don't allow my specified :code:`f<A>``.
 
-But in ``ff`` it allowed ``ff<BB<long>>``.
+But in :code:`ff` it allowed :code:`ff<BB<long>>``.
 
 Tested under VC10 and GCC3.4
 
@@ -72,7 +75,7 @@ My answer to the problem
 
 Let's think ourself as compiler to see what happened there.
 
-Define mark ``#`` : ``A#B`` is the instantiated result when we put ``B`` into the parameter ``T`` of ``A<T>`` .
+Define mark :code:`#` : :code:`A#B` is the instantiated result when we put :code:`B` into the parameter :code:`T` of :code:`A<T>` .
 
 First we discuss ff
 *******************
@@ -81,7 +84,7 @@ First we discuss ff
 
     DD<long> dd;
 
-After this sentense, the compiler saw the instantiation of ``DD<long>`` , so it instantiate ``DD#long`` , and also ``BB#long`` .
+After this sentense, the compiler saw the instantiation of :code:`DD<long>` , so it instantiate :code:`DD#long` , and also :code:`BB#long` .
 
 .. code-block:: c++
 
@@ -89,23 +92,23 @@ After this sentense, the compiler saw the instantiation of ``DD<long>`` , so it 
 
 This sentense required the compiler to calculate set of overloading functions.
 
-Step 1 we need to infer ``T`` of ``ff<T>`` from argument ``DD#long -> BB<T>`` . Based on the inference rule:
+Step 1 we need to infer :code:`T` of :code:`ff<T>` from argument :code:`DD#long -> BB<T>` . Based on the inference rule:
 
 ::
 
-    Argument with type ``class_template_name<T>`` can be use to infer ``T``.
+    Argument with type :code:`class_template_name<T>` can be use to infer :code:`T``.
 
-So compiler inferred ``T`` as ``long`` . Here if it is not ``BB`` but ``CC`` which is complete un-related, we can also infer, as long as ``CC`` is a template like ``CC<T>`` .
+So compiler inferred :code:`T` as :code:`long` . Here if it is not :code:`BB` but :code:`CC` which is complete un-related, we can also infer, as long as :code:`CC` is a template like :code:`CC<T>` .
 
-Step 2 Template Specialization Resolution. There is only one template here so we matched ``ff<T>`` .
+Step 2 Template Specialization Resolution. There is only one template here so we matched :code:`ff<T>` .
 
 Step 3 Template Instantiation
 
-After inferred ``long -> T`` , compiler instantiated ``ff#long`` .
+After inferred :code:`long -> T` , compiler instantiated :code:`ff#long` .
 
-Set of available overloading functions : ``{ff#long}`` 
+Set of available overloading functions : :code:`{ff#long}` 
 
-Then overloading resolution found the only match ``ff#long``, checked its real parameter ``DD#long`` can be down-cast to formal parameter ``BB#long`` .
+Then overloading resolution found the only match :code:`ff#long``, checked its real parameter :code:`DD#long` can be down-cast to formal parameter :code:`BB#long` .
 
 Then we discuss f
 *****************
@@ -116,23 +119,23 @@ Then we discuss f
 
 Calculate set of overloading functions.
 
-Step 1 infer all template parameters for template ``f`` . According to inference rule:
+Step 1 infer all template parameters for template :code:`f` . According to inference rule:
 
 ::
 
-    Parameter with type ``T`` can be used to infer ``T`` 。
+    Parameter with type T can be used to infer T 。
 
-So ``B -> T`` is inferred.
+So :code:`B -> T` is inferred.
 
 Step 2 Template Specialization Resolution.
 
-Here ``B`` is not ``A`` so we can not apply specialization of ``f<A>`` , remaining ``f<T>`` as the only alternative.
+Here :code:`B` is not :code:`A` so we can not apply specialization of :code:`f<A>` , remaining :code:`f<T>` as the only alternative.
 
 Step 3 Template Instantiation.
 
-When we put ``B`` into ``f<T>`` to instantiate as ``f#B`` , we need to instantiate ``traits#B``. 
+When we put :code:`B` into :code:`f<T>` to instantiate as :code:`f#B` , we need to instantiate :code:`traits#B``. 
 
-There is no specialization for ``B`` so we use template ``traits<T>``, ``traits#B::value=false`` , so ``enable_if#false`` didn't contains a ``type`` , an error occurred.
+There is no specialization for :code:`B` so we use template :code:`traits<T>` , :code:`traits#B::value=false` , so :code:`enable_if#false` didn't contains a :code:`type` , an error occurred.
 
 The only template is mismatch, available overloading functions is empty set. So we got an error.
 
