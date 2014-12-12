@@ -10,7 +10,8 @@ import sys
 sys.path.append(os.curdir)
 from pelicanconf import *
 
-SITEURL = "//farseerfc.github.io"
+# SITEURL = "//farseerfc.github.io"
+
 RELATIVE_URLS = False
 FEED_DOMAIN = SITEURL
 DELETE_OUTPUT_DIRECTORY = False

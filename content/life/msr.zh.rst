@@ -6,6 +6,9 @@ MSR 2012 @ ICSE
 :date: 2012-06-02 10:42
 :tags: msr, icse, mining, software, repository
 
+.. contents::
+
+
 Mining Software Repository 2012 @ ICSE
 +++++++++++++++++++++++++++++++++++++++
 

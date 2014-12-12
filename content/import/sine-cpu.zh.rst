@@ -19,6 +19,8 @@
    :align: center
    :alt: 正弦曲線
 
+.. PELICAN_END_SUMMARY
+
 
 潛心鑽研良久，得代碼：（java）
 

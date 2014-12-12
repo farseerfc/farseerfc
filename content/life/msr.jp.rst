@@ -6,6 +6,9 @@ MSR 2012 @ ICSE
 :date: 2012-06-02 10:42
 :tags: msr, icse, mining, software, repository
 
+.. contents::
+
+
 Mining Software Repository 2012 @ ICSE
 +++++++++++++++++++++++++++++++++++++++
 
@@ -23,6 +26,8 @@ MSR(MicroSoft Research) talk @ MSR(Mining Software Repositories)
 Zhangの発表はSoftware AnalysisとXIAOの２つの紹介です。XIAOはマイクロソフト
 が開発したCode Clone Detector、ある会社が私達に任せるのもこのようなシステム
 です。もっと詳しく知りたいが、実装に関わるものは言ってなかった。
+
+
 
 Towards Improving BTS with Game Mechanisms 
 -----------------------------------------------------------------------

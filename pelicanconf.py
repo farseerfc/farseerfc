@@ -2,10 +2,11 @@
 # -*- coding: utf-8 -*- #
 from __future__ import unicode_literals
 from hashlib import md5
+from os import environ
 
 AUTHOR = 'farseerfc'
 SITENAME = "Farseerfc的小窩"
-SITEURL = '//localhost:8000'
+SITEURL = environ.get("SITEURL", default='//localhost:8000')
 
 TIMEZONE = 'Asia/Tokyo'
 
@@ -39,7 +40,8 @@ LINKS = (('lilydjwg',
           '火星貓大大'),
          ('phoenixlzx',
           'http://blog.phoenixlzx.com/',
-          'https://www.gravatar.com/avatar/' + md5(b"i@phoenixlzx.com").hexdigest(),
+          'https://www.gravatar.com/avatar/' +
+          md5(b"i@phoenixlzx.com").hexdigest(),
           '鳳凰菊苣'
           ),
          ('fixme',
@@ -49,7 +51,8 @@ LINKS = (('lilydjwg',
           ),
          ('quininer',
           'http://quininer.github.io/',
-          'https://www.gravatar.com/avatar/' + md5(b"quininer@live.com").hexdigest(),
+          'https://www.gravatar.com/avatar/' +
+          md5(b"quininer@live.com").hexdigest(),
           '純JavaScript的帥氣博客'
           ),
          ('飲水思源',
@@ -76,11 +79,11 @@ I18N_SUBSITES = {
     'jp': dict(
         LOCALE='ja_JP.utf8',
         SITENAME="Farseerfcの居場所"
-        ),
+    ),
     'en': dict(
         LOCALE='en_US.utf8',
         SITENAME="Farseerfc's Blog"
-        ),
+    ),
     'zhs': dict(
         LOCALE='zh_CN.utf8',
         SITENAME="Farseerfc的小窝"
@@ -98,6 +101,7 @@ PLUGINS = ["i18n_subsites",
            'twitter_bootstrap_rst_directives',
            "render_math",
            "cjk-spacing",
+           'extract_toc',
            'summary']
 
 USE_LESS = False
@@ -121,7 +125,7 @@ DISPLAY_TAGS_INLINE = True
 OUTPUT_SOURCES = True
 
 DIRECT_TEMPLATES = (('search', 'index', 'categories', 'authors', 'archives',
-                    'tags'))
+                     'tags'))
 
 TWITTER_USERNAME = 'farseerfc'
 TWITTER_WIDGET_ID = "538997172142759936"

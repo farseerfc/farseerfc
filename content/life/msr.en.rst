@@ -6,6 +6,9 @@ MSR 2012 @ ICSE
 :date: 2012-06-02 10:42
 :tags: msr, icse, mining, software, repository
 
+.. contents::
+
+
 Mining Software Repository 2012 @ ICSE
 +++++++++++++++++++++++++++++++++++++++
 
@@ -13,7 +16,7 @@ I participated MSR of this year. We came to University of Zurich early
 in the morning. The registration got something wrong when it seems that 
 Swisses cannot tell the difference among Asians so that name cards of
 3 Chinese with family name of Yang are misplaced. And also the 
-organization field of Hotta was ``Japan, Japan``, as if he represented
+organization field of Hotta was "Japan, Japan", as if he represented
 the Japan.
 
 MSR(MicroSoft Research) talk @ MSR(Mining Software Repositories)
@@ -29,6 +32,8 @@ consider the running time, while the dynamic state need real time response.
 The thing I need to develop for Samsung is something like dynamic mode.
 I wanted to know more about the internal details about XIAO but the talk
 was finished there. 
+
+
 
 Towards Improving BTS with Game Mechanisms 
 -----------------------------------------------------------------------

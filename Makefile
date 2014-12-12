@@ -41,7 +41,7 @@ help:
 	@echo '                                                                       '
 
 
-html: clean theme
+html: drafts clean theme
 	$(PELICAN) $(INPUTDIR) -o $(OUTPUTDIR) -s $(CONFFILE) $(PELICANOPTS)
 
 drafts:
@@ -62,6 +62,7 @@ ZH=$(shell find -iname "*.zh.rst")
 %.zhs.rst: %.zh.rst
 	opencc -c opencc-t2s.json -i $^ -o $@
 	sed -i 's/:lang: zh/:lang: zhs/g' $@
+	sed -i 's/\.zh\./\.zhs\./g' $@
 
 cc: $(patsubst %.zh.rst,%.zhs.rst,$(ZH))
 
@@ -82,25 +83,31 @@ stopserver:
 theme: 
 	(cd theme && $(MAKE))
 
-publish: cc theme rmdraft
+publish: rmdraft cc theme 
 	$(PELICAN) $(INPUTDIR) -o $(OUTPUTDIR) -s $(PUBLISHCONF) $(PELICANOPTS)
 
-ssh_upload: publish
+ssh_upload:
+	$(MAKE) publish
 	scp -P $(SSH_PORT) -r $(OUTPUTDIR)/* $(SSH_USER)@$(SSH_HOST):$(SSH_TARGET_DIR)
 
-rsync_upload: publish
+rsync_upload: 
+	$(MAKE) publish
 	rsync -e "ssh -p $(SSH_PORT)" -P -rvz --delete $(OUTPUTDIR)/ $(SSH_USER)@$(SSH_HOST):$(SSH_TARGET_DIR) --cvs-exclude
 
-dropbox_upload: publish
+dropbox_upload: 
+	$(MAKE) publish
 	cp -r $(OUTPUTDIR)/* $(DROPBOX_DIR)
 
-ftp_upload: publish
+ftp_upload: 
+	$(MAKE) publish
 	lftp ftp://$(FTP_USER)@$(FTP_HOST) -e "mirror -R $(OUTPUTDIR) $(FTP_TARGET_DIR) ; quit"
 
-s3_upload: publish
+s3_upload: 
+	$(MAKE) publish
 	s3cmd sync $(OUTPUTDIR)/ s3://$(S3_BUCKET) --acl-public --delete-removed
 
-github: publish
+github: 
+	env SITEURL="//farseerfc.github.io" $(MAKE) publish
 	(cd $(OUTPUTDIR) && git add . && git commit -m "update" && git push)
 
 .PHONY: html help clean regenerate serve devserver publish ssh_upload rsync_upload dropbox_upload ftp_upload s3_upload github cc theme cleancc drafts
