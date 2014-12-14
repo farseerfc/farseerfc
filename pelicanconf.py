@@ -64,7 +64,7 @@ LINKS = (('lilydjwg',
 
 TWITTER_USERNAME = 'farseerfc'
 
-DEFAULT_PAGINATION = 8
+DEFAULT_PAGINATION = 5
 
 STATIC_PATHS = ['static', 'images', 'images/favicon.ico']
 EXTRA_PATH_METADATA = {
@@ -114,7 +114,7 @@ RELATIVE_URLS = False
 JINJA_EXTENSIONS = ['jinja2.ext.i18n']
 
 DOCUTIL_CSS = True
-TYPOGRIFY = True
+TYPOGRIFY = False
 PYGMENTS_STYLE = 'monokai'
 GITHUB_USER = 'farseerfc'
 GITHUB_SHOW_USER_LINK = True

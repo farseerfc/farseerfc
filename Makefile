@@ -83,7 +83,7 @@ stopserver:
 theme: 
 	(cd theme && $(MAKE))
 
-publish: rmdrafts cc theme 
+publish: rmdrafts cc clean theme 
 	$(PELICAN) $(INPUTDIR) -o $(OUTPUTDIR) -s $(PUBLISHCONF) $(PELICANOPTS)
 
 ssh_upload:
