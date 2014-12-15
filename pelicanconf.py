@@ -89,7 +89,7 @@ I18N_SUBSITES = {
         SITENAME="Farseerfc的小窝"
     ),
 }
-I18N_UNTRANSLATED_ARTICLES = "remove"
+I18N_UNTRANSLATED_ARTICLES = "hide"
 
 PLUGINS = ["i18n_subsites",
            "youku",
