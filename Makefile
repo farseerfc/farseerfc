@@ -8,19 +8,6 @@ OUTPUTDIR=$(BASEDIR)/../farseerfc.github.io
 CONFFILE=$(BASEDIR)/pelicanconf.py
 PUBLISHCONF=$(BASEDIR)/publishconf.py
 
-FTP_HOST=localhost
-FTP_USER=anonymous
-FTP_TARGET_DIR=/
-
-SSH_HOST=localhost
-SSH_PORT=22
-SSH_USER=root
-SSH_TARGET_DIR=/var/www
-
-S3_BUCKET=my_s3_bucket
-
-DROPBOX_DIR=~/Dropbox/Public/
-
 help:
 	@echo 'Makefile for a pelican Web site                                        '
 	@echo '                                                                       '
@@ -42,6 +29,7 @@ help:
 
 
 html: clean theme
+	(cd $(OUTPUTDIR) && git checkout master)
 	$(PELICAN) $(INPUTDIR) -o $(OUTPUTDIR) -s $(CONFFILE) $(PELICANOPTS)
 
 drafts:
@@ -81,7 +69,7 @@ stopserver:
 	@echo 'Stopped Pelican and SimpleHTTPServer processes running in background.'
 
 theme: 
-	(cd theme && $(MAKE))
+	(cd theme && scons -Q)
 
 publish: rmdrafts cc clean theme 
 	$(PELICAN) $(INPUTDIR) -o $(OUTPUTDIR) -s $(PUBLISHCONF) $(PELICANOPTS)
@@ -94,10 +82,6 @@ rsync_upload:
 	$(MAKE) publish
 	rsync -e "ssh -p $(SSH_PORT)" -P -rvz --delete $(OUTPUTDIR)/ $(SSH_USER)@$(SSH_HOST):$(SSH_TARGET_DIR) --cvs-exclude
 
-dropbox_upload: 
-	$(MAKE) publish
-	cp -r $(OUTPUTDIR)/* $(DROPBOX_DIR)
-
 ftp_upload: 
 	$(MAKE) publish
 	lftp ftp://$(FTP_USER)@$(FTP_HOST) -e "mirror -R $(OUTPUTDIR) $(FTP_TARGET_DIR) ; quit"
@@ -107,7 +91,13 @@ s3_upload:
 	s3cmd sync $(OUTPUTDIR)/ s3://$(S3_BUCKET) --acl-public --delete-removed
 
 github: 
+	(cd $(OUTPUTDIR) && git checkout gh-pages)
 	env SITEURL="//farseerfc.github.io" $(MAKE) publish
-	(cd $(OUTPUTDIR) && git add . && git commit -m "update" && git push)
+	(cd $(OUTPUTDIR) && git add . && git commit -m "update" && git push -u origin gh-pages)
+
+gitcafe: 
+	(cd $(OUTPUTDIR) && git checkout gitcafe-pages)
+	env SITEURL="//farseerfc.gitcafe.com" $(MAKE) publish
+	(cd $(OUTPUTDIR) && git add . && git commit -m "update" && git push -u gitcafe gitcafe-pages)
 
 .PHONY: html help clean regenerate serve devserver publish ssh_upload rsync_upload dropbox_upload ftp_upload s3_upload github cc theme cleancc drafts rmdrafts
