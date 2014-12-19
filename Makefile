@@ -28,8 +28,7 @@ help:
 	@echo '                                                                       '
 
 
-html: clean theme
-	(cd $(OUTPUTDIR) && git checkout master)
+html: theme clean
 	$(PELICAN) $(INPUTDIR) -o $(OUTPUTDIR) -s $(CONFFILE) $(PELICANOPTS)
 
 drafts:
@@ -71,7 +70,8 @@ stopserver:
 theme: 
 	(cd theme && scons -Q)
 
-publish: rmdrafts cc clean theme 
+publish: rmdrafts cc clean theme
+	echo $(SITEURL) > content/static/CNAME
 	$(PELICAN) $(INPUTDIR) -o $(OUTPUTDIR) -s $(PUBLISHCONF) $(PELICANOPTS)
 
 ssh_upload:
@@ -91,13 +91,13 @@ s3_upload:
 	s3cmd sync $(OUTPUTDIR)/ s3://$(S3_BUCKET) --acl-public --delete-removed
 
 github: 
-	(cd $(OUTPUTDIR) && git checkout gh-pages)
-	env SITEURL="//farseerfc.github.io" $(MAKE) publish
-	(cd $(OUTPUTDIR) && git add . && git commit -m "update" && git push -u origin gh-pages)
+	(cd $(OUTPUTDIR) && git checkout master)
+	env SITEURL="farseerfc.me" $(MAKE) publish
+	(cd $(OUTPUTDIR) && git add . && git commit -m "update" && git push)
 
 gitcafe: 
 	(cd $(OUTPUTDIR) && git checkout gitcafe-pages)
-	env SITEURL="//farseerfc.gitcafe.com" $(MAKE) publish
+	env SITEURL="farseerfc.gitcafe.com" $(MAKE) publish
 	(cd $(OUTPUTDIR) && git add . && git commit -m "update" && git push -u gitcafe gitcafe-pages)
 
 .PHONY: html help clean regenerate serve devserver publish ssh_upload rsync_upload dropbox_upload ftp_upload s3_upload github cc theme cleancc drafts rmdrafts

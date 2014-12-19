@@ -6,7 +6,7 @@ from os import getenv
 
 AUTHOR = 'farseerfc'
 SITENAME = "Farseerfc的小窩"
-SITEURL = getenv("SITEURL", default='//localhost:8000')
+SITEURL = '//' + getenv("SITEURL", default='localhost:8000')
 
 TIMEZONE = 'Asia/Tokyo'
 
@@ -66,9 +66,10 @@ TWITTER_USERNAME = 'farseerfc'
 
 DEFAULT_PAGINATION = 5
 
-STATIC_PATHS = ['static', 'images', 'images/favicon.ico']
+STATIC_PATHS = ['static', 'images', 'images/favicon.ico', 'static/CNAME']
 EXTRA_PATH_METADATA = {
-    'images/favicon.ico': {'path': 'favicon.ico'}
+    'images/favicon.ico': {'path': 'favicon.ico'},
+    'static/CNAME': {'path': 'CNAME'}
 }
 
 PLUGIN_PATHS = ['../pelican-plugins']
