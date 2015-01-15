@@ -27,6 +27,7 @@ GOOGLE_ANALYTICS = 'UA-29540705-1'
 
 
 TAG_FEED_ATOM = None
+FEED_ATOM = None
 FEED_ALL_ATOM = None
 CATEGORY_FEED_ATOM = None
 
@@ -64,12 +65,11 @@ LINKS = (('lilydjwg',
 
 TWITTER_USERNAME = 'farseerfc'
 
-DEFAULT_PAGINATION = 5
+DEFAULT_PAGINATION = 6
 
-STATIC_PATHS = ['static', 'images', 'images/favicon.ico', 'static/CNAME']
+STATIC_PATHS = ['static', 'images', 'images/favicon.ico']
 EXTRA_PATH_METADATA = {
-    'images/favicon.ico': {'path': 'favicon.ico'},
-    'static/CNAME': {'path': 'CNAME'}
+    'images/favicon.ico': {'path': 'favicon.ico'}
 }
 
 PLUGIN_PATHS = ['../pelican-plugins']
@@ -90,7 +90,7 @@ I18N_SUBSITES = {
         SITENAME="Farseerfc的小窝"
     ),
 }
-I18N_UNTRANSLATED_ARTICLES = "hide"
+I18N_UNTRANSLATED_ARTICLES = "remove"
 
 PLUGINS = ["i18n_subsites",
            "youku",

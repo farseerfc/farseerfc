@@ -44,7 +44,7 @@ cleancc: clean
 	find -iname "*.zhs.rst" -delete ;
 
 
-ZH=$(shell find -iname "*.zh.rst")
+ZH=$(shell find content -iname "*.zh.rst")
 
 %.zhs.rst: %.zh.rst
 	opencc -c opencc-t2s.json -i $^ -o $@
@@ -67,35 +67,34 @@ stopserver:
 	kill -9 `cat srv.pid`
 	@echo 'Stopped Pelican and SimpleHTTPServer processes running in background.'
 
-theme: 
+theme:
 	(cd theme && scons -Q)
 
 publish: rmdrafts cc clean theme
-	echo $(SITEURL) > content/static/CNAME
 	$(PELICAN) $(INPUTDIR) -o $(OUTPUTDIR) -s $(PUBLISHCONF) $(PELICANOPTS)
 
 ssh_upload:
 	$(MAKE) publish
 	scp -P $(SSH_PORT) -r $(OUTPUTDIR)/* $(SSH_USER)@$(SSH_HOST):$(SSH_TARGET_DIR)
 
-rsync_upload: 
+rsync_upload:
 	$(MAKE) publish
 	rsync -e "ssh -p $(SSH_PORT)" -P -rvz --delete $(OUTPUTDIR)/ $(SSH_USER)@$(SSH_HOST):$(SSH_TARGET_DIR) --cvs-exclude
 
-ftp_upload: 
+ftp_upload:
 	$(MAKE) publish
 	lftp ftp://$(FTP_USER)@$(FTP_HOST) -e "mirror -R $(OUTPUTDIR) $(FTP_TARGET_DIR) ; quit"
 
-s3_upload: 
+s3_upload:
 	$(MAKE) publish
 	s3cmd sync $(OUTPUTDIR)/ s3://$(S3_BUCKET) --acl-public --delete-removed
 
-github: 
+github:
 	(cd $(OUTPUTDIR) && git checkout master)
-	env SITEURL="farseerfc.me" $(MAKE) publish
+	env SITEURL="farseerfc.github.io" $(MAKE) publish
 	(cd $(OUTPUTDIR) && git add . && git commit -m "update" && git push)
 
-gitcafe: 
+gitcafe:
 	(cd $(OUTPUTDIR) && git checkout gitcafe-pages)
 	env SITEURL="farseerfc.gitcafe.com" $(MAKE) publish
 	(cd $(OUTPUTDIR) && git add . && git commit -m "update" && git push -u gitcafe gitcafe-pages)
