@@ -56,6 +56,12 @@ LINKS = (('lilydjwg',
           md5(b"quininer@live.com").hexdigest(),
           '純JavaScript的帥氣博客'
           ),
+         ('acgtyrant',
+          'http://acgtyrant.com/',
+          'https://www.gravatar.com/avatar/' +
+          md5(b"acgtyrant@gmail.com").hexdigest(),
+          '御宅暴君，維護這個人和Arch兩個博客'
+          ),
          ('飲水思源',
           'http://bbs.sjtu.edu.cn/',
           'https://bbs.sjtu.edu.cn/favicon.ico',
@@ -93,6 +99,7 @@ I18N_SUBSITES = {
 I18N_UNTRANSLATED_ARTICLES = "remove"
 
 PLUGINS = ["i18n_subsites",
+           "plantuml",
            "youku",
            "youtube",
            'tipue_search',
