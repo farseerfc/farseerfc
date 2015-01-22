@@ -15,7 +15,7 @@
 .. PELICAN_BEGIN_SUMMARY
 
 不知不覺間放任這邊長草很久了，從上次
-`折騰主題 <{filename}/python/try_pelican.zh.rst>`_ 到現在都快三年了，
+`折騰主題 <{filename}/tech/try_pelican.zh.rst>`_ 到現在都快三年了，
 而從上次 `寫了篇告白信 <{filename}/life/marry-me.zh.rst>`_ 到現在也有快兩年了。
 這期間曾經把主題配色從 `Bootstrap 2 <http://getbootstrap.com/2.3.2/>`_ 默認的
 白底黑字改成了黑底白字，也不過是用 drop-in 的配色方案而已，沒有本質上的改進。
@@ -84,19 +84,18 @@ Pelican 3.5 的新功能
         {
         {T
         +.
-        ++ cache                             Pelican 用的加速生成緩存
-        ++ content                           文章
-        +++ <categories>                     按分類存放    
-        +++ images                           文章包含的靜態圖片
-        +++ pages                            about 這樣的頁面
-        +++ static                           個別文章包含的靜態資源
-        ++ drafts                            未發佈的本地草稿箱
-        ++ Makefile                          生成用的make
-        ++ pelicanconf.py                    Pelican 的測試用配置 
-        ++ publishconf.py                    Pelican 的生成用配置
-        ++ plugins -> ../pelican-plugins
-        ++ output -> ../farseerfc.github.io
-        ++ theme -> ../pelican-bootstrap3
+        ++ content        
+        +++ <categories>  按分類存放的文章源文件
+        +++ images        文章包含的靜態圖片
+        +++ pages         about 這樣的頁面
+        +++ static        個別文章包含的靜態資源
+        ++ drafts         未發佈的本地草稿箱
+        ++ Makefile       生成用的make
+        ++ pelicanconf.py 測試用配置 
+        ++ publishconf.py 生成用配置
+        ++ plugins        -> ../pelican-plugins
+        ++ output         -> ../farseerfc.github.io
+        ++ theme          -> ../pelican-bootstrap3
         }
         }
 
@@ -112,7 +111,7 @@ github 上，其中的內容完全搬過來了。老 Pelican 博客的 Pelican �
 主題： Material Design 風格的 Bootstrap 3 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-上篇 `博文 <{filename}/python/summary-material-design-css-framework.zh.rst>`_ 
+上篇 `博文 <{filename}/tech/summary-material-design-css-framework.zh.rst>`_ 
 就總結了我爲了這個博客尋找了一堆 CSS 框架，並且最終決定用 
 `bootstrap-material-design <http://fezvrasta.github.io/bootstrap-material-design/>`_
 , `pelican-bootstrap3 <https://github.com/DandyDev/pelican-bootstrap3>`_
