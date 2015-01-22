@@ -27,42 +27,42 @@
 
 .. PELICAN_END_SUMMARY
 
-.. panel-default::
-    :title: Bootstrap 3 的新設計
+Bootstrap 3 的新設計
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    - 全新的mobile-first responsive設計。
+- 全新的mobile-first responsive設計。
 
-        原本Bootstrap 2雖然有responsive design的設計，
-        不過諸多細節不能符合我的需求，最終還是得手工 hack :code:`@media` 查詢去微調。
-        現在的mobile-first responsive grid system 則相對顯得科學很多了，也終於在手持
-        設備上看起來能舒服很多。諸位可以嘗試改變窗口寬度，或者在不同的手持設備上打開這個 
-        blog ，體驗一下這個頁面在不同顯示器大小中的效果。如果仍有問題歡迎
-        `發 Issue 給我 <https://github.com/farseerfc/pelican-bootstrap3/issues>`_  。
+原本Bootstrap 2雖然有responsive design的設計，
+不過諸多細節不能符合我的需求，最終還是得手工 hack :code:`@media` 查詢去微調。
+現在的mobile-first responsive grid system 則相對顯得科學很多了，也終於在手持
+設備上看起來能舒服很多。諸位可以嘗試改變窗口寬度，或者在不同的手持設備上打開這個 
+blog ，體驗一下這個頁面在不同顯示器大小中的效果。如果仍有問題歡迎
+`發 Issue 給我 <https://github.com/farseerfc/pelican-bootstrap3/issues>`_  。
 
-    - 科學的 Navbar 。
+- 科學的 Navbar 。
 
-        比 Bootstrap 2 那個科學很多了。無論是 sticky 在上端還是跟着浮動，或者像這邊這樣
-        `自動隱藏 <http://www.virtuosoft.eu/code/bootstrap-autohidingnavbar/>`_
-        都很簡單。  
+比 Bootstrap 2 那個科學很多了。無論是 sticky 在上端還是跟着浮動，或者像這邊這樣
+`自動隱藏 <http://www.virtuosoft.eu/code/bootstrap-autohidingnavbar/>`_
+都很簡單。  
 
-    更多細節參考 `Bootstrap 3 主頁 <http://getbootstrap.com/>`_ 。
+更多細節參考 `Bootstrap 3 主頁 <http://getbootstrap.com/>`_ 。
 
 
-.. panel-default::
-    :title: Pelican 3.5 的新功能
+Pelican 3.5 的新功能
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    - Python 2 和 Python 3 統一代碼
+- Python 2 和 Python 3 統一代碼
 
-        再沒有惱人的 unicode 相關的問題了。這對 blog 系統來說相當重要啊。
-        而且還能方便切換 pypy 等不同的解釋器。
+再沒有惱人的 unicode 相關的問題了。這對 blog 系統來說相當重要啊。
+而且還能方便切換 pypy 等不同的解釋器。
 
-    - 全新的插件系統：非常多好用的 `插件 <https://github.com/getpelican/pelican-plugins>`_ 等着你。
+- 全新的插件系統：非常多好用的 `插件 <https://github.com/getpelican/pelican-plugins>`_ 等着你。
 
-    - 增強了導入系統：嗯總算可以導入我的中文的 wordpress 博客了。（雖然那邊長草更久了……）
+- 增強了導入系統：嗯總算可以導入我的中文的 wordpress 博客了。（雖然那邊長草更久了……）
 
-    - 頁面內鏈接：不用硬編碼手寫鏈接了，方便各種 plugin 和 theme 的實現。
+- 頁面內鏈接：不用硬編碼手寫鏈接了，方便各種 plugin 和 theme 的實現。
 
-    更多細節參考 `Pelican 文檔 <http://pelican.readthedocs.org/en/latest/>`_ 。
+更多細節參考 `Pelican 文檔 <http://pelican.readthedocs.org/en/latest/>`_ 。
 
 
 .. PELICAN_BEGIN_SUMMARY
@@ -132,13 +132,10 @@ github 上，其中的內容完全搬過來了。老 Pelican 博客的 Pelican �
 
     .. code-block:: css
 
-        @screen-xs:                  320px;
-        @screen-sm:                  598px;
-        @screen-lg:                  1400px;
-        @grid-gutter-width:          16px;
-        @container-tablet:           (582px + @grid-gutter-width);
-        @container-large-desktop:    (1340px + @grid-gutter-width);
-        @navbar-collapse-max-height: 300px;
+        @screen-xs:  320px;
+        @screen-sm:  598px;
+        @screen-md:  992px;
+        @screen-lg: 1400px;
 
 首先把 Bootstrap 3 默認適配的幾個響應式設備的大小改成了我需要的大小。
 :code:`xs` 和 :code:`sm` 的大小分別按照我的手機屏幕 **豎屏** 和 **橫屏** 來算， 
