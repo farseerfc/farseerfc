@@ -9,16 +9,16 @@
 
 .. contents::
 
+.. PELICAN_BEGIN_SUMMARY
+
 前言
 ++++++++++++++++++++
-
-.. PELICAN_BEGIN_SUMMARY
 
 不知不覺間放任這邊長草很久了，從上次
 `折騰主題 <{filename}/tech/try_pelican.zh.rst>`_ 到現在都快三年了，
 而從上次 `寫了篇告白信 <{filename}/life/marry-me.zh.rst>`_ 到現在也有快兩年了。
 這期間曾經把主題配色從 `Bootstrap 2 <http://getbootstrap.com/2.3.2/>`_ 默認的
-白底黑字改成了黑底白字，也不過是用 drop-in 的配色方案而已，沒有本質上的改進。
+白底黑字改成了讓眼睛更舒適的黑底白字，也不過是用 drop-in 的配色方案而已，沒有本質上的改進。
 
 洞中一日世上千載，兩年裏 Bootstrap 已經升上 `v3.3 <http://getbootstrap.com/>`_ ,
 而 Pelican 則已經升到 `3.5 <https://github.com/getpelican/pelican/releases/tag/3.5.0>`_ 了。
@@ -51,12 +51,12 @@ blog ，體驗一下這個頁面在不同顯示器大小中的效果。如果仍
 Pelican 3.5 的新功能
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- Python 2 和 Python 3 統一代碼
+- Python 2 和 Python 3 統一代碼。
 
 再沒有惱人的 unicode 相關的問題了。這對 blog 系統來說相當重要啊。
 而且還能方便切換 pypy 等不同的解釋器。
 
-- 全新的插件系統：非常多好用的 `插件 <https://github.com/getpelican/pelican-plugins>`_ 等着你。
+- 全新的插件系統：非常多功能強大的 `插件 <https://github.com/getpelican/pelican-plugins>`_ 等着你。
 
 - 增強了導入系統：嗯總算可以導入我的中文的 wordpress 博客了。（雖然那邊長草更久了……）
 
@@ -85,14 +85,14 @@ Pelican 3.5 的新功能
         {T
         +.
         ++ content        
-        +++ <categories>  按分類存放的文章源文件
-        +++ images        文章包含的靜態圖片
-        +++ pages         about 這樣的頁面
-        +++ static        個別文章包含的靜態資源
-        ++ drafts         未發佈的本地草稿箱
-        ++ Makefile       生成用的make
-        ++ pelicanconf.py 測試用配置 
-        ++ publishconf.py 生成用配置
+        +++ <categories>  : 按分類存放的文章源文件
+        +++ images        : 文章包含的靜態圖片
+        +++ pages         : about 這樣的頁面
+        +++ static        : 個別文章包含的靜態資源
+        ++ drafts         : 未發佈的本地草稿箱
+        ++ Makefile       : 生成用的make
+        ++ pelicanconf.py : 測試用配置 
+        ++ publishconf.py : 生成用配置
         ++ plugins        -> ../pelican-plugins
         ++ output         -> ../farseerfc.github.io
         ++ theme          -> ../pelican-bootstrap3

@@ -36,8 +36,9 @@ KDE5 Plasma 之跳動賣萌的活動按鈕
 
 順便，今天還看到一個賣萌的 KDE5 Plasma 靜音圖標的翻譯：
 
+.. PELICAN_END_SUMMARY
+
 .. raw:: html
 
 	<blockquote class="twitter-tweet" lang="zh-tw"><p>KDE5のミュート画面の中国語翻訳、「静音」のはずだが「镜音」になっている。Vocaloidファンのネタだか、単なる入力ミスだか分からない。 <a href="http://t.co/ipyHjXMscR">pic.twitter.com/ipyHjXMscR</a></p>&mdash; Jiachen YANG (@farseerfc) <a href="https://twitter.com/farseerfc/status/541944351270518784">2014 12月 8日</a></blockquote>
 
-.. PELICAN_END_SUMMARY

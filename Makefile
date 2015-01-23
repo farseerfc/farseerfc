@@ -72,6 +72,7 @@ theme:
 
 publish: rmdrafts cc clean theme
 	$(PELICAN) $(INPUTDIR) -o $(OUTPUTDIR) -s $(PUBLISHCONF) $(PELICANOPTS)
+	(cd output && find -iname "*.rst" | xargs -I@  pygmentize -f html -o @.html @)
 
 ssh_upload:
 	$(MAKE) publish

@@ -7,6 +7,7 @@
 :tags: css, material, paper
 :series: pelican
 
+.. PELICAN_BEGIN_SUMMARY
 
 現在這裏的界面風格要從 Google 在 `I/O 2014 大會 <https://www.google.com/events/io>`_
 上公佈Android L 也即 後來的 Lollipop 說起。 他們在談論界面設計的時候公佈了他們的
@@ -23,14 +24,20 @@ Material Design。 但是我在 Web 前端科技樹上沒點多少技能點，�
 Polymer Paper Elements
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+.. PELICAN_END_SUMMARY
+
 .. panel-default::
   :title: Polymer
 
   .. image:: https://www.polymer-project.org/images/logos/p-logo.svg
       :alt: Polymer logo
 
+.. PELICAN_BEGIN_SUMMARY
+
 Google 官方提供的參考實現應該是 `Polymer <https://www.polymer-project.org/>`_ 中的
 `Paper Elements <https://www.polymer-project.org/docs/elements/paper-elements.html>`_ 。
+
+.. PELICAN_END_SUMMARY
 
 由於是 **官方參考實現** ，這個框架的確非常忠實地實現了 Material Design 的設計，但是同時
 由於它基於 `HTML5 Web Components <http://webcomponents.org/>`_ 構建，相關技術我還

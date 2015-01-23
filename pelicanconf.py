@@ -131,6 +131,7 @@ DISPLAY_CATEGORY_IN_BREADCRUMBS = True
 CC_LICENSE = "CC-BY-NC-SA"
 DISPLAY_TAGS_INLINE = True
 OUTPUT_SOURCES = True
+OUTPUT_SOURCES_EXTENSION = '.rst'
 
 DIRECT_TEMPLATES = (('search', 'index', 'categories', 'authors', 'archives',
                      'tags'))
