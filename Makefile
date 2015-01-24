@@ -72,7 +72,10 @@ theme:
 
 publish: rmdrafts cc clean theme
 	$(PELICAN) $(INPUTDIR) -o $(OUTPUTDIR) -s $(PUBLISHCONF) $(PELICANOPTS)
-	(cd output && find -iname "*.rst" | xargs -I@  pygmentize -f html -o @.html @)
+	$(MAKE) rsthtml
+
+rsthtml:
+	(cd output && find -iname "*.rst" | parallel --no-notice -I@  pygmentize -f html -o @.html @)
 
 ssh_upload:
 	$(MAKE) publish
@@ -100,4 +103,4 @@ gitcafe:
 	env SITEURL="farseerfc.gitcafe.com" $(MAKE) publish
 	(cd $(OUTPUTDIR) && git add . && git commit -m "update" && git push -u gitcafe gitcafe-pages)
 
-.PHONY: html help clean regenerate serve devserver publish ssh_upload rsync_upload dropbox_upload ftp_upload s3_upload github cc theme cleancc drafts rmdrafts
+.PHONY: html help clean regenerate serve devserver publish ssh_upload rsync_upload dropbox_upload ftp_upload s3_upload github cc theme cleancc drafts rmdrafts rsthtml

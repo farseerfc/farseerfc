@@ -114,12 +114,17 @@ github 上，其中的內容完全搬過來了。開始寫老博客的時候 Pel
 其佈局是如圖那樣的。這樣將生成的靜態網站和生成網站用的配置啦內容啦分開之後，頓時清晰了很多。
 
 然後這個內容 repo 中的三個符號鏈接分別指向三個子 repo（沒用 :code:`git submodule` 
-管理純粹是因爲偷懶）。 theme 指向 pelican-bootstrap3 ，是我修改過的 pelican 主題。 
-plugins 指向 pelican-plugins，由於 plugins 的質量有些參差不齊，其中不少 plugin 
+管理純粹是因爲偷懶）。 theme 指向 
+`pelican-bootstrap3 <https://github.com/farseerfc/pelican-bootstrap3>`_ 
+，是我修改過的 pelican 主題。 
+plugins 指向 `pelican-plugins <https://github.com/farseerfc/pelican-plugins>`_ 
+，由於 plugins 的質量有些參差不齊，其中不少 plugin 
 都按我的需要做了些許修改，一些是功能改進，另一些則是修bug（比如不少plugin只支持 python 2）。
-最後 output 指向 farseerfc.github.io 也就是發佈的靜態網站啦。
+最後 output 指向 
+`farseerfc.github.io <https://github.com/farseerfc/farseerfc.github.io>`_ 
+也就是發佈的靜態網站啦。
 
-接下來主要在 **主題** 和 **插件** 兩個方面介紹一下改版的細節。
+接下來從 **主題** 和 **插件** 兩個方面介紹一下改版的細節。
 
 主題： Material Design 風格的 Bootstrap 3 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -127,7 +132,7 @@ plugins 指向 pelican-plugins，由於 plugins 的質量有些參差不齊，�
 上篇 `博文 <{filename}/tech/summary-material-design-css-framework.zh.rst>`_ 
 就總結了我爲了這個博客尋找了一堆 CSS 框架，並且最終決定用 
 `bootstrap-material-design <http://fezvrasta.github.io/bootstrap-material-design/>`_
-, `pelican-bootstrap3 <https://github.com/DandyDev/pelican-bootstrap3>`_
+, `DandyDev/pelican-bootstrap3 <https://github.com/DandyDev/pelican-bootstrap3>`_
 和 `Bootstrap 3 <http://getbootstrap.com/>`_ 這三個項目結合的方式實現這個模板的主題。
 這三個項目都或多或少經過了我的修改，修改後的項目以 pelican-bootstrap3 爲基礎放在
 `這裏 <https://github.com/farseerfc/pelican-bootstrap3>`_ ，包括 `Bootstrap3 樣式 <https://github.com/farseerfc/pelican-bootstrap3/tree/master/static/bootstrap>`_
@@ -154,7 +159,6 @@ plugins 指向 pelican-plugins，由於 plugins 的質量有些參差不齊，�
         @container-lg: 1320px; /* 1170px; */
         @container-xl: 1990px;
 
-
 首先把 Bootstrap 3 默認適配的幾個 `響應式設備的大小 <http://getbootstrap.com/css/#grid>`_ 
 改成了我需要的大小。:code:`xs` 和 :code:`sm` 的大小分別按照我的手機屏幕 **豎屏** 和
 **橫屏** 時候的瀏覽器頁面寬度來算， :code:`md` 是想兼容 Nexus 7 橫屏 960 的寬度以及
@@ -163,57 +167,142 @@ plugins 指向 pelican-plugins，由於 plugins 的質量有些參差不齊，�
 比如 1600、 2048 甚至 2560 寬的顯示器現在也並不少見，其結果就是頁面中左右兩側
 有很大的空間被浪費掉了。作爲深受這一問題困擾的用戶之一，我用
 `這裏介紹的方法 <http://stackoverflow.com/a/25644266>`_
-給 bootstrap 增加了一類「:ruby:`比大更大|bigger than bigger`」的 :code:`xl` 響應式設備尺寸，寬度設爲支持 2048 
-像素寬的顯示器。
+給 bootstrap 增加了一類「 :ruby:`比大更大|bigger than bigger` 」的
+:code:`xl` 響應式設備尺寸，寬度設爲支持 2048 像素寬的顯示器，具體的修改反映在 
+`variables.less <https://github.com/farseerfc/pelican-bootstrap3/blob/master/static/bootstrap/variables.less>`_
+文件裏。
 
-然後把主題配色改成了現在這樣的淡紫色 :code:`@brand-primary: darken(#6B5594, 6.5%);`
-，配合我的頭像風格， 這個修改只需要一行。
-接着刪掉了 :code:`.btn` 的 :code:`white-space: nowrap;` 讓按鈕的文字可以換行，
-這也只是一行修改。
-
-接下來一個目標是讓主頁的文章列表像 Google+ 主頁那樣根據顯示器寬度自動分欄。
+接下來目標是讓主頁的文章列表像 Google+ 主頁那樣根據顯示器寬度自動調整分欄。
 想要達到的效果是，根據上面定義的屏幕寬度尺寸：
 
-- :code:`xs` 用單欄 :ruby:`流動|fluid` 佈局
-- :code:`sm` 和 :code:`md` 用單欄列表加單欄側邊欄固定佈局
-- :code:`lg` 用雙欄列表加單欄側邊欄固定佈局
-- :code:`xl` 用三欄列表加雙欄側邊欄固定佈局
++--------------------------------+---------------------------------------------------------------------------+
+|     |xs|                       |       |lg|                                                                |
++--------------------------------+---------------------------------------------------------------------------+
+| +-----------+                  |   +-------------+-------------+--------------+                            |
+| | |NavbarC| |                  |   |          |Navbar|                        |                            |
+| +-----------+                  |   +-------------+-------------+--------------+                            |
+| | |article| |                  |   | |article| 1 | |article| 2 |  |sidebar| 1 |                            |
+| +-----------+                  |   +-------------+-------------+--------------+                            |
+| | |sidebar| |                  |   | |article| 3 | |article| 4 |  |sidebar| 2 |                            |
+| +-----------+                  |   +-------------+-------------+--------------+                            |
+| | |Footer|  |                  |   |          |Footer|                        |                            |
+| +-----------+                  |   +-------------+-------------+--------------+                            |
++--------------------------------+---------------------------------------------------------------------------+
+|     |sm|                       |     |xl|                                                                  |
++--------------------------------+---------------------------------------------------------------------------+
+| +-------------+--------------+ | +-------------+-------------+--------------+-------------+--------------+ |
+| | |Navbar|                   | | |          |Navbar|                                                     | |
+| +-------------+--------------+ | +-------------+-------------+--------------+-------------+--------------+ |
+| | |article| 1 |  |sidebar| 1 | | | |article| 1 | |article| 2 | |article| 3  | |sidebar| 1 |  |sidebar| 2 | |
+| +-------------+--------------+ | +-------------+-------------+--------------+-------------+--------------+ |
+| | |article| 2 |  |sidebar| 2 | | | |article| 4 | |article| 5 | |article| 6  | |sidebar| 1 |  |sidebar| 2 | |
+| +-------------+--------------+ | +-------------+-------------+--------------+-------------+--------------+ |
+| | |Footer|                   | | |          |Footer|                                                     | |
+| +-------------+--------------+ | +-------------+-------------+--------------+-------------+--------------+ |
++--------------------------------+---------------------------------------------------------------------------+
 
-+---+---+----+------------+------------+
-|          |Navbar|                    |
-+===+===+====+============+============+
-| 1 | 2 | 3  | |sidebar|  |  |sidebar| |
-+---+---+----+            |            |
-| 4 | 5 | 6  |            |            |
-+---+---+----+------------+------------+
-|          Footer                      |
-+---+---+----+-------------------------+
-
-.. |Navbar| replace:: 導航欄
-.. |Footer| replace:: 底欄
+.. |xs| replace:: :code:`xs` 用單欄 :ruby:`流動|fluid` 佈局
+.. |sm| replace:: :code:`sm` 和 :code:`md` 用單欄文章列表、單欄 |sidebarr| 固定佈局
+.. |lg| replace:: :code:`lg` 用雙欄文章列表、單欄 |sidebarr| 固定佈局
+.. |xl| replace:: :code:`xl` 用三欄文章列表、雙欄 |sidebarr| 固定佈局
+.. |Navbar| replace:: :ruby:`導航欄|Navbar`
+.. |NavbarC| replace:: 摺疊的導航欄
+.. |Footer| replace:: :ruby:`底欄|footer`
+.. |sidebarr| replace:: :ruby:`側邊欄|sidebar`
 .. |sidebar| replace:: 側邊欄
+.. |article| replace:: 文章
 
-最後是最最重要的 **文章正文** 的樣式。這裏我想要達到的效果是，在大屏幕上用更大的字號，讓讀者
+一開始純粹用 Bootstrap3 的響應式柵格實現這個分欄佈局，結果發現效果不太理想，因爲文章列表和
+側邊欄的高度是變化的，會導致柵格間留下大片空白。後來改用 
+`這裏示範的waterfall <http://cssdeck.com/labs/pinterest-like-waterfall-design-purely-css>`_
+實現文章和側邊欄的佈局，具體的實現代碼在 
+`waterfall.less <https://github.com/farseerfc/pelican-bootstrap3/blob/master/static/bootstrap/waterfall.less>`_
+，總算達到了想要的佈局了。
+
+然後是最最重要的 **文章正文** 的樣式。這裏我想要達到的效果是，在大屏幕上用更大的字號，讓讀者
 看起來更舒適，同時在小屏幕上用比較小的字號，最終保證基本上「一行」的文字數接近。這個修改
 主要針對 :code:`.jumbotron`，
 用了 `不太科學的方式 <https://github.com/farseerfc/pelican-bootstrap3/blob/master/static/bootstrap/jumbotron.less>`_ 代碼太長就不貼全了。
 
+最後是一些細微的定製。把主題配色改成了現在這樣的淡紫色 :code:`@brand-primary: darken(#6B5594, 6.5%);`
+，配合我的頭像風格， 這個修改只需要一行。
+接着刪掉了 :code:`.btn` 的 :code:`white-space: nowrap;` 讓按鈕的文字可以換行，
+這也只是一行修改。
 
 對 bootstrap-material-design 的定製
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-這裏定製的地方也不算太多。原樣式中一個不太科學的做法是所有 :code:`.btn` 都強制加上了陰影
-效果，這在已經有陰影的環境裏用的話非常礙眼，像是 Win9x 風格的厚重的睫毛膏。既然可以單獨
+這裏定製的地方不多。原樣式中一個不太科學的做法是所有 :code:`.btn` 都強制加上了陰影
+效果，這在已經有陰影的環境裏用的話非常礙眼，像是 Win9x 風格的厚重睫毛膏。既然可以單獨
 給每個樣式加陰影，於是就把 :code:`.btn` 強制的陰影去掉了，只保留鼠標懸停之後強調的陰影。
-其它定製的細節麼就是統一配色風格而已啦，這個不說太多。
+其它定製的細節麼就是統一配色風格而已，這裏不細說。
 
 
 將以上兩者整合在 pelican-bootstrap3 裏
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+.. panel-default::
+    :title: Pelican 實現顯示源代碼按鈕
+
+    顯示源代碼按鈕借用了 Pelican 配置中自帶的 :code:`OUTPUT_SOURCES` 選項將源文件複製到輸出文件夾：
+
+    .. code-block:: python
+
+        OUTPUT_SOURCES = True
+        OUTPUT_SOURCES_EXTENSION = '.rst'
+
+    然後在 Makefile 裏用 pygmentize 把所有源代碼文件着色：
+
+    .. code-block:: bash 
+
+        find -iname "*.rst" | parallel -I@  pygmentize -f html -o @.html @
+
+    最後在按鈕按下的時候用 jQuery 載入源代碼：
+
+    .. code-block:: html
+
+        <a onclick="$.get('{{SITEURL}}/{{article.slug}}.rst.html', function(data){$('#source-code').html(data)});$('#article-content').toggle();$('#source-content').toggle();">
+
+    雖然難看的 hack 比較多，但是能用！
+
+
+
 雖說 pelican-bootstrap3 是我 fork 出來的，不過由於我修改的地方實在太多，代碼看來基本上
 接近重寫了一份。好在之前有給 pelican 寫 bootstrap 2 主題的經驗，這次修改算得上駕輕就熟。
+可以對比一下 `上游作者的博客 <http://dandydev.net/>`_ 和這裏的樣子體會一下感覺。
+具體修改過的地方包括：
 
+#. 套用 bootstrap-material-design 的各個元素樣式。
+#. 在文章列表模板應用上面提到的 Bootstrap 3 的柵格佈局。
+#. 翻譯到多個語言，這裏在後面的 i18n-subsite 插件裏詳述。
+#. 套用後面會介紹到的各種插件。
+#. 統一側邊欄的樣式到一個模板裏。
+#. 顯示源代碼按鈕，也就是每篇文章信息欄中的 
+   :html:`<button class="btn btn-primary"><i class="fa fa-code"></i></button>` 按鈕。
+
+
+插件: 發揮 Python 和 ReSructuredText 的優勢 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+先列舉一下我目前用到的所有插件：
+
+.. code-block:: python
+
+    PLUGINS = ["i18n_subsites",
+               "plantuml",
+               "youku",
+               "youtube",
+               'tipue_search',
+               'neighbors',
+               'series',
+               'bootstrapify',
+               'twitter_bootstrap_rst_directives',
+               "render_math",
+               "cjk-spacing",
+               'extract_toc',
+               'summary']
+
+嗯其實不算多。
 
 Test Math
 +++++++++++++++++++
