@@ -73,7 +73,7 @@ TWITTER_USERNAME = 'farseerfc'
 
 DEFAULT_PAGINATION = 6
 
-STATIC_PATHS = ['static', 'images', 'images/favicon.ico']
+STATIC_PATHS = ['static', 'images', 'uml', 'images/favicon.ico']
 EXTRA_PATH_METADATA = {
     'images/favicon.ico': {'path': 'favicon.ico'}
 }

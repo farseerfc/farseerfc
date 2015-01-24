@@ -6,3 +6,4 @@ output
 theme
 plugins
 *.zhs.rst
+content/uml
