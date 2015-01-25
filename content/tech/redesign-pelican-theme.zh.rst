@@ -46,7 +46,7 @@ Bootstrap 3 的新設計
   不過諸多細節不能符合我的需求，最終還是得手工 hack :code:`@media` 查詢去微調。
   現在的 :ruby:`優先移動設備|mobile-first` :ruby:`響應式|responsive`
   :ruby:`柵格系統|grid system` 則相對顯得科學很多了，也終於能在手持
-  設備上看起來能舒服很多。諸位可以嘗試改變窗口寬度，或者在不同的手持設備上打開這個 
+  設備上看起來舒服一些。諸位可以嘗試改變窗口寬度，或者在不同的手持設備上打開這個 
   blog ，體驗一下這個頁面在不同顯示器大小中的效果。如果仍有問題歡迎
   `發 Issue 給我 <https://github.com/farseerfc/pelican-bootstrap3/issues>`_  。
 
@@ -159,12 +159,12 @@ plugins 指向 `pelican-plugins <https://github.com/farseerfc/pelican-plugins>`_
         @container-xl: 1990px;
 
 首先把 Bootstrap 3 默認適配的幾個 `響應式設備的大小 <http://getbootstrap.com/css/#grid>`_ 
-改成了我需要的大小。:code:`xs` 和 :code:`sm` 的大小分別按照我的手機屏幕 **豎屏** 和
+改成了我需要的大小。 :code:`xs` 和 :code:`sm` 的大小分別按照我的手機屏幕 **豎屏** 和
 **橫屏** 時候的瀏覽器頁面寬度來算， :code:`md` 是想兼容 Nexus 7 橫屏 960 的寬度以及
 一個常見上網本 1024 的寬度。 :code:`lg` 的大小則按照常見的筆記本 1366 寬的屏幕來適配。
 
-這裏 Bootstrap 3 支持的設備大小的一個問題是，它最多考慮到 1200 像素寬的顯示器，而更大的
-比如 1600、 2048 甚至 2560 寬的顯示器現在也並不少見，其結果就是頁面中左右兩側
+這裏 Bootstrap 3 支持的設備大小的一個問題是，它最多考慮到 1200 像素寬的顯示器，而更寬的
+比如 1600、 2048 甚至 2560 像素寬的顯示器現在也並不少見，其結果就是頁面中左右兩側
 有很大的空間被浪費掉了。作爲深受這一問題困擾的用戶之一，我用
 `這裏介紹的方法 <http://stackoverflow.com/a/25644266>`_
 給 bootstrap 增加了一類「 :ruby:`比大更大|bigger than bigger` 」的
@@ -337,34 +337,37 @@ i18n-subsites
 很多博客系統和CMS對多語言的支持都是這樣的，這種處理方式的缺點也顯而易見：作爲 **主語言**
 的語言必須足夠通用，纔能讓進來的人找到合適的翻譯版本，所以通常 **主語言** 都是英語。
 
-而這個插件做的事情描述起來很簡單：將文章按語言屬性分到多個子站，然後分別對多個子站生成
-靜態頁面。具體的實現方式是對 pelican 的頁面生成步驟做了拆分：
+而這個插件做的事情描述起來很簡單：將文章按語言屬性分到多個子站，每個子站獨立放在各自的文件夾。
+比如主站是 https://farseerfc.github.io/ 的話，那麼英語的子站就可以是 
+https://farseerfc.github.io/en/ 。
+然後分別對多個子站生成靜態頁面。具體的實現方式是對 pelican 的頁面生成步驟做了拆分：
 
 #. pelican 按正常情況讀入文章，生成元信息。
-#. i18n-subsites 針對每個語言，覆蓋掉 pelican 的一些選項設置，然後調用 pelican 的
-   頁面生成器按模板生成文章。
-#. 對靜態內容，全部從子站鏈接回主站。
+#. i18n-subsites 針對每個語言，覆蓋掉 pelican 的一些選項設置比如路徑和 URL ，
+   分別調用 pelican 的頁面生成器按模板生成文章。
+#. 對共用的靜態內容比如模板的 js 和 css 文件，只在主站中生成，子站中的相應鏈接全部鏈回主站。
 
-雖然描述起來簡單，但是這個插件可以說最大化利用了 Pelican 的插件系統了，實現細節相對比較
-複雜，大概是我用的這些插件裏面最複雜的了。至於它會覆蓋哪些 Pelican 的配置，請參閱它的
+雖然描述起來簡單，但是這個插件可以說最大化利用了 Pelican 的插件系統，實現細節相對比較
+複雜，大概是我用的這些插件裏面最複雜的了。不誇張的說 Pelican 3.4 支持的新插件 API 和
+站內鏈接功能基本上就是爲了配合這個插件的。至於具體它會覆蓋哪些 Pelican 的配置，請參閱它的
 `README.md文件 <https://github.com/farseerfc/pelican-plugins/blob/master/i18n_subsites/README.rst>`_ 。
 
-按內容拆分多語言子站的做法只解決了問題的一半，還留下另一個問題，也即對模板的翻譯。
-對這個問題， i18n-subsites 提供了兩套方案：
+按內容拆分多語言子站的做法只解決了問題的一半，還留下另一半的問題，也即對模板的翻譯。
+對這個問題， i18n-subsites 提供了兩套方案供選擇：
 
-#. 用覆蓋配置的方式讓每個子站套用不同的模板。這配置起來簡單，但是對模板維護起來有點困難。
+#. 用覆蓋配置路徑的方式讓每個子站套用不同的模板。這配置起來簡單，但是對模板維護起來有點困難。
 #. 用 jinja2 的 i18n 插件，配合 Python 的 gettext 庫實現內容翻譯。這個方案
-   `配置起來比較複雜 <https://github.com/farseerfc/pelican-plugins/blob/master/i18n_subsites/localizing_using_jinja2.rst>`_ ，
-   但是配置好之後用起來就很方便了（除了要記得更新翻譯，處理 po 和 mo 文件等等瑣碎事宜）。
+   `配置起來比較複雜 <https://github.com/farseerfc/pelican-plugins/blob/master/i18n_subsites/localizing_using_jinja2.rst>`_ ，但是配置好之後用起來就很方便了。
+   只是要記得每次修改了模板都要更新翻譯，處理 \*.po 和 \*.mo 文件等等瑣碎事宜。
 
 這裏我用 jinja2 的 i18n 插件的方式實現了模板的翻譯，
 `各個語言的翻譯在這裏 <https://github.com/farseerfc/pelican-bootstrap3/tree/master/translations>`_ ，
 然後用 `這裏的 SCons 腳本 <https://github.com/farseerfc/pelican-bootstrap3/blob/master/SConstruct>`_ 
 根據內容是否變化自動更新 po 和 mo 文件。
 
-配置好這一套方案之後，還要注意在模板和文章中處理好鏈接。用 Pelican 推薦的新的文章間鏈接
-的寫法以及 :code:`SITEURL` 設置爲實際 URL 並且關閉 :code:`RELATIVE_URLS` 之後就沒
-什麼問題了。
+配置好這一套方案之後，還要注意在模板和文章中處理好鏈接。用 Pelican 3.4 之後推薦的
+新的文章間鏈接的寫法以及將 :code:`SITEURL` 設置爲實際 URL 並且關閉 :code:`RELATIVE_URLS` 
+之後，應該就不會出沒什麼問題了（可能還要考慮使用的模板和插件的兼容性，大部分都是寫死了 URL 的問題）。
 
 plantuml
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -382,7 +385,7 @@ plantuml
 
 `PlantUML <http://plantuml.sourceforge.net/>`_ 是一個Java實現的，
 用接近文字描述的語言繪製 UML 圖或者 GUI 界面圖的工具，非常適合嵌入在
-Markdown、 reStructuredText、 AsciiDoc 這種輕量級標記語言裏。
+Markdown、 reStructuredText、 AsciiDoc 等這種輕量級標記語言裏。
 然後麼這個 plantuml 插件就是定義了一個新的 reStructuredText
 :ruby:`指示符|directive` :code:`.. uml::`，把嵌入的內容提取出來調用 plantuml 命令處理
 成圖像然後再插入到文章中。
@@ -399,8 +402,9 @@ Markdown、 reStructuredText、 AsciiDoc 這種輕量級標記語言裏。
         ArrayList : Object[] elementData
         ArrayList : size()
 
-實際用起來這個插件實現得稍微有點小問題：首先它只支持 python2，所以我把它改寫成了 python 
-2 和 3 都通用的語法;其次它原本輸出的文件夾會被 pelican 刪掉，所以把它改了個位置。
+實際用起來這個插件實現上稍微有點小問題：首先它只支持 python2，所以我把它改寫成了 python 
+2 和 3 都通用的語法；其次它原本輸出的文件夾似乎會被 pelican 刪掉，所以把它改了個位置；
+然後它輸出的 URL 也和 i18n-subsites 插件間有不兼容的問題，也順帶修掉了。
 `修改之後的代碼在這裏 <https://github.com/farseerfc/pelican-plugins/tree/master/plantuml>`_ 。
 
 render-math
@@ -419,8 +423,9 @@ render-math
 
 這個插件提供在 reStructuredText 中用 LaTeX 語法插入數學公式的能力，定義了
 :code:`:math:` :ruby:`行內角色|role` 和 :code:`.. math::` :ruby:`指示符|directive` 。
-後臺庫當然是大名鼎鼎簡單好用的 `MathJax <http://www.mathjax.org/>`_ ，這個庫
-會用 MathJax 的 CDN 載入，所以也沒有額外的依賴文件。
+實際工作的渲染庫當然是大名鼎鼎的 `MathJax <http://www.mathjax.org/>`_ ，這個插件
+會用 MathJax 的 CDN 載入，所以也沒有額外的依賴文件。（只是不知道是否會被國內牆掉，
+如果公式顯示不正常請 **務必** 告訴我。）
 
 
 youtube 和 youku 
@@ -448,8 +453,8 @@ neighbors 和 series
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 這兩個插件比較類似也都比較簡單， neighbors 提供一篇文章的前後文章信息，
-在主題模板裏可以用來製作「上一篇」和「下一篇」按鈕。 
-series 提供將多篇文章歸類位一個系列的支持，當然也需要在
+在主題模板裏可以用來製作 **上一篇** 和 **下一篇** 按鈕。 
+series 提供將多篇文章歸類爲一個 **系列** 的支持，當然也需要在
 主題模板中定義顯示「文章系列」的列表。這兩個插件的效果都能在本文末尾，評論區上方的部分看到。
 
 
@@ -480,9 +485,12 @@ twitter_bootstrap_rst_directives 這個插件則是增加了幾個 reStructuredT
 簡單實現和正文文字的圖文混排。
 
 除此以外我還在 twitter_bootstrap_rst_directives 這個插件裏套用它的框架實現了兩個額外
-的 :ruby:`行內角色|role`， 分別是 :code:`:ruby:` ：通過 html 的 :code:`<ruby>` 標籤實現
-文字上方的注音（firefox下不支持，會使用文字後的括號顯示）， 以及 :code:`:html:` 在
-行內插入 :ruby:`裸|raw` html 標籤。這兩個 :ruby:`行內角色|role` 的
+的 :ruby:`行內角色|role`， 分別是 :code:`:ruby:` ：通過 html5 的 :code:`<ruby>` 
+標籤實現文字上方的注音（firefox下 
+`不支持 <https://bugzilla.mozilla.org/show_bug.cgi?id=33339>`_
+，會使用文字後的括號顯示）， 以及 :code:`:html:` ：在
+行內插入 :ruby:`裸|raw` html 標籤（這屬於 Markdown 的基本功能，在 reStructuredText
+這邊由於要考慮多種輸出格式於是就比較麻煩了）。這兩個 :ruby:`行內角色|role` 的
 `實現代碼在這裏 <https://github.com/farseerfc/pelican-plugins/blob/master/twitter_bootstrap_rst_directives/bootstrap_rst_directives.py#L140>`_ 。
 
 extract_toc 和 summary
@@ -493,14 +501,14 @@ extract_toc 和 summary
 reStructuredText 原本就有自動生成
 :ruby:`目錄|toc` 的功能，用起來也非常簡單，只需要在想要插入目錄的地方寫一行
 :code:`.. contents::` ，剩下的都由 docutils 自動生成了。 
-只是當然，這樣生成的目錄肯定會出現在文章的正文裏，而 extract_toc 的作用就是簡單地
-把這個目錄抽取出來，讓模板能在別的地方放置這個目錄。 比如我這裏就把目錄放在了一個
+只是當然這樣生成的目錄肯定會插入在文章的正文裏，而 extract_toc 這個插件的作用就是簡單地
+把這個目錄抽取出來，讓模板能在別的地方放置這個目錄。比如我這裏就把目錄放在了一個
 :code:`panel` 裏。
 
 然後 Pelican 也原本就有從文章中抽取 :ruby:`總結|summary` 顯示在文章列表的功能。
-Pelican 原始的實現似乎是按照文字數抽取前半段，不總是合適作爲總結。 於是這個 summary
+Pelican 原始的實現似乎是按照文字數抽取前半段，不總是適合作爲總結。 於是這個 summary
 插件的作用其實是允許在正文中以特殊的註釋的方式標註哪些部分應該被抽出來作爲總結。
-summary 這個插件的實現只允許抽取一小段文字，我又對它的實現做了少許擴充，允許標註多段
+summary 這個插件原本的實現只允許抽取一段文字，我又對它的實現做了少許擴充，允許標註多段
 文字合併起來作爲總結。
 
 
@@ -514,12 +522,13 @@ summary 這個插件的實現只允許抽取一小段文字，我又對它的實
 ，由於比較長，這裏就不再貼了。
 
 折騰這個主題前後歷時兩個月，期間學會了不少東西，也算是不錯的收穫吧。
-現在既然基礎打好了，接下來就要開始多寫博客了。（希望拖延症不會再犯）
+現在既然基礎打好了，接下來就要開始多寫博客了。（希望拖延症不會再犯……）
 
 最近發現除了我的博客之外還有一個網站 
 `Kansas Linux Fest <http://www.kansaslinuxfest.us/>`_ fork 
 了我的主題，不過他們用了我修改的早期版本，還是原本的 Bootstrap 3 和 
-bootstrap-material-design 樣式。自己草草修改的東西被別人用到果然還是有點小激動呢。
+bootstrap-material-design 樣式。自己草草修改的東西被別人用到果然還是有點小激動呢，
+以及接下來不能馬馬虎虎地寫 commit 消息了。
 
 
 .. [#] 賽65:17「看哪！我造新天新地」啟21:5「我將一切都更新了。」
