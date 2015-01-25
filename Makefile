@@ -71,6 +71,8 @@ theme:
 	(cd theme && scons -Q)
 
 publish: rmdrafts cc clean theme
+	[ ! -d $(OUTPUTDIR) ] || find $(OUTPUTDIR) -mindepth 1 -not -wholename "*/.git*" -delete
+	rm -rf cache
 	$(PELICAN) $(INPUTDIR) -o $(OUTPUTDIR) -s $(PUBLISHCONF) $(PELICANOPTS)
 	$(MAKE) rsthtml
 

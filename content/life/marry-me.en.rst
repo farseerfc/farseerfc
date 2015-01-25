@@ -6,10 +6,15 @@ Will You Marry Me?
 :date: 2013-02-20 20:42
 :tags: will, you, marry, me
 
-.. image:: /images/marry-me.png
-	:alt: will you marry me
+.. panel-default::
+    :title: After rendering
 
-.. PELICAN_END_SUMMARY
+	.. PELICAN_BEGIN_SUMMARY
+
+	.. image:: /images/marry-me.png
+		:alt: will you marry me
+
+	.. PELICAN_END_SUMMARY
 
 Above is a image, the playable version is below:
 

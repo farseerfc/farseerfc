@@ -6,12 +6,19 @@
 :date: 2013-02-20 20:42
 :tags: will, you, marry, me
 
-.. image:: /images/marry-me.png
-	:alt: 嫁給我好麼
 
-.. PELICAN_END_SUMMARY
 
-上面那個是裝飾……可以玩的是下面這個：
+.. panel-default::
+    :title: 渲染的樣子
+
+	.. PELICAN_BEGIN_SUMMARY
+
+	.. image:: /images/marry-me.png
+		:alt: 嫁給我好麼
+
+	.. PELICAN_END_SUMMARY
+
+可以玩的是下面這個：
 
 .. raw:: html
     

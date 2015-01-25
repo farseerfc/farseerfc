@@ -6,10 +6,15 @@
 :date: 2013-02-20 20:42
 :tags: will, you, marry, me
 
-.. image:: /images/marry-me.png
-	:alt: 嫁になってくれませんか？
+.. panel-default::
+    :title: 画像はこのように
 
-.. PELICAN_END_SUMMARY
+	.. PELICAN_BEGIN_SUMMARY
+
+	.. image:: /images/marry-me.png
+		:alt: 嫁になってくれませんか？
+
+	.. PELICAN_END_SUMMARY
 
 
 上のは飾りだけ、遊べるのはこれ：
