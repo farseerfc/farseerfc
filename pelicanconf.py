@@ -108,7 +108,6 @@ PLUGINS = ["i18n_subsites",
            'bootstrapify',
            'twitter_bootstrap_rst_directives',
            "render_math",
-           "cjk-spacing",
            'extract_toc',
            'summary']
 
