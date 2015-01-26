@@ -73,6 +73,7 @@ theme:
 publish: rmdrafts cc clean theme
 	[ ! -d $(OUTPUTDIR) ] || find $(OUTPUTDIR) -mindepth 1 -not -wholename "*/.git*" -delete
 	rm -rf cache
+	echo $(SITEURL) > content/static/CNAME
 	$(PELICAN) $(INPUTDIR) -o $(OUTPUTDIR) -s $(PUBLISHCONF) $(PELICANOPTS)
 	$(MAKE) rsthtml
 
@@ -97,7 +98,7 @@ s3_upload:
 
 github:
 	(cd $(OUTPUTDIR) && git checkout master)
-	env SITEURL="farseerfc.github.io" $(MAKE) publish
+	env SITEURL="farseerfc.me" $(MAKE) publish
 	(cd $(OUTPUTDIR) && git add . && git commit -m "update" && git push)
 
 gitcafe:

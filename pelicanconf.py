@@ -60,7 +60,7 @@ LINKS = (('lilydjwg',
           'http://acgtyrant.com/',
           'https://www.gravatar.com/avatar/' +
           md5(b"acgtyrant@gmail.com").hexdigest(),
-          '御宅暴君，維護這個人和Arch兩個博客'
+          '御宅暴君，維護着他個人的和Arch的兩個博客'
           ),
          ('飲水思源',
           'http://bbs.sjtu.edu.cn/',
@@ -73,9 +73,10 @@ TWITTER_USERNAME = 'farseerfc'
 
 DEFAULT_PAGINATION = 6
 
-STATIC_PATHS = ['static', 'images', 'uml', 'images/favicon.ico']
+STATIC_PATHS = ['static', 'images', 'uml', 'images/favicon.ico', 'static/CNAME']
 EXTRA_PATH_METADATA = {
-    'images/favicon.ico': {'path': 'favicon.ico'}
+    'images/favicon.ico': {'path': 'favicon.ico'},
+    'static/CNAME': {'path': 'CNAME'}
 }
 
 PLUGIN_PATHS = ['../pelican-plugins']
