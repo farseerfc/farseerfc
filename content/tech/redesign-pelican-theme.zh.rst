@@ -14,7 +14,7 @@
 
 .. label-warning::
     
-    **2015年1月30日更新**
+    **2015年2月3日更新**
 
 .. PELICAN_END_SUMMARY
 
@@ -562,13 +562,21 @@ twitter_bootstrap_rst_directives 這個插件則是增加了幾個 reStructuredT
 簡單實現和正文文字的圖文混排。
 
 除此以外我還在 twitter_bootstrap_rst_directives 這個插件裏套用它的框架實現了兩個額外
-的 :ruby:`行內角色|role`， 分別是 :code:`:ruby:` ：通過 html5 的 :code:`<ruby>` 
+的 :ruby:`行內角色|role` ， 分別是 :code:`:ruby:` ：通過 html5 的 :code:`<ruby>` 
 標籤實現文字上方的注音（firefox下 
 `不支持 <https://bugzilla.mozilla.org/show_bug.cgi?id=33339>`_
 ，會使用文字後的括號顯示）， 以及 :code:`:html:` ：在
 行內插入 :ruby:`裸|raw` html 標籤（這屬於 Markdown 的基本功能，在 reStructuredText
 這邊由於要考慮多種輸出格式於是就比較麻煩了）。這兩個 :ruby:`行內角色|role` 的
 `實現代碼在這裏 <https://github.com/farseerfc/pelican-plugins/blob/master/twitter_bootstrap_rst_directives/bootstrap_rst_directives.py#L140>`_ 。
+
+.. label-warning::
+    
+    **2015年2月3日更新**
+
+今天又在 twitter_bootstrap_rst_directives 裏增加了兩個 :ruby:`行內角色|role` 。
+一個是 :code:`:twi:` 用來寫 twitter 用戶的鏈接，比如 :twi:`farseerfc` ，另一個是
+:code:`:irc:` 用來指向 freenode 的 channel ，比如 :irc:`yssyd3` 。
 
 extract_toc 和 summary
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
