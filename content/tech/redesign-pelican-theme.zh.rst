@@ -9,6 +9,16 @@
 
 .. contents::
 
+
+.. PELICAN_BEGIN_SUMMARY
+
+.. label-warning::
+    
+    **2015年1月30日更新**
+
+.. PELICAN_END_SUMMARY
+
+
 前言: 新天新地，將一切都更新了 [#]_
 ++++++++++++++++++++++++++++++++++++++++
 
@@ -183,7 +193,7 @@ plugins 指向 `pelican-plugins <https://github.com/farseerfc/pelican-plugins>`_
 |     |xs|          |     |sm|                 |     |md|                            |
 +-------------------+--------------------------+-------------------------------------+
 | +-----------+     | +---------+--------+     | +---------+--------+                |
-| | |NavbarC| |     | |     |Navbarr|    |     | | |Navbar|         |                |
+| | |Navbarr| |     | |     |Navbar|     |     | | |Navbar|         |                |
 | +-----------+     | +---------+--------+     | +---------+--------+                |
 | | |art|     |     | | |art|            |     | | |art| 1 | |sb| 1 |                |
 | +-----------+     | +---------+--------+     | +---------+--------+                |
@@ -212,7 +222,6 @@ plugins 指向 `pelican-plugins <https://github.com/farseerfc/pelican-plugins>`_
 .. |xl| replace:: :code:`xl` 用三欄文章列表、雙欄 |sb| 固定佈局
 .. |Navbarr| replace:: :ruby:`導航欄|Navbar`
 .. |Navbar| replace:: 導航欄
-.. |NavbarC| replace:: 摺疊的導航欄
 .. |Footer| replace:: :ruby:`底欄|footer`
 .. |Footerr| replace:: 底欄
 .. |sidebarr| replace:: :ruby:`側邊欄|sidebar`
@@ -246,6 +255,16 @@ plugins 指向 `pelican-plugins <https://github.com/farseerfc/pelican-plugins>`_
 ，配合我的頭像風格， 這個修改只需要一行。
 接着刪掉了 :code:`.btn` 的 :code:`white-space: nowrap;` 讓按鈕的文字可以換行，
 這也只是一行修改。
+
+.. label-warning::
+    
+    **2015年1月29日更新**
+
+另外我也不太喜歡 Bootstrap 3 默認在手機上的 :ruby:`摺疊導航欄|collapsed navbar` ，
+摺疊之後的操作不夠直觀方便而且依賴 javascript 所以有 bug …… 於是我把它關掉了，
+具體方式是在 variables.less 把 :code:`@grid-float-breakpoint` 和
+:code:`@grid-float-breakpoint-max` 都設爲0就可以了。
+
 
 對 bootstrap-material-design 的定製
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -411,6 +430,60 @@ Markdown、 reStructuredText、 AsciiDoc 等這種輕量級標記語言裏。
 然後它輸出的 URL 也和 i18n-subsites 插件間有不兼容的問題，也順帶修掉了。
 `修改之後的代碼在這裏 <https://github.com/farseerfc/pelican-plugins/tree/master/plantuml>`_ 。
 
+.. label-warning::
+    
+    **2015年1月30日更新**
+
+.. panel-default::
+    :title: 嵌入 Ditaa 的示例
+
+    .. ditaa::
+
+                           +-------------+
+                           |   ditaa     |-------+
+                           |  Diagram    |       |
+                           +-------------+       | PNG out
+                               ^                 |
+                               | ditaa in        |
+                               |                 v
+         +--------+   +--------+----+    /----------------\
+         |        | --+   Pelican   +--> |                |
+         |  Text  |   +-------------+    | Beautiful Blog |
+         |Document|   |   !magic!   |    |                |
+         |     {d}|   |             |    |                |
+         +---+----+   +-------------+    \----------------/
+             :                                   ^
+             |          Lots of work             |
+             +-----------------------------------+
+
+
+plantuml 是繪製UML的，除此之外還有一個類似的工具是繪製一般的 :ruby:`流程圖|diagram`
+的，叫 `ditaa <http://ditaa.sourceforge.net/>`_ ，和 plantuml 非常像，也比較像
+reStructuredText 的表格。
+於是我也照貓畫虎實現了一個 ditaa 的 :ruby:`指示符|directive` ，用起來類似這樣：
+
+.. code-block:: rst
+
+    .. ditaa::
+
+                           +-------------+
+                           |   ditaa     |-------+
+                           |  Diagram    |       |
+                           +-------------+       | PNG out
+                               ^                 |
+                               | ditaa in        |
+                               |                 v
+         +--------+   +--------+----+    /----------------\
+         |        | --+   Pelican   +--> |                |
+         |  Text  |   +-------------+    | Beautiful Blog |
+         |Document|   |   !magic!   |    |                |
+         |     {d}|   |             |    |                |
+         +---+----+   +-------------+    \----------------/
+             :                                   ^
+             |          Lots of work             |
+             +-----------------------------------+
+
+
 render-math
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -518,7 +591,7 @@ summary 這個插件原本的實現只允許抽取一段文字，我又對它的
 
 .. label-warning::
     
-    **2015年1月29日更新：**
+    **2015年1月29日更新**
 
 今天在 extract_toc 插件的幫助下，在側邊欄裏放了一個 Bootstrap affix 的目錄，
 它保持在頁面的右側位置不變，方便導航到文章的各個地方。具體實現方法除了 Bootstrap 3 的

@@ -31,9 +31,13 @@ FEED_ATOM = None
 FEED_ALL_ATOM = None
 CATEGORY_FEED_ATOM = None
 
+LOAD_CONTENT_CACHE = True
+CHECK_MODIFIED_METHOD = "md5"
+
 LINKS = (('lilydjwg',
           'http://lilydjwg.is-programmer.com/',
-          'https://upload.wikimedia.org/wikipedia/commons/0/03/Vulpes_vulpes_laying_in_snow.jpg',
+          'https://www.gravatar.com/avatar/' +
+          md5(b"lilydjwg@gmail.com").hexdigest(),
           '依雲（aka. 百合仙子）'),
          ('felixonmars',
           'http://blog.felixc.at/',

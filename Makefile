@@ -28,7 +28,7 @@ help:
 	@echo '                                                                       '
 
 
-html: theme clean
+html: theme
 	$(PELICAN) $(INPUTDIR) -o $(OUTPUTDIR) -s $(CONFFILE) $(PELICANOPTS)
 
 drafts:
