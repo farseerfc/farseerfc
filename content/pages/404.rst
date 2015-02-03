@@ -1,0 +1,63 @@
+404 Page Not Found 
+=============================================================================
+
+:slug: 404
+:lang: zh
+:status: hidden
+:date: 2015-02-02 19:21:34
+
+頁面沒找到呢
+++++++++++++++++++++++++++++++++++++++
+
+	你能聽到麼
+
+	硬盤旋轉的聲音
+
+	答案未找到 [#]_
+
+	.. [#] `編程之禪 The ZEN of Programming <https://en.wikipedia.org/wiki/The_Tao_of_Programming>`_
+
+
+您訪問了一個不存在的頁面噢。
+
+如果你是通過點本博客內的鏈接進來的，請在下面留言讓我修復鏈接。
+
+如果你是直接輸入 URL 進來的，是希望我針對一個新話題寫點什麼？也請留言吧。
+
+
+Page Not Found
+++++++++++++++++++++++++++++++++++++++
+
+	The web site you seek
+
+	Lies beyond our perception
+
+	But others await. [#]_
+
+	.. [#] `Haiku Error Messages <http://8325.org/haiku/>`_
+
+You are trying to access a page not found in this blog.
+
+If you followed a link in my blog to here, please leave a comment below,
+so that I can fix the problematic link.
+
+If you arrived here by entering URL manually... Maybe you want me to write
+about some new topic? Please leave a comment as well.
+
+ページが見つかりません
+++++++++++++++++++++++++++++++++++++++
+
+	みみうざい
+
+	ファイル探す音
+
+	該当あらず
+
+
+アクセスしようとしているページが見つかりません。
+
+このブログ内のリンクに沿ってこちらに辿りつけた方は、下に書き込んでください、
+壊れたリンクを修正いたします。
+
+URLを手入力してここに着いた方は、私に何か書いてほしいかな？
+よろしければトピックも書き込んでください。

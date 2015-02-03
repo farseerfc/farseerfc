@@ -77,11 +77,20 @@ TWITTER_USERNAME = 'farseerfc'
 
 DEFAULT_PAGINATION = 6
 
-STATIC_PATHS = ['static', 'images', 'uml', 'images/favicon.ico', 'static/CNAME']
+STATIC_PATHS = ['static',
+                'images',
+                'uml',
+                'images/favicon.ico',
+                'static/CNAME']
+
 EXTRA_PATH_METADATA = {
     'images/favicon.ico': {'path': 'favicon.ico'},
     'static/CNAME': {'path': 'CNAME'}
 }
+
+PAGE_URL = "{slug}.html"
+PAGE_SAVE_AS = "{slug}.html"
+
 
 PLUGIN_PATHS = ['../pelican-plugins']
 THEME = "../pelican-bootstrap3"
