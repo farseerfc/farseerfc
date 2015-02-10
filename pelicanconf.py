@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*- #
 from __future__ import unicode_literals
-from hashlib import md5
 from os import getenv
 
 AUTHOR = 'farseerfc'
@@ -33,50 +32,6 @@ CATEGORY_FEED_ATOM = None
 
 LOAD_CONTENT_CACHE = True
 CHECK_MODIFIED_METHOD = "md5"
-
-
-def gravatar(email):
-    return 'https://www.gravatar.com/avatar/' + md5(email).hexdigest()
-
-# LINKS = (('lilydjwg',
-#           'http://lilydjwg.is-programmer.com/',
-#           gravatar(b"lilydjwg@gmail.com"),
-#           '依雲（aka. 百合仙子）'),
-#          ('felixonmars',
-#           'http://blog.felixc.at/',
-#           gravatar(b'felixonmars@archlinux.org'),
-#           '火星貓大大'),
-#          ('phoenixlzx',
-#           'http://blog.phoenixlzx.com/',
-#           gravatar(b"i@phoenixlzx.com"),
-#           '鳳凰菊苣'
-#           ),
-#          ('fixme',
-#           'https://fbq.github.io/',
-#           gravatar(b"abstractionfbq@gmail.com"),
-#           '水源技站'
-#           ),
-#          ('LQYMGT',
-#           'https://lqymgt.github.io/',
-#           gravatar(b'lqymgt@gmail.com'),
-#           'ID是irc上的中文社區鎮社之寶的可愛學弟'
-#           ),
-#          ('quininer',
-#           'http://quininer.github.io/',
-#           gravatar(b"quininer@live.com"),
-#           '純JavaScript的帥氣博客'
-#           ),
-#          ('acgtyrant',
-#           'http://acgtyrant.com/',
-#           gravatar(b"acgtyrant@gmail.com"),
-#           '御宅暴君，維護着他個人的和Arch的兩個博客'
-#           ),
-#          ('飲水思源',
-#           'http://bbs.sjtu.edu.cn/',
-#           'https://bbs.sjtu.edu.cn/favicon.ico',
-#           '上海交通大學飲水思源BBS站'
-#           ),
-#          )
 
 TWITTER_USERNAME = 'farseerfc'
 

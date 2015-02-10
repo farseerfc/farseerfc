@@ -11,9 +11,9 @@
 
 	你能聽到麼
 
-	硬盤旋轉的聲音
-
-	答案未找到 [#]_
+		硬盤旋轉的聲音
+		
+		答案未找到 [#]_
 
 	.. [#] `編程之禪 The ZEN of Programming <https://en.wikipedia.org/wiki/The_Tao_of_Programming>`_
 
@@ -28,11 +28,11 @@
 Page Not Found
 ++++++++++++++++++++++++++++++++++++++
 
-	The web site you seek
+	Page you are seeking
 
-	Lies beyond our perception
+		From your path they are fleeing
 
-	But others await. [#]_
+		Their winter has come. [#]_
 
 	.. [#] `Haiku Error Messages <http://8325.org/haiku/>`_
 
@@ -49,9 +49,9 @@ about some new topic? Please leave a comment as well.
 
 	みみうざい
 
-	ファイル探す音
+		ファイル探す音
 
-	該当あらず
+		該当あらず
 
 
 アクセスしようとしているページが見つかりません。
