@@ -113,7 +113,7 @@ TWITTER_USERNAME = 'farseerfc'
 TWITTER_WIDGET_ID = "538997172142759936"
 
 AVATAR = 'images/avatar.jpg'
-ABOUT_PAGE = "pages/about.html"
+ABOUT_PAGE = "about.html"
 ABOUT_ME = """<h3 style="text-align:center">
 <a href="https://twitter.com/farseerfc"                  target="_blank">
 <i class="fa fa-twitter" style="text-align:center"></i></a>
