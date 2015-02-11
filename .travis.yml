@@ -9,7 +9,7 @@ install:
     - pip install pelican
     - pip install babel
     - sudo apt-get install opencc npm
-    - npm install -g less
+    - sudo npm install -g less
 
 script:
     - git clone https://github.com/farseerfc/pelican-plugins plugins
