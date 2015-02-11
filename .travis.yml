@@ -7,6 +7,7 @@ python:
 
 install:
     - pip install pelican
+    - pip install babel
     - sudo apt-get install opencc npm
     - npm install -g less
 
