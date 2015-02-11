@@ -1,0 +1,15 @@
+language: python
+python:
+	- "2.7"
+	- "3.4"
+	- "pypy"
+
+install:
+	- pip install pelican
+	- sudo apt-get install opencc
+
+script:
+	- git clone https://github.com/farseerfc/pelican-plugins plugins
+	- git clone https://github.com/farseerfc/pelican-bootstrap3 theme
+	- mkdir output
+	- make html
