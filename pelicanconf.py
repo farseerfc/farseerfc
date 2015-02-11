@@ -45,7 +45,8 @@ STATIC_PATHS = ['static',
 
 EXTRA_PATH_METADATA = {
     'images/favicon.ico': {'path': 'favicon.ico'},
-    'static/CNAME': {'path': 'CNAME'}
+    'static/CNAME': {'path': 'CNAME'},
+    'static/robots.txt': {'path': 'robots.txt'},
 }
 
 PAGE_URL = "{slug}.html"
@@ -83,7 +84,12 @@ PLUGINS = ["i18n_subsites",
            'twitter_bootstrap_rst_directives',
            "render_math",
            'extract_toc',
+           'sitemap',
            'summary']
+
+SITEMAP = {
+    'format': 'xml',
+}
 
 USE_LESS = False
 
