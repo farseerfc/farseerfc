@@ -7,7 +7,8 @@ python:
 
 install:
     - pip install pelican
-    - sudo apt-get install opencc
+    - sudo apt-get install opencc npm
+    - npm install less
 
 script:
     - git clone https://github.com/farseerfc/pelican-plugins plugins
