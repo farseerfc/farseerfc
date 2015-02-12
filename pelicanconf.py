@@ -53,8 +53,8 @@ PAGE_URL = "{slug}.html"
 PAGE_SAVE_AS = "{slug}.html"
 
 
-PLUGIN_PATHS = ['../pelican-plugins']
-THEME = "../pelican-bootstrap3"
+PLUGIN_PATHS = ['plugins']
+THEME = "theme"
 
 
 I18N_SUBSITES = {
