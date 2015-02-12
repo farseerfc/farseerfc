@@ -8,12 +8,13 @@ python:
 before_install:
     - sudo apt-add-repository ppa:chris-lea/node.js -y
     - sudo apt-get update
-    - sudo apt-get install nodejs 
+    - sudo apt-get install nodejs ditaa plantuml
 
 install:
     - sudo pip install pelican 
     - sudo pip install jinja2
     - sudo pip install babel
+    - sudo pip install beautifulsoup4
     - sudo npm install -g less
     - sudo ln -s /bin/true /bin/opencc
 
