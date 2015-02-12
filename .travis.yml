@@ -8,10 +8,12 @@ python:
 before_install:
     - sudo apt-add-repository ppa:chris-lea/node.js -y
     - sudo apt-get update
-    - sudo apt-get install nodejs python-pybabel
+    - sudo apt-get install nodejs
 
 install:
-    - pip install pelican jinja2
+    - pip install pelican 
+    - pip install jinja2
+    - pip install babel
     - sudo npm install -g less
 
 script:
