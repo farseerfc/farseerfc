@@ -11,7 +11,7 @@ before_install:
     - sudo apt-get install nodejs python-pybabel
 
 install:
-    - pip install pelican
+    - pip install pelican jinja2
     - sudo npm install -g less
 
 script:
