@@ -1,1 +1,0 @@
-watch-final: drafts/*.rst -> echo "========updated========" && make drafts cc html

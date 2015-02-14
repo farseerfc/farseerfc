@@ -7,7 +7,7 @@ Wayland 的是與非
 :tags: linux, wayland, xorg
 
 連着好幾年了，每年都有人說 wayland_ 要來了， X11 即將壽終正寢了。
-畢竟 X11 這個協議遠在Linux之前就有了，歲數都比我大，歷史遺留問題
+畢竟 X11 這個協議遠在 Linux 之前就有了，歲數都比我大，歷史遺留問題
 一大堆，安全性、擴展性都跟不上時代了。
 
 .. _wayland: http://wayland.freedesktop.org/
