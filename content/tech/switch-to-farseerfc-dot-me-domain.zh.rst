@@ -11,7 +11,7 @@
 博客上，當時試着轉到過這個域名，發現 :ruby:`自定義域名|custom domain` 
 只支持 http 不支持 https ，想着還要買自己的證書，於是就扔在了一旁。不用自定義域名的話，
 放在 github.io 上是可以用 HTTPS 的。
-今天在 :irc:`archlinux-cn` 上受大牛 :twi:`quininer` 和 :twi:`lilydjwg` 點播，
+今天在 :irc:`archlinux-cn` 上受大牛 :fref:`quininer` 和 :fref:`lilydjwg` 點播，
 發現 cloudflare 有提供
 `免費的支持 SSL 的 CDN 服務 <https://blog.cloudflare.com/introducing-universal-ssl/>`_
 趕快去申請了一個，感覺非常讚，於是就換過來了。
@@ -104,6 +104,6 @@
 致謝
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-最後要感謝提供消息的 :twi:`quininer` 和 :twi:`lilydjwg` ，感謝撰寫設置步驟的
+最後要感謝提供消息的 :fref:`quininer` 和 :fref:`lilydjwg` ，感謝撰寫設置步驟的
 *Jonathan J Hunt* ， 感謝 CloudFlare 提供免費 SSL CDN 服務，感謝 Github 提供
 方便免費的 Pages 託管。
