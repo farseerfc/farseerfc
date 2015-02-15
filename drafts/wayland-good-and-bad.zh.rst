@@ -13,7 +13,7 @@
 
 .. _wayland: http://wayland.freedesktop.org/
 
-看樣子 2015年的確像是 Wayland 終於能用了
+看樣子 2015年的確像是 Wayland 終於能用了 
 --------------------------------------------------------------------
 
 根據 `Arch 的 Wiki <https://wiki.archlinux.org/index.php/Wayland>`_ 上跟蹤着的 wayland 進展，

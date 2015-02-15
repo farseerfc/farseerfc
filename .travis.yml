@@ -8,7 +8,7 @@ python:
 before_install:
     - sudo apt-add-repository ppa:chris-lea/node.js -y
     - sudo apt-get update
-    - sudo apt-get install nodejs ditaa plantuml
+    - sudo apt-get install nodejs ditaa
 
 install:
     - sudo pip install pelican 
@@ -17,6 +17,11 @@ install:
     - sudo pip install beautifulsoup4
     - sudo npm install -g less
     - sudo ln -s /bin/true /bin/opencc
+    - wget http://sourceforge.net/projects/plantuml/files/plantuml.jar/download -O plantuml
+    - echo "#! /bin/sh" > plantuml
+    - echo 'exec java -jar /opt/plantuml/plantuml.jar "$@"' >> plantuml
+    - install -m 755 -D plantuml /usr/bin/plantuml
+    - plantuml -version
 
 script:
     - git clone https://github.com/farseerfc/pelican-plugins plugins
