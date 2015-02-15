@@ -21,7 +21,7 @@ Xorg 上常用的遠程桌面工具有很多，基於 VNC 協議的、基於NX�
 於是今天介紹一個使用方便設置也簡單的方法： 通過 chrome-remote-desktop 在 archlinux 
 上使用遠程桌面。這個方案的優勢在於，藉助 Google 的雲端服務器（內部貌似是XMPP協議下的握手）
 方便地實現了 NAT 穿透，無論什麼網絡環境基本都能使用。當然，要支持遠程登錄，
-位於遠端的登錄的計算機必須一直開着 Chrome 。
+位於遠端的登錄的計算機必須一直開着 Chrome Remote Desktop 的後臺服務。
 
 .. panel-default:: 
 	:title: Chrome Remote Desktop 插件

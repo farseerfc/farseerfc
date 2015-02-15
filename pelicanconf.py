@@ -73,6 +73,8 @@ I18N_SUBSITES = {
 }
 I18N_UNTRANSLATED_ARTICLES = "remove"
 
+MD_EXTENSIONS = ['admonition', 'toc', 'codehilite(css_class=highlight)', 'extra']
+
 PLUGINS = ["i18n_subsites",
            "plantuml",
            "youku",

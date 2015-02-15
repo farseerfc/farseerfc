@@ -103,7 +103,7 @@ github:
 
 gitcafe:
 	(cd $(OUTPUTDIR) && git checkout gitcafe-pages)
-	env SITEURL="farseerfc.gitcafe.com" $(MAKE) publish
+	env SITEURL="farseerfc.gitcafe.io" $(MAKE) publish
 	(cd $(OUTPUTDIR) && git add . && git commit -m "update" && git push -u gitcafe gitcafe-pages)
 
 .PHONY: html help clean regenerate serve devserver publish ssh_upload rsync_upload dropbox_upload ftp_upload s3_upload github cc theme cleancc drafts rmdrafts rsthtml
