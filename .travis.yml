@@ -24,7 +24,7 @@ install:
     - sudo install -m 755 -D plantuml /usr/bin/plantuml
     - plantuml -version
     - wget https://bintray.com/artifact/download/byvoid/opencc/opencc-1.0.2.tar.gz
-    - tar xv opencc-1.0.2.tar.gz
+    - tar xf opencc-1.0.2.tar.gz
     - cd opencc && make && sudo make install
     - opencc --version
 
