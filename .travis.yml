@@ -16,7 +16,9 @@ install:
     - sudo pip install babel
     - sudo pip install beautifulsoup4
     - sudo npm install -g less
-    - wget http://sourceforge.net/projects/plantuml/files/plantuml.jar/download -O plantuml
+    - wget http://sourceforge.net/projects/plantuml/files/plantuml.jar/download -O plantuml.jar
+    - sudo mkdir -p /opt/plantuml
+    - sudo cp plantuml.jar /opt/plantuml
     - echo "#! /bin/sh" > plantuml
     - echo 'exec java -jar /opt/plantuml/plantuml.jar "$@"' >> plantuml
     - sudo install -m 755 -D plantuml /usr/bin/plantuml
