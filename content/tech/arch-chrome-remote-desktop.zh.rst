@@ -73,14 +73,14 @@ Archlinux 上設置遠程登錄的服務器
 首先我們需要把遠程登錄的用戶添加入 chrome-remote-desktop 這個用戶組裏。
 新版本的 chrome remote desktop 提供了一個命令做這個事情，所以執行以下命令就可以了：
 
-.. code-block:: bash
+.. code-block:: console
 
 	$ /opt/google/chrome-remote-desktop/chrome-remote-desktop --add-user
 
 然後我們需要手動創建 :code:`~/.config/chrome-remote-desktop` 這個文件夾，內容是空的
 就好了，隨後 chrome 會往這裏面放 :code:`host#.json` 文件用於身份驗證。
 
-.. code-block:: bash
+.. code-block:: console
 
 	$ mkdir ~/.config/chrome-remote-desktop
 
@@ -88,7 +88,7 @@ Archlinux 上設置遠程登錄的服務器
 登錄時的 .xinitrc ，內容麼就是啓動你想在遠程登錄時用的桌面環境。
 這裏可以指定一個和你正在登錄的 WM/DE 不同的桌面，比如我啓動 xfce4：
 
-.. code-block:: bash
+.. code-block:: console
 
 	$ cat ~/.chrome-remote-desktop-session
 	#!/bin/bash
@@ -131,14 +131,14 @@ Archlinux 上設置遠程登錄的服務器
 同時，啓用了遠程鏈接之後，可以在剛剛創建的 ~/.config/chrome-remote-desktop 
 文件夾中找到記錄了驗證信息的文件。
 
-.. code-block:: bash
+.. code-block:: console
 
 	$ ls .config/chrome-remote-desktop 
 	chrome-profile  host#8cfe7ecfd6bb17955c1ea22f77d0d800.json  pulseaudio#8cfe7ecfd6
 
 然後就可以啓動對應的 systemd 用戶服務了，如果想自動啓動服務要記得 :code:`systemctl --user enable` ：
 
-.. code-block:: bash
+.. code-block:: console
 
 	$ systemctl --user start chrome-remote-desktop.service
 
