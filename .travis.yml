@@ -7,7 +7,7 @@ python:
 before_install:
     - sudo apt-add-repository ppa:chris-lea/node.js -y
     - sudo apt-get update
-    - sudo apt-get install nodejs ditaa doxygen
+    - sudo apt-get install nodejs ditaa doxygen parallel
 
 install:
     - sudo pip install pelican 
@@ -38,4 +38,4 @@ script:
     - git clone https://github.com/farseerfc/pelican-plugins plugins
     - git clone https://github.com/farseerfc/pelican-bootstrap3 theme
     - mkdir output
-    - env SITEURL="farseerfc.me" make publish
+    - env SITEURL="farseerfc.me" make publish PELICANOPTS=-D
