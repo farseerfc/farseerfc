@@ -15,6 +15,7 @@ install:
     - sudo pip install jinja2
     - sudo pip install babel
     - sudo pip install beautifulsoup4
+    - sudo pip install markdown
     - sudo npm install -g less
     - wget http://sourceforge.net/projects/plantuml/files/plantuml.jar/download -O plantuml.jar
     - sudo mkdir -p /opt/plantuml
@@ -27,6 +28,11 @@ install:
     - tar xf opencc-1.0.2.tar.gz
     - cd opencc-1.0.2 && make && sudo make install && cd ..
     - opencc --version
+    - sudo locale-gen zh_CN.UTF-8
+    - sudo locale-gen zh_HK.UTF-8
+    - sudo locale-gen en_US.UTF-8
+    - sudo locale-gen ja_JP.UTF-8
+    - locale -a
 
 script:
     - git clone https://github.com/farseerfc/pelican-plugins plugins
