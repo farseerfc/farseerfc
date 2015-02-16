@@ -38,4 +38,4 @@ script:
     - git clone https://github.com/farseerfc/pelican-plugins plugins
     - git clone https://github.com/farseerfc/pelican-bootstrap3 theme
     - mkdir output
-    - env SITEURL="farseerfc.me" $(MAKE) publish
+    - env SITEURL="farseerfc.me" make publish
