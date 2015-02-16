@@ -25,7 +25,7 @@ install:
     - plantuml -version
     - wget https://bintray.com/artifact/download/byvoid/opencc/opencc-1.0.2.tar.gz
     - tar xf opencc-1.0.2.tar.gz
-    - cd opencc-1.0.2 && make && sudo make install
+    - cd opencc-1.0.2 && make && sudo make install && cd ..
     - opencc --version
 
 script:
