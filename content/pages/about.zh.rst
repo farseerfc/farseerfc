@@ -65,3 +65,12 @@ facebook: http://www.facebook.com/farseerfc
 renren（人人）: http://renren.com/farseer
 
 
+關於現在用的頭像
+------------------------------------------
+
+.. figure:: images/sakuya.jpg
+	:alt: 我的頭像 十六夜 咲夜
+
+	這個頭像來自 HUG 大大繪製的 :ruby:`十六夜|いざよい` :ruby:`咲夜|さくや` ，
+	`pixiv id=41143207 <http://www.pixiv.net/member_illust.php?mode=medium&illust_id=41143207>`_
+	因爲實在太喜歡了所以就擅自拿來作爲頭像了。
