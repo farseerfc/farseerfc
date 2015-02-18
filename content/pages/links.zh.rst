@@ -60,3 +60,9 @@ Links
 	:logo: https://avatars3.githubusercontent.com/u/1693228
 
 	OS X 骨灰用戶，Haskell大牛，好像什麼都知道。
+
+.. friend:: mazk
+	:nick: `mazk <https://mazk.github.io/>`_
+	:logo: https://mazk.github.io/images/avatar.jpg
+
+	我的完整博客模板的第一個用戶，似乎還是高中生，前途無量呀。

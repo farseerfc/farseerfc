@@ -65,3 +65,17 @@ facebook: http://www.facebook.com/farseerfc
 renren（人人）: http://renren.com/farseer
 
 
+
+今使っているアバター
+------------------------------------------
+
+.. figure:: /images/sakuya.jpg
+	:alt: 今使っているアバター 十六夜 咲夜
+
+	このアバターは `HUG 氏 <http://weibo.com/PetroleummonsterHUG>`_
+	が描いた :ruby:`十六夜|いざよい` :ruby:`咲夜|さくや` ，
+	`pixiv id=41143207 <http://www.pixiv.net/member_illust.php?mode=medium&illust_id=41143207>`_ ようようむ
+	あまりにも素晴らしく描いていたから勝手にアバターとして使いました。
+	十六夜は東方プロジェクトの :ruby:`妖々夢|ようようむ` 、 
+	:ruby:`永夜抄|えいやしょう` や :ruby:`緋想天|ひそうてん`、:ruby:`非想天則|ひそうてんそく` などに出てきた
+	キャラクターで、一番使いこなす子の原因で気に入ります。

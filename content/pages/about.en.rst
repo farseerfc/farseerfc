@@ -67,3 +67,15 @@ facebook: http://www.facebook.com/farseerfc
 renren（人人）: http://renren.com/farseer
 
 
+Current Avatar
+------------------------------------------
+
+.. figure:: /images/sakuya.jpg
+	:alt: My avatar is Izayoi Sakuya
+
+	This avatar is :ruby:`十六夜|いざよい Izayoi` :ruby:`咲夜|さくや Sakuya` ， drawn by `HUG <http://weibo.com/PetroleummonsterHUG>`_ and published here
+	`pixiv id=41143207 <http://www.pixiv.net/member_illust.php?mode=medium&illust_id=41143207>`_ .
+	Izayoi is a character from Touhou Project, and she is my favorite character in many released games
+	of Touhou Project, including :ruby:`妖々夢|Perfect Cherry Blossom` , :ruby:`永夜抄|Imperishable Night` ,
+	:ruby:`緋想天|Scarlet Weather Rhapsody` , :ruby:`非想天則|Hisōtensoku` .
+	
