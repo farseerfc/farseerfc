@@ -126,4 +126,14 @@ build fail ，而如果在 script 裏失敗的話算作 build fail 。
 所以調用了 4 次 locale-gen 。
 
 寫好 :code:`.travis.yml` 之後把它 push 到 github ，然後 travis 這邊就會自動 clone
-下來。
+下來開始編譯。 travis 上能看到編譯的完整過程和輸出，一切正常的話編譯結束之後
+build 的狀態就會變成 passed ，比如我的這次的
+https://travis-ci.org/farseerfc/farseerfc/builds/51344614 。
+
+從 Travis-CI 推往 Github 
+--------------------------------------------------------
+
+上面的測試編譯通過了之後，下一步自然就是讓 travis-ci 編譯的結果自動推到 Github
+發佈出來。要推往 Github 自然需要設置 github 用戶的身份，在本地設置的時候是把
+本地的 ssh key 添加到 github 賬戶就可以了，在一切細節都公開了的 travis 上
+當然不能放私有 key 。
