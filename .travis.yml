@@ -2,7 +2,6 @@ language: python
 
 python:
     - "2.7"
-    - "pypy"
 
 before_install:
     - sudo apt-add-repository ppa:chris-lea/node.js -y
@@ -38,4 +37,4 @@ script:
     - git clone https://github.com/farseerfc/pelican-plugins plugins
     - git clone https://github.com/farseerfc/pelican-bootstrap3 theme
     - mkdir output
-    - env SITEURL="farseerfc.me" make publish PELICANOPTS=-D
+    - env SITEURL="farseerfc.me" make publish
