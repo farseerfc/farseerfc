@@ -99,7 +99,7 @@ s3_upload:
 github:
 	(cd $(OUTPUTDIR) && git checkout master)
 	env SITEURL="farseerfc.me" $(MAKE) publish
-	(cd $(OUTPUTDIR) && git add . && git commit -m "update" && git push)
+	(cd $(OUTPUTDIR) && git add -A . && git commit -m "update" && git push)
 
 gitcafe:
 	(cd $(OUTPUTDIR) && git checkout gitcafe-pages)

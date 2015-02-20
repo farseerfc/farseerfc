@@ -179,8 +179,8 @@ build 的狀態就會變成 passed ，比如
 .. code-block:: yaml
 
 	script:
-	    - git config --global user.email $GIT_EMAIL
-	    - git config --global user.email $GIT_NAME
+	    - git config --global user.email "$GIT_EMAIL"
+	    - git config --global user.email "$GIT_NAME"
 	    - git clone https://github.com/farseerfc/pelican-plugins plugins
 	    - git clone https://github.com/farseerfc/pelican-bootstrap3 theme
 	    - git clone https://$GH_TOKEN@github.com/farseerfc/farseerfc.github.io output
