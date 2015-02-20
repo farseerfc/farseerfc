@@ -78,7 +78,7 @@ publish: rmdrafts cc clean theme
 	$(MAKE) rsthtml
 
 rsthtml:
-	(cd output && find -iname "*.rst" | parallel --no-notice -I@  pygmentize -f html -o @.html @)
+	(cd output && find -iname "*.rst" | parallel -I@ pygmentize -f html -o @.html @)
 
 ssh_upload:
 	$(MAKE) publish
