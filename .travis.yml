@@ -3,6 +3,9 @@ language: python
 python:
     - "2.7"
 
+env:
+    - secure: "bYM5iYmO9zCgdCfxdanVnWWeEfsjQVfVdin3kBDLB/0l8sZb/Ja4dY5xRgHVYMxS6p7q3pF4Rk9jNAnm5PunremSRPBnvFaBeB8ZpvtL9ChuuNB2XIJK6mbO8wNmZrHtZnA7WkOl4UqyGZis+fRAMfnvoODzlhWWjmsGFDHMwgA="
+
 before_install:
     - sudo apt-add-repository ppa:chris-lea/node.js -y
     - sudo apt-get update
@@ -36,5 +39,5 @@ install:
 script:
     - git clone https://github.com/farseerfc/pelican-plugins plugins
     - git clone https://github.com/farseerfc/pelican-bootstrap3 theme
-    - mkdir output
-    - env SITEURL="farseerfc.me" make publish
+    - git clone https://github.com/farseerfc/farseerfc.github.io output
+    - make github

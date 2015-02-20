@@ -28,7 +28,8 @@ Github Pages 原本就有的
 寫的所以跨平臺，但是具體到博客的配置方面， Windows 環境和 Linux/OSX/Unix-like
 環境下還是有
 `些許出入 <http://pelican.readthedocs.org/en/latest/settings.html#date-format-and-locale>`_
-的。還有在手機上就不能隨便寫一篇博客發表出來（不知道有沒有勇士嘗試過在
+的。還有就是沒有像 wordpress 那樣的基於 web
+的編輯環境，在手機上就不能隨便寫一篇博客發表出來（不知道有沒有勇士嘗試過在
 Android 的 SL4A_ 環境下的 python 中跑 pelican ，還要配合一個
 `Android 上的 git 客戶端 <https://play.google.com/store/apps/details?id=com.romanenco.gitt>`_ ）。
 
@@ -88,17 +89,13 @@ Android 的 SL4A_ 環境下的 python 中跑 pelican ，還要配合一個
 		    - echo "#! /bin/sh" > plantuml
 		    - echo 'exec java -jar /opt/plantuml/plantuml.jar "$@"' >> plantuml
 		    - sudo install -m 755 -D plantuml /usr/bin/plantuml
-		    - plantuml -version
 		    - wget https://bintray.com/artifact/download/byvoid/opencc/opencc-1.0.2.tar.gz
 		    - tar xf opencc-1.0.2.tar.gz
 		    - cd opencc-1.0.2 && make && sudo make install && cd ..
-		    - opencc --version
 		    - sudo locale-gen zh_CN.UTF-8
 		    - sudo locale-gen zh_HK.UTF-8
 		    - sudo locale-gen en_US.UTF-8
 		    - sudo locale-gen ja_JP.UTF-8
-		    - locale -a
-		    - pelican --version
 
 		script:
 		    - git clone https://github.com/farseerfc/pelican-plugins plugins
@@ -116,19 +113,20 @@ Android 的 SL4A_ 環境下的 python 中跑 pelican ，還要配合一個
 
 Travis-CI 提供的虛擬機是比較標準的 Ubuntu 12.04 LTS ，打上了最新的補丁，並且根據你指定的
 語言選項會把響應的解釋器和編譯器升級到最新版（或者指定的版本）。這裏用 python 語言的配置。
-這裏 before_install 和 install 的區別其實不大，任何一個失敗的話算作 build errored 而不是
-build fail ，而如果在 script 裏失敗的話算作 build fail 。
+配置中的 before_install 和 install 的區別其實不大，其中任何一個失敗的話算作
+build errored 而不是 build fail ，而如果在 script 裏失敗的話算作 build fail 。
 
-這裏爲了編譯模板，我還需要比較新的 less.js ，所以添加了 ppa 裝了個 nodejs 。
+爲了編譯我的模板，還需要比較新的 less.js ，所以添加了 ppa 裝了個最新的 nodejs 。
 還從源碼編譯安裝上了最新版的 opencc ，因爲 Ubuntu 源裏的 opencc 的版本比較老，
 然後 doxygen 作爲 opencc 的編譯依賴也裝上了。
 其它安裝的東西麼，除了 pelican 之外都是插件們需要的。以及我還需要生成 4 個語言的 locale
-所以調用了 4 次 locale-gen 。
+所以調用了 4 次 locale-gen 。由於是比較標準的 Ubuntu 環境，所以基本上編譯的步驟和在本地
+Linux 環境中是一樣的，同樣的這套配置應該可以直接用於本地 Ubuntu 下編譯我的博客。
 
 寫好 :code:`.travis.yml` 之後把它 push 到 github ，然後 travis 這邊就會自動 clone
 下來開始編譯。 travis 上能看到編譯的完整過程和輸出，一切正常的話編譯結束之後
-build 的狀態就會變成 passed ，比如我的這次的
-https://travis-ci.org/farseerfc/farseerfc/builds/51344614 。
+build 的狀態就會變成 passed ，比如
+`我的這次的build <https://travis-ci.org/farseerfc/farseerfc/builds/51344614>`_ 。
 
 從 Travis-CI 推往 Github 
 --------------------------------------------------------
@@ -136,4 +134,42 @@ https://travis-ci.org/farseerfc/farseerfc/builds/51344614 。
 上面的測試編譯通過了之後，下一步自然就是讓 travis-ci 編譯的結果自動推到 Github
 發佈出來。要推往 Github 自然需要設置 github 用戶的身份，在本地設置的時候是把
 本地的 ssh key 添加到 github 賬戶就可以了，在一切細節都公開了的 travis 上
-當然不能放私有 key 。
+當然不能放私有 key ，所以我們需要另外一種方案傳遞密碼。
+
+.. panel-default:: 
+	:title: Github 上創建 Personal Access Token
+
+	.. image:: {filename}/images/travis-blog-push.png
+	  :alt: Github 上創建 Personal Access Token
+
+好在 Github 支持通過 `Personal Access Token <https://github.com/settings/applications>`_
+的方式驗證，這個和 App Token 一樣可以隨時吊銷，同時完全是個人創建的。另一方面 Travis-CI
+支持加密一些私密數據，通過環境變量的方式傳遞給編譯腳本，避免公開關鍵數據。
+
+首先創建一個 `Personal Access Token <https://github.com/settings/applications>`_
+需要勾選一些權限，我只給予了最小的 public_repo 權限，如側邊裏的圖。生成之後會得到一長串
+散列碼。
+
+然後我們需要 :code:`travis` 命令來加密這個 token ， archlinux 用戶可以安裝
+:code:`aur/ruby-travis` ，其它用戶可以用 gems 安裝：
+
+.. code-block:: console
+
+	$ gem install travis
+
+裝好之後，在設定了 Travis-CI 的 repo 的目錄中執行一下 :code:`travis status` ，
+命令會指導你登錄 Travis-CI 並驗證 repo 。正常的話會顯示最新的 build 狀態。
+然後同樣在這個 repo 目錄下執行：
+
+.. code-block:: console
+
+	$ travis encrypt 'GIT_NAME="Jiachen Yang" GIT_EMAIL=farseerfc@gmail.com GH_TOKEN=<Personal Access Token>'
+
+當然上面一行裏的相應信息替換爲個人的信息，作爲這個命令的執行結果會得到另一長串散列碼，
+把這串散列寫入剛纔的 :code:`.travis.yml` 文件：
+
+.. code-block:: yaml
+	env:
+	    - secure: "bYM5iYmO9zCgdCfxdanVnWWeEfsjQVfVdin3kBDLB/0l8sZb/Ja4dY5xRgHVYMxS6p7q3pF4Rk9jNAnm5PunremSRPBnvFaBeB8ZpvtL9ChuuNB2XIJK6mbO8wNmZrHtZnA7WkOl4UqyGZis+fRAMfnvoODzlhWWjmsGFDHMwgA="
+
+有了這段聲明之後， Travis-CI 就會在每次編譯之前，設置上面加密的環境變量。
