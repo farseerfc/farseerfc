@@ -169,7 +169,19 @@ build 的狀態就會變成 passed ，比如
 把這串散列寫入剛纔的 :code:`.travis.yml` 文件：
 
 .. code-block:: yaml
+
 	env:
-	    - secure: "bYM5iYmO9zCgdCfxdanVnWWeEfsjQVfVdin3kBDLB/0l8sZb/Ja4dY5xRgHVYMxS6p7q3pF4Rk9jNAnm5PunremSRPBnvFaBeB8ZpvtL9ChuuNB2XIJK6mbO8wNmZrHtZnA7WkOl4UqyGZis+fRAMfnvoODzlhWWjmsGFDHMwgA="
+	    - secure: "long secure hash string"
 
 有了這段聲明之後， Travis-CI 就會在每次編譯之前，設置上面加密的環境變量。
+然後在編譯腳本中利用這些環境變量來生成博客：
+
+.. code-block:: yaml
+
+	script:
+	    - git config --global user.email $GIT_EMAIL
+	    - git config --global user.email $GIT_NAME
+	    - git clone https://github.com/farseerfc/pelican-plugins plugins
+	    - git clone https://github.com/farseerfc/pelican-bootstrap3 theme
+	    - git clone https://$GH_TOKEN@github.com/farseerfc/farseerfc.github.io output
+	    - make github
