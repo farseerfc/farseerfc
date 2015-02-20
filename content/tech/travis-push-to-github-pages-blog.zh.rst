@@ -118,8 +118,9 @@ Travis-CI 提供的虛擬機是比較標準的 Ubuntu 12.04 LTS ，打上了最�
 配置中的 before_install 和 install 的區別其實不大，其中任何一個失敗的話算作
 build errored 而不是 build fail ，而如果在 script 裏失敗的話算作 build fail 。
 
-爲了編譯我的模板，還需要比較新的 less.js ，所以添加了 ppa 裝了個最新的 nodejs 。
-還從源碼編譯安裝上了最新版的 opencc ，因爲 Ubuntu 源裏的 opencc 的版本比較老，
+爲了編譯我的模板，還需要比較新的 less.js ，所以添加了 ppa 裝了個最新的 nodejs
+並用它裝上了 less 。
+還從源碼編譯安裝上了最新版的 opencc 1.0.2 ，因爲 Ubuntu 源裏的 opencc 的版本比較老(0.4)，
 然後 doxygen 作爲 opencc 的編譯依賴也裝上了。
 其它安裝的東西麼，除了 pelican 之外都是插件們需要的。以及我還需要生成 4 個語言的 locale
 所以調用了 4 次 locale-gen 。由於是比較標準的 Ubuntu 環境，所以基本上編譯的步驟和在本地
@@ -133,10 +134,10 @@ build 的狀態就會變成 passing ，比如
 從 Travis-CI 推往 Github 
 --------------------------------------------------------
 
-上面的測試編譯通過了之後，下一步自然就是讓 travis-ci 編譯的結果自動推到 Github
-發佈出來。要推往 Github 自然需要設置 github 用戶的身份，在本地設置的時候是把
-本地的 ssh key 添加到 github 賬戶就可以了，在一切細節都公開了的 travis 上
-當然不能放私有 key ，所以我們需要另外一種方案傳遞密碼。
+上面的測試編譯通過了之後，下一步就是讓 travis-ci 編譯的結果自動推到 Github Pages
+並發佈出來。要推往 Github 自然需要設置 Github 用戶的身份，在本地設置的時候是把
+ssh key 添加到 github 賬戶就可以了，在編譯細節都通過 github repo 公開了的 travis 上
+當然不能放推送用的私有 key ，所以我們需要另外一種方案傳遞密碼。
 
 .. panel-default:: 
 	:title: Github 上創建 Personal Access Token
@@ -146,7 +147,7 @@ build 的狀態就會變成 passing ，比如
 
 好在 Github 支持通過 `Personal Access Token <https://github.com/settings/applications>`_
 的方式驗證，這個和 App Token 一樣可以隨時吊銷，同時完全是個人創建的。另一方面 Travis-CI
-支持加密一些私密數據，通過環境變量的方式傳遞給編譯腳本，避免公開關鍵數據。
+支持加密一些私密數據，通過環境變量的方式傳遞給編譯腳本，避免公開密碼這樣的關鍵數據。
 
 首先創建一個 `Personal Access Token <https://github.com/settings/applications>`_ 
 ，這裏需要勾選一些給這個 Token 的權限，我只給予了最小的 public_repo 權限，如側邊裏的圖。
