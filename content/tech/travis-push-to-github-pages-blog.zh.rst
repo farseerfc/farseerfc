@@ -113,7 +113,8 @@ Android 的 SL4A_ 環境下的 python 中跑 pelican ，還要配合一個
 	    - env SITEURL="farseerfc.me" make publish
 
 Travis-CI 提供的虛擬機是比較標準的 Ubuntu 12.04 LTS ，打上了最新的補丁，並且根據你指定的
-語言選項會把響應的解釋器和編譯器升級到最新版（或者指定的版本）。這裏用 python 語言的配置。
+語言選項會把相應的解釋器和編譯器升級到最新版（或者指定的版本）。這裏用 python 語言的配置，
+所以 python 是 2.7 的最新版並且有 pip 可以直接用。
 配置中的 before_install 和 install 的區別其實不大，其中任何一個失敗的話算作
 build errored 而不是 build fail ，而如果在 script 裏失敗的話算作 build fail 。
 
