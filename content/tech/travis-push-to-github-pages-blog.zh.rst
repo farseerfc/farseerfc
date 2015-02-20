@@ -206,4 +206,15 @@ build 的狀態就會變成 passed ，比如
 
 .. |travisIcon| image:: https://travis-ci.org/farseerfc/farseerfc.svg?branch=master
 
-這樣設置之後的另一個好處就在於可以利用 Github 的 Web 界面編輯文章內容。
+這樣設置之後的另一個好處就在於可以利用 Github 的 Web 界面編輯文章內容。在 Github 裏
+編輯和保存之後會自動作爲一個 commit 提交，所以也會處罰 Travis-CI 的自動編譯。
+
+.. figure:: {filename}/images/travis-edit-github-web.png
+	:alt: 在 Github 的 Web 界面中直接編輯文章內容
+
+	在 Github 的 Web 界面中直接編輯文章內容
+
+以及雖然目前還沒有好用的 Github 的手機客戶端，不過直接用 Android/iPhone 的瀏覽器登錄
+github 並編輯文章的可用性也還不錯，所以同樣的方式也可以直接在手機上發佈博文了。
+
+That is all, happy bloging ~ 
