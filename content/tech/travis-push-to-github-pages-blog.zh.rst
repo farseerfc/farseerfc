@@ -9,11 +9,9 @@
 
 .. contents::
 
-前言
-----------------------------
 
-上次介紹 `過這個博客改換了主題 <{filename}/tech/redesign-pelican-theme.zh.rst>`_ ，
-本以爲這個話題可以告一段落了，沒想到還要繼續呢。
+上次介紹過 `這個博客改換了主題 <{filename}/tech/redesign-pelican-theme.zh.rst>`_ ，
+本以爲這個話題可以告一段落了，沒想到還能繼續寫呢。
 
 寄宿在 Github Pages 上的靜態博客通常有兩種方案，其一是使用 Jekyll_ 方式撰寫，這可以利用
 Github Pages 原本就有的 
@@ -24,7 +22,8 @@ Github Pages 原本就有的
 .. _Jekyll: http://jekyllrb.com/
 
 我用 Pelican_ 生成博客，當然就只能選擇後一種方式了。這帶來一些不便，比如本地配置 pelican
-還是有一點點複雜的，所以不能隨便找臺電腦就開始寫博客。再比如 pelican 本身雖然是 python
+還是有一點點複雜的，所以不能隨便找臺電腦就開始寫博客。有的時候只是想修正一兩個錯別字，
+這時候必須打開某臺特定的電腦纔能編輯博客就顯得不太方便了。再比如 pelican 本身雖然是 python
 寫的所以跨平臺，但是具體到博客的配置方面， Windows 環境和 Linux/OSX/Unix-like
 環境下還是有
 `些許出入 <http://pelican.readthedocs.org/en/latest/settings.html#date-format-and-locale>`_
