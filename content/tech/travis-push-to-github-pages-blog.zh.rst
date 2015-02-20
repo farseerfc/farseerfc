@@ -151,9 +151,9 @@ build 的狀態就會變成 passed ，比如
 的方式驗證，這個和 App Token 一樣可以隨時吊銷，同時完全是個人創建的。另一方面 Travis-CI
 支持加密一些私密數據，通過環境變量的方式傳遞給編譯腳本，避免公開關鍵數據。
 
-首先創建一個 `Personal Access Token <https://github.com/settings/applications>`_
-需要勾選一些權限，我只給予了最小的 public_repo 權限，如側邊裏的圖。生成之後會得到一長串
-散列碼。
+首先創建一個 `Personal Access Token <https://github.com/settings/applications>`_ 
+，這裏需要勾選一些給這個 Token 的權限，我只給予了最小的 public_repo 權限，如側邊裏的圖。
+生成之後會得到一長串 Token 的散列碼。
 
 然後我們需要 :code:`travis` 命令來加密這個 token ， archlinux 用戶可以安裝
 :code:`aur/ruby-travis` ，其它用戶可以用 gems 安裝：
@@ -192,7 +192,7 @@ build 的狀態就會變成 passed ，比如
 	    - make github
 
 具體我用的配置見
-`這裏的最新版 <https://github.com/farseerfc/farseerfc/blob/master/.travis.yml>`_
+`這裏的最新版 <https://github.com/farseerfc/farseerfc/blob/master/.travis.yml>`_ 。
 在我的 :code:`make github` 中 
 `調用了 <https://github.com/farseerfc/farseerfc/blob/master/Makefile#L102>`_
 :code:`git push` 命令，從而執行了 :code:`make github` 之後就會自動部署到 github 上。
@@ -207,7 +207,7 @@ build 的狀態就會變成 passed ，比如
 .. |travisIcon| image:: https://travis-ci.org/farseerfc/farseerfc.svg?branch=master
 
 這樣設置之後的另一個好處就在於可以利用 Github 的 Web 界面編輯文章內容。在 Github 裏
-編輯和保存之後會自動作爲一個 commit 提交，所以也會處罰 Travis-CI 的自動編譯。
+編輯和保存之後會自動作爲一個 commit 提交，所以也會觸發 Travis-CI 的自動編譯。
 
 .. figure:: {filename}/images/travis-edit-github-web.png
 	:alt: 在 Github 的 Web 界面中直接編輯文章內容
@@ -217,4 +217,4 @@ build 的狀態就會變成 passed ，比如
 以及雖然目前還沒有好用的 Github 的手機客戶端，不過直接用 Android/iPhone 的瀏覽器登錄
 github 並編輯文章的可用性也還不錯，所以同樣的方式也可以直接在手機上發佈博文了。
 
-That is all, happy bloging ~ 
+That is all, happy blogging ~ 
