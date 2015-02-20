@@ -107,8 +107,8 @@ Android 的 SL4A_ 環境下的 python 中跑 pelican ，還要配合一個
 	    - sudo locale-gen ja_JP.UTF-8
 
 	script:
-	    - git clone https://github.com/farseerfc/pelican-plugins plugins
-	    - git clone https://github.com/farseerfc/pelican-bootstrap3 theme
+	    - git clone --depth 1 https://github.com/farseerfc/pelican-plugins plugins
+	    - git clone --depth 1 https://github.com/farseerfc/pelican-bootstrap3 theme
 	    - mkdir output
 	    - env SITEURL="farseerfc.me" make publish
 
