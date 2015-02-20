@@ -61,48 +61,6 @@ Android 的 SL4A_ 環境下的 python 中跑 pelican ，還要配合一個
 啓用 Travis-CI 自動編譯 
 --------------------------------------------------------
 
-.. panel-default::
-  :title: **暫時** 測試的目的下的 :code:`.travis.yml` 
-
-	.. code-block:: yaml
-
-		language: python
-
-		python:
-		    - "2.7"
-
-		before_install:
-		    - sudo apt-add-repository ppa:chris-lea/node.js -y
-		    - sudo apt-get update
-		    - sudo apt-get install nodejs ditaa doxygen parallel
-
-		install:
-		    - sudo pip install pelican 
-		    - sudo pip install jinja2
-		    - sudo pip install babel
-		    - sudo pip install beautifulsoup4
-		    - sudo pip install markdown
-		    - sudo npm install -g less
-		    - wget "http://downloads.sourceforge.net/project/plantuml/plantuml.jar?r=&ts=1424308684&use_mirror=jaist" -O plantuml.jar
-		    - sudo mkdir -p /opt/plantuml
-		    - sudo cp plantuml.jar /opt/plantuml
-		    - echo "#! /bin/sh" > plantuml
-		    - echo 'exec java -jar /opt/plantuml/plantuml.jar "$@"' >> plantuml
-		    - sudo install -m 755 -D plantuml /usr/bin/plantuml
-		    - wget https://bintray.com/artifact/download/byvoid/opencc/opencc-1.0.2.tar.gz
-		    - tar xf opencc-1.0.2.tar.gz
-		    - cd opencc-1.0.2 && make && sudo make install && cd ..
-		    - sudo locale-gen zh_CN.UTF-8
-		    - sudo locale-gen zh_HK.UTF-8
-		    - sudo locale-gen en_US.UTF-8
-		    - sudo locale-gen ja_JP.UTF-8
-
-		script:
-		    - git clone https://github.com/farseerfc/pelican-plugins plugins
-		    - git clone https://github.com/farseerfc/pelican-bootstrap3 theme
-		    - mkdir output
-		    - env SITEURL="farseerfc.me" make publish
-
 這一步很簡單，訪問 https://travis-ci.org/ 並用你的 Github 賬戶登錄，
 授權它訪問你的賬戶信息就可以了。然後在 https://travis-ci.org/repositories 裏開啓
 需要編譯的 repo ，這樣 Travis-CI 就會監視對這個 repo 的所有 push 操作，並且對
@@ -114,7 +72,46 @@ Android 的 SL4A_ 環境下的 python 中跑 pelican ，還要配合一個
 	在 Travis-CI 中開啓對 Github Repo 的持續整合
 
 然後在 repo 的根目錄放一個 :code:`.travis.yml` 文件描述編譯的步驟。
-**暫時** 測試的目的下我寫的 :code:`.travis.yml` 大概是側邊那樣。
+**暫時** 測試的目的下我寫的 :code:`.travis.yml` 大概是下面這樣。
+
+.. code-block:: yaml
+
+	language: python
+
+	python:
+	    - "2.7"
+
+	before_install:
+	    - sudo apt-add-repository ppa:chris-lea/node.js -y
+	    - sudo apt-get update
+	    - sudo apt-get install nodejs ditaa doxygen parallel
+
+	install:
+	    - sudo pip install pelican 
+	    - sudo pip install jinja2
+	    - sudo pip install babel
+	    - sudo pip install beautifulsoup4
+	    - sudo pip install markdown
+	    - sudo npm install -g less
+	    - wget "http://downloads.sourceforge.net/project/plantuml/plantuml.jar?r=&ts=1424308684&use_mirror=jaist" -O plantuml.jar
+	    - sudo mkdir -p /opt/plantuml
+	    - sudo cp plantuml.jar /opt/plantuml
+	    - echo "#! /bin/sh" > plantuml
+	    - echo 'exec java -jar /opt/plantuml/plantuml.jar "$@"' >> plantuml
+	    - sudo install -m 755 -D plantuml /usr/bin/plantuml
+	    - wget https://bintray.com/artifact/download/byvoid/opencc/opencc-1.0.2.tar.gz
+	    - tar xf opencc-1.0.2.tar.gz
+	    - cd opencc-1.0.2 && make && sudo make install && cd ..
+	    - sudo locale-gen zh_CN.UTF-8
+	    - sudo locale-gen zh_HK.UTF-8
+	    - sudo locale-gen en_US.UTF-8
+	    - sudo locale-gen ja_JP.UTF-8
+
+	script:
+	    - git clone https://github.com/farseerfc/pelican-plugins plugins
+	    - git clone https://github.com/farseerfc/pelican-bootstrap3 theme
+	    - mkdir output
+	    - env SITEURL="farseerfc.me" make publish
 
 Travis-CI 提供的虛擬機是比較標準的 Ubuntu 12.04 LTS ，打上了最新的補丁，並且根據你指定的
 語言選項會把響應的解釋器和編譯器升級到最新版（或者指定的版本）。這裏用 python 語言的配置。
