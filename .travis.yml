@@ -40,6 +40,7 @@ install:
 script:
     - git config --global user.email "$GIT_EMAIL"
     - git config --global user.name "$GIT_NAME"
+    - git config --global push.default simple
     - git clone https://github.com/farseerfc/pelican-plugins plugins
     - git clone https://github.com/farseerfc/pelican-bootstrap3 theme
     - git clone https://$GH_TOKEN@github.com/farseerfc/farseerfc.github.io output

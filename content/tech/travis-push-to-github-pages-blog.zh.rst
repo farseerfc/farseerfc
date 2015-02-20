@@ -3,7 +3,7 @@
 
 :slug: travis-push-to-github-pages-blog
 :lang: zh
-:date: 2015-02-19 22:45
+:date: 2015-02-20 11:10
 :tags: pelican, github, pages, travis, travis-ci, ubuntu
 :series: pelican
 
@@ -185,3 +185,9 @@ build 的狀態就會變成 passed ，比如
 	    - git clone https://github.com/farseerfc/pelican-bootstrap3 theme
 	    - git clone https://$GH_TOKEN@github.com/farseerfc/farseerfc.github.io output
 	    - make github
+
+具體我用的配置見
+`這裏的最新版 <https://github.com/farseerfc/farseerfc/blob/master/.travis.yml>`_
+在我的 :code:`make github` 中 
+`調用了 <https://github.com/farseerfc/farseerfc/blob/master/Makefile#L102>`_
+:code:`git push` 命令，從而執行了 :code:`make github` 之後就會自動部署到 github 上。
