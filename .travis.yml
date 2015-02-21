@@ -44,6 +44,11 @@ script:
     - git config --global push.default simple
     - git clone --depth 1 https://github.com/farseerfc/pelican-plugins plugins
     - git clone --depth 1 https://github.com/farseerfc/pelican-bootstrap3 theme
-    - git clone --depth 1 https://github.com/farseerfc/farseerfc.github.io output
-    - echo "https://farseerfc:$GH_TOKEN@github.com/" > .git/credentials
-    - make github
+    - git clone --depth 1 https://$GH_TOKEN@github.com/farseerfc/farseerfc.github.io output
+  	- env SITEURL="farseerfc.me" $(MAKE) publish
+
+after_success:
+    - cd output
+    - git add -A .
+    - git commit -m "update from travis" 
+    - git push --quiet
