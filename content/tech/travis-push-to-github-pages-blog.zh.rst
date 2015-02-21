@@ -168,8 +168,7 @@ ssh key 添加到 github 賬戶就可以了，在編譯細節都通過 github re
 	`travis api <http://docs.travis-ci.com/api/#repository-keys>`_
 	也能加密數據。
 
-	第一步登錄 travis ，進入這個頁面 https://travis-ci.org/profile/info 找到自己的
-	Token ，然後用這個命令得到你的repo的 pubkey ：
+	第一步用這個命令得到你的repo的 pubkey ：
 
 	.. code-block:: console
 
