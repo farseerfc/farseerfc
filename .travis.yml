@@ -4,7 +4,7 @@ python:
     - "2.7"
 
 env:
-    - secure: "bYM5iYmO9zCgdCfxdanVnWWeEfsjQVfVdin3kBDLB/0l8sZb/Ja4dY5xRgHVYMxS6p7q3pF4Rk9jNAnm5PunremSRPBnvFaBeB8ZpvtL9ChuuNB2XIJK6mbO8wNmZrHtZnA7WkOl4UqyGZis+fRAMfnvoODzlhWWjmsGFDHMwgA="
+    - secure: "Hl7Mg82Li3e+rPRsll4dH1HgLvJKtJH2RASi/qX/lGsMALzsROJDYTJoTa2LHsFM46bbX+hp2zVCUs6o++S4sRTvOk50YnJUN0b3eqN/FmUbLs5ba7Y49QAoxbTduShTKxtmrkA3wizqTIS/TSCwrjtlt4Io/9PKz3g1Y+1SSDI="
 
 before_install:
     - echo $HELLO
@@ -14,7 +14,7 @@ before_install:
     - sudo rm /etc/parallel/config
 
 install:
-    - sudo pip install pelican 
+    - sudo pip install pelican
     - sudo pip install jinja2
     - sudo pip install babel
     - sudo pip install beautifulsoup4

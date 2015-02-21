@@ -99,11 +99,11 @@ s3_upload:
 github:
 	(cd $(OUTPUTDIR) && git checkout master)
 	env SITEURL="farseerfc.me" $(MAKE) publish
-	(cd $(OUTPUTDIR) && git add -A . && git commit -m "update" && git push)
+	(cd $(OUTPUTDIR) && git add -A . && git commit -m "update" && git push --quiet)
 
 gitcafe:
 	(cd $(OUTPUTDIR) && git checkout gitcafe-pages)
 	env SITEURL="farseerfc.gitcafe.io" $(MAKE) publish
-	(cd $(OUTPUTDIR) && git add . && git commit -m "update" && git push -u gitcafe gitcafe-pages)
+	(cd $(OUTPUTDIR) && git add . && git commit -m "update" && git push -u gitcafe gitcafe-pages --quiet)
 
 .PHONY: html help clean regenerate serve devserver publish ssh_upload rsync_upload dropbox_upload ftp_upload s3_upload github cc theme cleancc drafts rmdrafts rsthtml
