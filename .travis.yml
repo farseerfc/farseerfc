@@ -33,6 +33,7 @@ install:
     - sudo install -t /usr/lib libopencc.so
     - sudo install -t /usr/lib libopencc.so.1.0.0
     - sudo install -t /usr/lib libopencc.so.2
+    - cd ..
     - opencc --version
     - sudo locale-gen zh_CN.UTF-8
     - sudo locale-gen zh_HK.UTF-8
