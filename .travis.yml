@@ -10,7 +10,7 @@ before_install:
     - echo $HELLO
     - sudo apt-add-repository ppa:chris-lea/node.js -y
     - sudo apt-get update
-    - sudo apt-get install nodejs ditaa doxygen parallel graphviz
+    - sudo apt-get install nodejs ditaa parallel graphviz
     - sudo rm /etc/parallel/config
 
 install:
@@ -27,9 +27,8 @@ install:
     - echo 'exec java -jar /opt/plantuml/plantuml.jar "$@"' >> plantuml
     - sudo install -m 755 -D plantuml /usr/bin/plantuml
     - plantuml -version
-    - wget https://bintray.com/artifact/download/byvoid/opencc/opencc-1.0.2.tar.gz
-    - tar xf opencc-1.0.2.tar.gz
-    - cd opencc-1.0.2 && make && sudo make install && cd ..
+    - git clone https://github.com/farseerfc/opencc-bin opencc-bin
+    - cd opencc-bin && sudo make install && cd ..
     - opencc --version
     - sudo locale-gen zh_CN.UTF-8
     - sudo locale-gen zh_HK.UTF-8
