@@ -4,8 +4,9 @@ python:
     - "2.7"
 
 env:
-    - secure: "bYM5iYmO9zCgdCfxdanVnWWeEfsjQVfVdin3kBDLB/0l8sZb/Ja4dY5xRgHVYMxS6p7q3pF4Rk9jNAnm5PunremSRPBnvFaBeB8ZpvtL9ChuuNB2XIJK6mbO8wNmZrHtZnA7WkOl4UqyGZis+fRAMfnvoODzlhWWjmsGFDHMwgA="
     - secure: "iovXEA4xmseQm+TTfaPEbhUeEba4VkXFliKBrEMbSSaQmTISJ9KzJnfFflaygNriPCmEoYm3OdAzB+zNrS3p4WsnHWku7HzBReP97mShE8s5rIPkprPQgALUH/tdA6l/3j7ALVsnPnZFQF/imcaTswbZapP+z7yXJpY/4KVmjvg="
+    - secure: "bYM5iYmO9zCgdCfxdanVnWWeEfsjQVfVdin3kBDLB/0l8sZb/Ja4dY5xRgHVYMxS6p7q3pF4Rk9jNAnm5PunremSRPBnvFaBeB8ZpvtL9ChuuNB2XIJK6mbO8wNmZrHtZnA7WkOl4UqyGZis+fRAMfnvoODzlhWWjmsGFDHMwgA="
+    
 
 before_install:
     - echo $HELLO
