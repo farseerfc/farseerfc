@@ -177,17 +177,17 @@ ssh key 添加到 github 賬戶就可以了，在編譯細節都通過 github re
 	其中的 <github-id/repo> 替換成 github 上的 用戶名/repo名， 比如我的是
 	farseerfc/farseer 。travis api 獲得的結果是一個 json ，所以還用 python 的 
 	json 模塊處理了一下，然後把其中包含 key 的行用 :code:`grep` 提取出來，用 
-	:code:`sed` 匹配出 key 的字符串本身，然後 :code:`xargs -0 echo -e`
+	:code:`sed` 匹配出 key 的字符串本身，然後 :code:`xargs -0 echo -en`
 	解釋掉轉義字符，然後刪掉其中的 "<空格>RSA" 幾個字（否則 openssl 不能讀），
 	最後保存在名爲 travis.pem 的文件裏。
 
-	有了 pubkey 之後用 openssl 加密我們需要加密的東西：
+	有了 pubkey 之後用 openssl 加密我們需要加密的東西並用 base64 編碼：
 
 	.. code-block:: console
 
-		echo -n "Hello=world" | openssl rsautl -encrypt -pubin -inkey travis.pem | base64 -w0
+		echo -n 'GIT_NAME="Jiachen Yang" GIT_EMAIL=farseerfc@gmail.com GH_TOKEN=<Personal Access Token>' | openssl rsautl -encrypt -pubin -inkey travis.pem | base64 -w0
 
-	得到的結果就是 secure 裏要寫的加密過的內容。
+	替換了相應的身份信息和token之後，這行得到的結果就是 secure 裏要寫的加密過的內容。
 
 
 
@@ -212,7 +212,7 @@ ssh key 添加到 github 賬戶就可以了，在編譯細節都通過 github re
 .. code-block:: yaml
 
 	env:
-	    - secure: "long secure hash string"
+	    - secure: "long secure base64 string"
 
 有了這段聲明之後， Travis-CI 就會在每次編譯之前，設置上面加密的環境變量。
 然後在編譯腳本中利用這些環境變量來生成博客：
