@@ -219,14 +219,18 @@ ssh key 添加到 github 賬戶就可以了，在編譯細節都通過 github re
 
 .. code-block:: yaml
 
-	script:
-	    - git config --global user.email "$GIT_EMAIL"
-	    - git config --global user.email "$GIT_NAME"
-	    - git clone https://github.com/farseerfc/pelican-plugins plugins
-	    - git clone https://github.com/farseerfc/pelican-bootstrap3 theme
-	    - git clone https://$GH_TOKEN@github.com/farseerfc/farseerfc.github.io output
-	    - make github
+  script:
+      - git config --global user.email "$GIT_EMAIL"
+      - git config --global user.name "$GIT_NAME"
+      - git config --global push.default simple
+      - git clone --depth 1 https://github.com/farseerfc/pelican-plugins plugins
+      - git clone --depth 1 https://github.com/farseerfc/pelican-bootstrap3 theme
+      - git clone --depth 1 https://github.com/farseerfc/farseerfc.github.io output
+      - echo "https://$GH_TOKEN@github.com/" > .git/credentials
+      - make github
 
+這裏要注意不要直接用包含了 GH_TOKEN 的 URL 去 git clone ，因爲 git push 的時候會顯示出這個
+URL，從而造成 GH_TOKEN 泄漏出來。
 具體我用的配置見
 `這裏的最新版 <https://github.com/farseerfc/farseerfc/blob/master/.travis.yml>`_ 。
 在我的 :code:`make github` 中
