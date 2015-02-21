@@ -29,10 +29,12 @@ install:
     - plantuml -version
     - git clone --depth 1 https://github.com/farseerfc/opencc-bin opencc-bin
     - cd opencc-bin 
-    - sudo install -t /usr/bin opencc
-    - sudo install -t /usr/lib libopencc.so
-    - sudo install -t /usr/lib libopencc.so.1.0.0
-    - sudo install -t /usr/lib libopencc.so.2
+    - sudo install -t /usr/bin src/opencc
+    - sudo install -t /usr/lib src/libopencc.so
+    - sudo install -t /usr/lib src/libopencc.so.1.0.0
+    - sudo install -t /usr/lib src/libopencc.so.2
+    - sudo mkdir -p /usr/share/opencc
+    - sudo cp data/* /usr/share/opencc/
     - cd ..
     - opencc --version
     - sudo locale-gen zh_CN.UTF-8
