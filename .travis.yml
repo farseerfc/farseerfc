@@ -27,8 +27,12 @@ install:
     - echo 'exec java -jar /opt/plantuml/plantuml.jar "$@"' >> plantuml
     - sudo install -m 755 -D plantuml /usr/bin/plantuml
     - plantuml -version
-    - git clone https://github.com/farseerfc/opencc-bin opencc-bin
-    - cd opencc-bin && sudo make install && cd ..
+    - git clone --depth 1 https://github.com/farseerfc/opencc-bin opencc-bin
+    - cd opencc-bin 
+    - sudo install -t /usr/bin opencc
+    - sudo install -t /usr/lib libopencc.so
+    - sudo install -t /usr/lib libopencc.so.1.0.0
+    - sudo install -t /usr/lib libopencc.so.2
     - opencc --version
     - sudo locale-gen zh_CN.UTF-8
     - sudo locale-gen zh_HK.UTF-8
