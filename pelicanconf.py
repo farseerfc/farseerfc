@@ -35,7 +35,7 @@ CHECK_MODIFIED_METHOD = "md5"
 
 TWITTER_USERNAME = 'farseerfc'
 
-DEFAULT_PAGINATION = 6
+DEFAULT_PAGINATION = 8
 
 STATIC_PATHS = ['static',
                 'images',
