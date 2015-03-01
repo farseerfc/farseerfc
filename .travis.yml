@@ -15,12 +15,7 @@ before_install:
     - sudo apt-add-repository ppa:chris-lea/node.js -y
     - sudo apt-get update
     - sudo apt-get install nodejs ditaa parallel graphviz phantomjs
-    - sudo mkdir /usr/share/fonts/opentype
-    - wget https://github.com/adobe-fonts/source-code-pro/archive/1.017R.tar.gz
-    - tar xf 1.017R.tar.gz
-    - sudo chown -R root:root source-code-pro-1.017R
-    - sudo mv source-code-pro-1.017R/* /usr/share/fonts/opentype
-    - sudo fc-cache -f -v
+    - sudo apt-get install ttf-arphic-uming ttf-arphic-ukai fonts-liberation ttf-wqy-zenhei
     - sudo rm /etc/parallel/config
 
 install:
