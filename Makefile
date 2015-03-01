@@ -75,7 +75,18 @@ publish: rmdrafts cc clean theme
 	rm -rf cache
 	echo $(SITEURL) > content/static/CNAME
 	$(PELICAN) $(INPUTDIR) -o $(OUTPUTDIR) -s $(PUBLISHCONF) $(PELICANOPTS)
-	$(MAKE) rsthtml
+
+renderpdf:
+	(cd $(OUTPUTDIR) && \
+	find  -iname "*.html" \
+		! -iname "*.rst.html" \
+		! -iwholename "*/tag/*" \
+		! -iwholename "*/author/*" \
+		! -iwholename "*/category/*" \
+		! -iwholename "*/pages/*" \
+		! -iname "search.html" \
+		! -iname "index*.html") | \
+	sed "s#\.\/##g" | parallel -I@ ./renderpdf.sh @
 
 rsthtml:
 	(cd output && find -iname "*.rst" | parallel -I@ pygmentize -f html -o @.html @)
@@ -99,7 +110,10 @@ s3_upload:
 github:
 	(cd $(OUTPUTDIR) && git checkout master)
 	env SITEURL="farseerfc.me" $(MAKE) publish
-	(cd $(OUTPUTDIR) && git add -A . && git commit -m "update" && git push --quiet)
+	(cd $(OUTPUTDIR) && git add -A . && git commit -m "update html" && git push --quiet)
+	env SITEURL="farseerfc.me" $(MAKE) rsthtml
+	env SITEURL="farseerfc.me" $(MAKE) renderpdf
+	(cd $(OUTPUTDIR) && git add -A . && git commit -m "update rst.html pdf png" && git push --quiet)
 
 gitcafe:
 	(cd $(OUTPUTDIR) && git checkout gitcafe-pages)

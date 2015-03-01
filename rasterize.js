@@ -2,6 +2,8 @@ var page = require('webpage').create(),
     system = require('system'),
     address, output, size;
 
+var isPdf = false;
+
 if (system.args.length < 3 || system.args.length > 5) {
     console.log('Usage: rasterize.js URL filename [paperwidth*paperheight|paperformat] [zoom]');
     console.log('  paper (pdf output) examples: "5in*7.5in", "10cm*20cm", "A4", "Letter"');
@@ -16,6 +18,7 @@ if (system.args.length < 3 || system.args.length > 5) {
         size = system.args[3].split('*');
         page.paperSize = size.length === 2 ? { width: size[0], height: size[1], margin: '0px' }
                                            : { format: system.args[3], orientation: 'portrait', margin: '1cm' };
+        isPdf = true;
     } else if (system.args.length > 3 && system.args[3].substr(-2) === "px") {
         size = system.args[3].split('*');
         if (size.length === 2) {
@@ -29,6 +32,8 @@ if (system.args.length < 3 || system.args.length > 5) {
             pageHeight = parseInt(pageWidth * 3/4, 10); // it's as good an assumption as any
             console.log ("pageHeight:",pageHeight);
             page.viewportSize = { width: pageWidth, height: pageHeight };
+
+
         }
     }
     if (system.args.length > 4) {
@@ -40,6 +45,18 @@ if (system.args.length < 3 || system.args.length > 5) {
             phantom.exit(1);
         } else {
             window.setTimeout(function () {
+                if(!isPdf){
+                    var clipRect = page.evaluate(function(){
+                        return document.querySelector("#article-content").getBoundingClientRect();
+                    });
+                    page.clipRect = {
+                        top:    clipRect.top,
+                        left:   clipRect.left,
+                        width:  clipRect.width,
+                        height: clipRect.height
+                    };
+                }
+
                 page.render(output);
                 phantom.exit();
             }, 200);
