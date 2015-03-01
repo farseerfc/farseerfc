@@ -112,7 +112,6 @@ github:
 	env SITEURL="farseerfc.me" $(MAKE) publish
 	(cd $(OUTPUTDIR) && git add -A . && git commit -m "update html" && git push --quiet)
 	env SITEURL="farseerfc.me" $(MAKE) rsthtml
-	env SITEURL="farseerfc.me" $(MAKE) renderpdf
 	(cd $(OUTPUTDIR) && git add -A . && git commit -m "update rst.html pdf png" && git push --quiet)
 
 gitcafe:
