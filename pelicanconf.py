@@ -35,7 +35,7 @@ CHECK_MODIFIED_METHOD = "md5"
 
 TWITTER_USERNAME = 'farseerfc'
 
-DEFAULT_PAGINATION = 8
+DEFAULT_PAGINATION = 12
 
 STATIC_PATHS = ['static',
                 'images',
@@ -60,11 +60,11 @@ THEME = "theme"
 I18N_SUBSITES = {
     'jp': dict(
         LOCALE='ja_JP.utf8',
-        SITENAME="Farseerfcの居場所"
+        SITENAME="Farseerfcの巣"
     ),
     'en': dict(
         LOCALE='en_US.utf8',
-        SITENAME="Farseerfc's Blog"
+        SITENAME="Farseerfc's Nest"
     ),
     'zhs': dict(
         LOCALE='zh_CN.utf8',
@@ -117,6 +117,8 @@ CC_LICENSE = "CC-BY-NC-SA"
 DISPLAY_TAGS_INLINE = True
 OUTPUT_SOURCES = True
 OUTPUT_SOURCES_EXTENSION = '.rst'
+WEIBO_WIDGET = True
+WEIBO_APPKEY = "3Lgf94"
 
 DIRECT_TEMPLATES = (('search', 'index', 'categories', 'authors', 'archives',
                      'tags'))
