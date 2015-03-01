@@ -15,6 +15,7 @@ before_install:
     - sudo apt-add-repository ppa:chris-lea/node.js -y
     - sudo apt-get update
     - sudo apt-get install nodejs ditaa parallel graphviz phantomjs
+    - sudo apt-get install $(check-language-support -l zh-hans)
     - sudo rm /etc/parallel/config
 
 install:
@@ -63,8 +64,4 @@ after_success:
     - git add -A .
     - git commit -m "update from travis" 
     - git push --quiet
-    - cd ..
-    - env SITEURL="farseerfc.me" make rsthtml
-    - git add -A .
-    - git commit -m "update rst.thml from travis" 
-    - git push --quiet
+
