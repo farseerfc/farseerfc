@@ -16,7 +16,10 @@ before_install:
     - sudo apt-get update
     - sudo apt-get install nodejs ditaa parallel graphviz phantomjs
     - sudo mkdir /usr/share/fonts/opentype
-    - sudo git clone https://github.com/adobe-fonts/source-code-pro.git /usr/share/fonts/opentype/scp
+    - wget https://github.com/adobe-fonts/source-code-pro/archive/1.017R.tar.gz
+    - tar xf 1.017R.tar.gz
+    - sudo chown -R root:root 1.017R
+    - sudo mv 1.017R/* /usr/share/fonts/opentype
     - sudo fc-cache -f -v
     - sudo rm /etc/parallel/config
 
