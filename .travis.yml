@@ -15,7 +15,7 @@ before_install:
     - sudo apt-add-repository ppa:chris-lea/node.js -y
     - sudo apt-get update
     - sudo apt-get install nodejs ditaa parallel graphviz phantomjs
-    - sudo apt-get install xfonts-intl-chinese xfonts-wqy
+    - sudo apt-get install ttf-arphic-uming ttf-arphic-ukai fonts-liberation ttf-wqy-zenhei ttf-wqy-microhei
     - sudo rm /etc/parallel/config
 
 install:
