@@ -38,7 +38,7 @@ rmdrafts:
 	[ ! -d content/drafts ] || rm -rf content/drafts
 
 clean:
-	[ ! -d $(OUTPUTDIR) ] || find $(OUTPUTDIR) -mindepth 1 -not -wholename "*/.git*"  -not -iname "*.pdf" -not -iname "*.png" -delete
+	[ ! -d $(OUTPUTDIR) ] || find $(OUTPUTDIR) -not -type d -not -wholename "*/.git*"  -not -iname "*.pdf" -not -iname "*.png" -delete
 
 cleancc: clean
 	find -iname "*.zhs.rst" -delete ;
@@ -71,7 +71,7 @@ theme:
 	(cd theme && scons -Q)
 
 publish: rmdrafts cc theme
-	[ ! -d $(OUTPUTDIR) ] || find $(OUTPUTDIR) -mindepth 1 -not -wholename "*/.git*"  -not -iname "*.pdf" -not -iname "*.png" -delete
+	[ ! -d $(OUTPUTDIR) ] || find $(OUTPUTDIR) -not -type d -not -wholename "*/.git*"  -not -iname "*.pdf" -not -iname "*.png" -delete
 	rm -rf cache
 	echo $(SITEURL) > content/static/CNAME
 	$(PELICAN) $(INPUTDIR) -o $(OUTPUTDIR) -s $(PUBLISHCONF) $(PELICANOPTS)
