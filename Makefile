@@ -38,7 +38,7 @@ rmdrafts:
 	[ ! -d content/drafts ] || rm -rf content/drafts
 
 clean:
-	[ ! -d $(OUTPUTDIR) ] || find $(OUTPUTDIR) -mindepth 1 -not -wholename "*/.git*" -delete
+	[ ! -d $(OUTPUTDIR) ] || find $(OUTPUTDIR) -mindepth 1 -not -wholename "*/.git*"  -not -iname "*.pdf" -not -iname "*.png" -delete
 
 cleancc: clean
 	find -iname "*.zhs.rst" -delete ;
@@ -70,13 +70,15 @@ stopserver:
 theme:
 	(cd theme && scons -Q)
 
-publish: rmdrafts cc clean theme
-	[ ! -d $(OUTPUTDIR) ] || find $(OUTPUTDIR) -mindepth 1 -not -wholename "*/.git*" -delete
+publish: rmdrafts cc theme
+	[ ! -d $(OUTPUTDIR) ] || find $(OUTPUTDIR) -mindepth 1 -not -wholename "*/.git*"  -not -iname "*.pdf" -not -iname "*.png" -delete
 	rm -rf cache
 	echo $(SITEURL) > content/static/CNAME
 	$(PELICAN) $(INPUTDIR) -o $(OUTPUTDIR) -s $(PUBLISHCONF) $(PELICANOPTS)
+	$(MAKE) rsthtml
 
 renderpdf:
+	env SITEURL="pdf" $(MAKE) html
 	(cd $(OUTPUTDIR) && \
 	find  -iname "*.html" \
 		! -iname "*.rst.html" \
@@ -84,9 +86,13 @@ renderpdf:
 		! -iwholename "*/author/*" \
 		! -iwholename "*/category/*" \
 		! -iwholename "*/pages/*" \
+		! -iname "tags*" \
+		! -iname "authors*" \
+		! -iname "categor*" \
+		! -iname "pages*" \
 		! -iname "search.html" \
 		! -iname "index*.html") | \
-	sed "s#\.\/##g" | parallel -I@ ./renderpdf.sh @
+	sed "s#\.\/##g" | xargs phantomjs rasterize.js file://$(pwd)/output/
 
 rsthtml:
 	(cd output && find -iname "*.rst" | parallel -I@ pygmentize -f html -o @.html @)
@@ -109,10 +115,9 @@ s3_upload:
 
 github:
 	(cd $(OUTPUTDIR) && git checkout master)
+	$(MAKE) renderpdf
 	env SITEURL="farseerfc.me" $(MAKE) publish
 	(cd $(OUTPUTDIR) && git add -A . && git commit -m "update html" && git push --quiet)
-	env SITEURL="farseerfc.me" $(MAKE) rsthtml
-	(cd $(OUTPUTDIR) && git add -A . && git commit -m "update rst.html pdf png" && git push --quiet)
 
 gitcafe:
 	(cd $(OUTPUTDIR) && git checkout gitcafe-pages)

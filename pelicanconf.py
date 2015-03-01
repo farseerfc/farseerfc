@@ -5,7 +5,10 @@ from os import getenv
 
 AUTHOR = 'farseerfc'
 SITENAME = "Farseerfc的小窩"
+
 SITEURL = '//' + getenv("SITEURL", default='localhost:8000')
+if getenv("SITEURL", default='localhost:8000') == "pdf":
+    SITEURL = '.'
 
 TIMEZONE = 'Asia/Tokyo'
 
@@ -100,7 +103,7 @@ SITEMAP = {
 USE_LESS = False
 
 # Uncomment following line if you want document-relative URLs when developing
-RELATIVE_URLS = False
+RELATIVE_URLS = True
 
 # Theme options
 
