@@ -92,7 +92,7 @@ renderpdf:
 		! -iname "pages*" \
 		! -iname "search.html" \
 		! -iname "index*.html") | \
-	sed "s#\.\/##g" | xargs phantomjs rasterize.js file://$(pwd)/output/
+	sed "s#\.\/##g" | xargs phantomjs rasterize.js file://$(shell pwd)/output/
 
 rsthtml:
 	(cd output && find -iname "*.rst" | parallel -I@ pygmentize -f html -o @.html @)
