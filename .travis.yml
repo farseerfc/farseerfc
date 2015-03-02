@@ -17,7 +17,7 @@ before_install:
     - sudo apt-get install nodejs ditaa parallel graphviz phantomjs
     - wget -O source-han-sans-1.001R.tar.gz https://github.com/adobe-fonts/source-han-sans/archive/1.001R.tar.gz
     - tar xf source-han-sans-1.001R.tar.gz
-    - makedir -p ~/.fonts
+    - mkdir -p ~/.fonts
     - cp -r source-han-sans-1.001R/* ~/.fonts
     - curl http://cfp.vim-cn.com/cbJQ > ~/.config/fontconfig/fonts.conf
     - sudo fc-cache -v
