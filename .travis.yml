@@ -15,7 +15,11 @@ before_install:
     - sudo apt-add-repository ppa:chris-lea/node.js -y
     - sudo apt-get update
     - sudo apt-get install nodejs ditaa parallel graphviz phantomjs
-    - sudo apt-get install ttf-arphic-uming ttf-arphic-ukai fonts-liberation ttf-wqy-zenhei ttf-wqy-microhei
+    - wget -O source-han-sans-1.001R.tar.gz https://github.com/adobe-fonts/source-han-sans/archive/1.001R.tar.gz
+    - tar xf source-han-sans-1.001R.tar.gz
+    - makedir -p ~/.fonts
+    - cp -r source-han-sans-1.001R/* ~/.fonts
+    - curl http://cfp.vim-cn.com/cbJQ > ~/.config/fontconfig/fonts.conf
     - sudo fc-cache -v
     - sudo rm /etc/parallel/config
 
@@ -49,7 +53,7 @@ install:
     - sudo locale-gen ja_JP.UTF-8
     - locale -a
     - pelican --version
-    - fc-match -s "WenQuanYi Micro Hei"
+    - fc-match -s "Source Han Sans"
 
 script:
     - git config --global user.email "$GIT_EMAIL"
