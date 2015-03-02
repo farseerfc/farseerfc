@@ -25,4 +25,3 @@ PLUGINS = ["i18n_subsites",
 = test math
 
 \\( a x + b = \\alpha \\)
-
