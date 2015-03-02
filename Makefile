@@ -89,6 +89,7 @@ renderpdf:
 		! -iname "authors*" \
 		! -iname "categor*" \
 		! -iname "pages*" \
+		！-iname "archives*" \
 		! -iname "search.html" \
 		! -iname "index*.html") | \
 	sed "s#\.\/##g" | xargs phantomjs rasterize.js file://$(shell pwd)/output/
