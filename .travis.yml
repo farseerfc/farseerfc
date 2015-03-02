@@ -19,7 +19,9 @@ before_install:
     - tar xf source-han-sans-1.001R.tar.gz
     - mkdir -p ~/.fonts
     - cp -r source-han-sans-1.001R/* ~/.fonts
+    - mkdir -p ~/.config/fontconfig/
     - curl http://cfp.vim-cn.com/cbJQ > ~/.config/fontconfig/fonts.conf
+    - cp ~/.config/fontconfig/fonts.conf ~/.fonts.conf
     - sudo fc-cache -v
     - sudo rm /etc/parallel/config
 
