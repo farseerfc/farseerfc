@@ -121,7 +121,8 @@ DISPLAY_TAGS_INLINE = True
 OUTPUT_SOURCES = True
 OUTPUT_SOURCES_EXTENSION = '.rst'
 WEIBO_WIDGET = True
-WEIBO_APPKEY = "3Lgf94"
+WEIBO_APPKEY = "NANnN"
+WEIBO_APPKEYN = "498769639"
 
 DIRECT_TEMPLATES = (('search', 'index', 'categories', 'authors', 'archives',
                      'tags'))
