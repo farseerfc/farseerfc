@@ -15,7 +15,7 @@ before_install:
     - sudo apt-add-repository ppa:chris-lea/node.js -y
     - sudo apt-get update
     - sudo apt-get install nodejs ditaa parallel graphviz phantomjs
-    - sudo apt-get install ttf-wqy-zenhei ttf-wqy-microhei
+    - sudo apt-get install ttf-arphic-uming ttf-arphic-ukai fonts-liberation ttf-wqy-zenhei ttf-wqy-microhei
     - sudo fc-cache -v
     - sudo rm /etc/parallel/config
 
@@ -49,6 +49,7 @@ install:
     - sudo locale-gen ja_JP.UTF-8
     - locale -a
     - pelican --version
+    - fc-match -s "WenQuanYi Micro Hei"
 
 script:
     - git config --global user.email "$GIT_EMAIL"
