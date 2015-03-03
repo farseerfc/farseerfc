@@ -7,7 +7,7 @@ function render(target){
     var page = webpage.create(),
         address, output, size;
 
-    address = system.args[1] + target;
+    address = "http://localhost:8000/" + target;
     output = target.substr(0, target.length-5);
     page.viewportSize = { width: 456, height: 600 };
 
@@ -44,11 +44,11 @@ function render(target){
     });
 };
 
-for(var i = 2; i< system.args.length; ++i){
+for(var i = 1; i< system.args.length; ++i){
     console.log("Rendering: "+ system.args[i]);
     render(system.args[i]);
 }
-console.log("Total "+ (system.args.length - 2) + " pages" );
+console.log("Total "+ (system.args.length - 1) + " pages" );
 window.setTimeout(function () {
     console.log("Writed "+ writedPdf + " pdf" );
     console.log("Writed "+ writedPng + " png" );
