@@ -64,7 +64,8 @@ script:
     - git clone --depth 1 https://github.com/farseerfc/pelican-plugins plugins
     - git clone --depth 1 https://github.com/farseerfc/pelican-bootstrap3 theme
     - git clone --depth 1 https://$GH_TOKEN@github.com/farseerfc/farseerfc.github.io output
-    - make renderpdf
+    - make html
+    - ./renderpdf.sh
     - env SITEURL="farseerfc.me" make publish
 
 after_success:

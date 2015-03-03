@@ -7,8 +7,6 @@ AUTHOR = 'farseerfc'
 SITENAME = "Farseerfc的小窩"
 
 SITEURL = '//' + getenv("SITEURL", default='localhost:8000')
-if getenv("SITEURL", default='localhost:8000') == "pdf":
-    SITEURL = '.'
 
 TIMEZONE = 'Asia/Tokyo'
 

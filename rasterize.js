@@ -8,7 +8,7 @@ function render(target){
         address, output, size;
 
     address = system.args[1] + target;
-    output = "output/" + target.substr(0, target.length-5);
+    output = target.substr(0, target.length-5);
     page.viewportSize = { width: 456, height: 600 };
 
     page.open(address, function (status) {
@@ -39,7 +39,7 @@ function render(target){
                 page.render(output+".png");
                 console.log("Writing: " + output+".png");
                 writedPng ++;
-            }, 200);
+            }, 500);
         }
     });
 };

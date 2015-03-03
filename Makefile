@@ -77,22 +77,8 @@ publish: rmdrafts cc theme
 	$(MAKE) rsthtml
 
 renderpdf:
-	env SITEURL="pdf" $(MAKE) html
-	(cd $(OUTPUTDIR) && \
-	find  -iname "*.html" \
-		! -iname "*.rst.html" \
-		! -iwholename "*/tag/*" \
-		! -iwholename "*/author/*" \
-		! -iwholename "*/category/*" \
-		! -iwholename "*/pages/*" \
-		! -iname "tags*" \
-		! -iname "authors*" \
-		! -iname "categor*" \
-		! -iname "pages*" \
-		！-iname "archives*" \
-		! -iname "search.html" \
-		! -iname "index*.html") | \
-	sed "s#\.\/##g" | xargs phantomjs rasterize.js file://$(shell pwd)/output/
+	$(MAKE) html
+	./renderpdf.sh
 
 rsthtml:
 	(cd output && find -iname "*.rst" | parallel -I@ pygmentize -f html -o @.html @)
