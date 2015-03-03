@@ -71,7 +71,7 @@ theme:
 	(cd theme && scons -Q)
 
 publish: rmdrafts cc theme
-	[ ! -d $(OUTPUTDIR) ] || find $(OUTPUTDIR) -not -type d -not -wholename "*/.git*"  -not -iname "*.pdf" -not -iname "*.png" -delete
+	[ ! -d $(OUTPUTDIR) ] || (cd $(OUTPUTDIR) && find -not -type d -not -wholename "*/.git*"  -not -iname "*.pdf" -not -iname "*.png" -delete)
 	echo $(SITEURL) > content/static/CNAME
 	$(PELICAN) $(INPUTDIR) -o $(OUTPUTDIR) -s $(PUBLISHCONF) $(PELICANOPTS)
 	$(MAKE) rsthtml
