@@ -15,9 +15,7 @@ before_install:
     - sudo apt-add-repository ppa:chris-lea/node.js -y
     - sudo apt-get update
     - sudo apt-get install nodejs ditaa parallel graphviz phantomjs
-    - mkdir -p cache
-    - test -f cache/source-han-sans-1.001R.tar.gz || wget -O cache/source-han-sans-1.001R.tar.gz https://github.com/adobe-fonts/source-han-sans/archive/1.001R.tar.gz
-    - cp cache/source-han-sans-1.001R.tar.gz source-han-sans-1.001R.tar.gz
+    - wget -O source-han-sans-1.001R.tar.gz https://github.com/adobe-fonts/source-han-sans/archive/1.001R.tar.gz
     - tar xf source-han-sans-1.001R.tar.gz
     - mkdir -p ~/.fonts
     - cp -r source-han-sans-1.001R/* ~/.fonts
