@@ -76,10 +76,6 @@ publish: rmdrafts cc theme
 	$(PELICAN) $(INPUTDIR) -o $(OUTPUTDIR) -s $(PUBLISHCONF) $(PELICANOPTS)
 	$(MAKE) rsthtml
 
-renderpdf:
-	$(MAKE) html
-	./renderpdf.sh
-
 rsthtml:
 	(cd output && find -iname "*.rst" | parallel -I@ pygmentize -f html -o @.html @)
 
