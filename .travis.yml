@@ -11,7 +11,6 @@ cache:
     - cache
 
 before_install:
-    - sudo apt-add-repository ppa:chris-lea/node.js -y
     - sudo apt-get update
     - sudo apt-get install nodejs ditaa parallel graphviz phantomjs
     - wget -O source-han-sans-1.001R.tar.gz https://github.com/adobe-fonts/source-han-sans/archive/1.001R.tar.gz
