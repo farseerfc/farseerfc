@@ -3,7 +3,7 @@
 
 :slug: wayland-good-and-bad
 :lang: zh
-:date: 2015-02-15 22:45
+:date: 2015-03-11 22:45
 :tags: linux, wayland, xorg
 
 連着 `五六年了 <http://www.phoronix.com/scan.php?page=news_topic&q=Wayland&selection=20>`_
@@ -12,6 +12,42 @@
 一大堆，安全性、擴展性都跟不上時代了。
 
 .. _wayland: http://wayland.freedesktop.org/
+
+先說說 Wayland 是何來歷 
+--------------------------------------------------------------------
+
+Wayland_ 是什麼？官網這麼說::
+
+	Wayland is intended as a simpler replacement for X…
+
+	Wayland is a protocol for a compositor to talk to its clients 
+	as well as a C library implementation of that protocol…
+
+也就是說 Wayland 是一個用來實現 :ruby:`混合器|Compositor` 的協議，
+實現了 Wayland 協議的混合器可以用來替代我們的 X 圖形服務器。
+那麼 **混合器** 這又是個什麼東西，我們爲什麼需要它呢？
+
+要理解爲什麼我們需要 **混合器** （或者它的另一個叫法，
+:ruby:`混合窗口管理器|Compositing Window Manager` ），我們需要回顧一下歷史，
+瞭解一下混合器出現之前主要的窗口管理器，也就是
+:ruby:`棧式窗口管理器|Stacking Window Manager` 的實現方式。
+
+.. panel-default:: 
+	:title: 棧式窗口管理器的例子，Windows 3.11 的桌面，圖片來自維基百科
+
+	.. image:: {filename}/images/Windows_3.11_workspace.png
+	  :alt: 棧式窗口管理器的例子，Windows 3.11 的桌面
+
+我們知道最初圖形界面的應用程序是全屏的，獨佔整個顯示器（現在很多遊戲機和手持設備的實現仍舊如此）。
+所有程序都全屏並且一個時候只能看到一個程序的輸出，這個限制顯然不能滿足人們使用計算機的需求，
+於是就有了 `窗口 <http://en.wikipedia.org/wiki/WIMP_(computing)>`_ 
+的概念，有了 `桌面隱喻 <http://en.wikipedia.org/wiki/Desktop_metaphor>`_ 。
+在 :ruby:`桌面隱喻|Desktop Metaphor` 中每個窗口只佔用顯示面積的一小部分，有其顯示的位置和大小，
+可以互相遮蓋。於是棧式窗口管理器就是在圖形界面中實現桌面隱喻的核心功能，
+其實現方式大體就是：給每個窗口一個相對的“高度”或者說“遠近”，比較高的窗口顯得距離用戶比較近，
+比較高的窗口會覆蓋其下比較低的窗口。
+
+
 
 看樣子 2015年的確像是 Wayland 終於能用了 
 --------------------------------------------------------------------
@@ -28,6 +64,7 @@ WM/Compositor 除了作爲實驗性參考實現的 weston 和上述 DE 之外，
 `好玩 <https://github.com/evil0sheep/motorcar>`_ 的新 WM 。
 另外各個發行版支持程度方面 Fedora 21 上的 Gnome 3 也有實驗性支持了。
 總體上可以說從 Xorg 遷移到 Wayland 的準備已經基本就緒了。
+
 
 於是問題就是 **我們是否應該換到 Wayland** 
 --------------------------------------------------------------------
