@@ -3,7 +3,7 @@
 
 :slug: wayland-good-and-bad
 :lang: zh
-:date: 2015-03-11 22:45
+:date: 2015-03-12 22:45
 :tags: linux, wayland, xorg
 
 連着 `五六年了 <http://www.phoronix.com/scan.php?page=news_topic&q=Wayland&selection=20>`_
@@ -16,17 +16,16 @@
 先說說 Wayland 是何來歷 
 --------------------------------------------------------------------
 
-Wayland_ 是什麼？官網這麼說::
+Wayland 是什麼？ `官網 <http://wayland.freedesktop.org/>`_ 這麼說::
 
 	Wayland is intended as a simpler replacement for X…
 
 	Wayland is a protocol for a compositor to talk to its clients 
 	as well as a C library implementation of that protocol…
 
-也就是說 Wayland 是一個用來實現 :ruby:`混合器|Compositor` 的協議，
+也就是說 Wayland 是一個用來實現 :ruby:`混合器|Compositor` 的協議和庫，
 實現了 Wayland 協議的混合器可以用來替代我們的 X 圖形服務器。
 那麼 **混合器** 這又是個什麼東西，我們爲什麼需要它呢？
-
 要理解爲什麼我們需要 **混合器** （或者它的另一個叫法，
 :ruby:`混合窗口管理器|Compositing Window Manager` ），我們需要回顧一下歷史，
 瞭解一下混合器出現之前主要的窗口管理器，也就是
@@ -39,14 +38,40 @@ Wayland_ 是什麼？官網這麼說::
 	  :alt: 棧式窗口管理器的例子，Windows 3.11 的桌面
 
 我們知道最初圖形界面的應用程序是全屏的，獨佔整個顯示器（現在很多遊戲機和手持設備的實現仍舊如此）。
-所有程序都全屏並且一個時候只能看到一個程序的輸出，這個限制顯然不能滿足人們使用計算機的需求，
+所有程序都全屏並且任何時刻只能看到一個程序的輸出，這個限制顯然不能滿足人們使用計算機的需求，
 於是就有了 `窗口 <http://en.wikipedia.org/wiki/WIMP_(computing)>`_ 
 的概念，有了 `桌面隱喻 <http://en.wikipedia.org/wiki/Desktop_metaphor>`_ 。
+
 在 :ruby:`桌面隱喻|Desktop Metaphor` 中每個窗口只佔用顯示面積的一小部分，有其顯示的位置和大小，
 可以互相遮蓋。於是棧式窗口管理器就是在圖形界面中實現桌面隱喻的核心功能，
 其實現方式大體就是：給每個窗口一個相對的“高度”或者說“遠近”，比較高的窗口顯得距離用戶比較近，
-會覆蓋其下比較低的窗口。
+會覆蓋其下比較低的窗口。繪圖的時候窗口管理器會從把窗口按高低排序，按照從低到高的順序
+使用 `畫家算法 <http://zh.wikipedia.org/wiki/%E7%94%BB%E5%AE%B6%E7%AE%97%E6%B3%95>`_
+繪製整個屏幕。
 
+這裏還要補充一點說明，在當時圖形界面的概念剛剛普及的時候，繪圖操作是非常“昂貴”的。
+可以想象一下 800x600 像素的顯示器輸出下，每幀
+`真彩色 <http://zh.wikipedia.org/wiki/%E7%9C%9F%E5%BD%A9%E8%89%B2>`_
+位圖就要佔掉 :math:`800 \times 600 \times 3 \approx 1.4 \text{MiB}` 的內存大小，30Hz 的刷新率
+（也就是30FPS）下每秒從 CPU 傳往繪圖設備的數據單單位圖就需要
+:math:`1.4 \times 30 = 41 \text{MiB}` 的帶寬。對比一下當時的
+`VESA 接口 <http://en.wikipedia.org/wiki/VESA_Local_Bus>`_ 總的數據傳輸能力也就是
+:math:`25 \text{MHz} \times 32 \text{bits} = 100 \text{MiB/s}` 左右，
+而 Windows 3.1 的最低內存需求是 1MB，對當時的硬件而言無論是顯示設備、內存或是CPU，
+這無疑都是一個龐大的負擔。
+
+於是在當時的硬件條件下採用棧式窗口管理器有一個巨大 **優勢** ：如果正確地採用畫家算法，
+並且合理地控制重繪時 **只繪製沒有被別的窗口覆蓋的部分** ，那麼無論有多少窗口互相
+遮蓋，都可以保證每次繪製屏幕的最大面積不會超過整個顯示器的面積。
+同樣因爲實現方式棧式窗口管理器也有一些難以迴避的 **限制** ：
+
+#. 窗口必須是矩形的，不能支持不規則形狀的窗口。
+#. 不支持透明或者半透明的顏色。
+#. 爲了優化效率，縮放窗口和移動窗口的過程中，窗口的內容不會得到重繪請求，
+   必須等到縮放或者移動命令結束之後窗口纔會重繪。
+
+轉眼 Windows 稱霸了 PC 產業，Apple 聘請回了 Jobs 爲重振 Macintosh 基於 NeXTSTEP
+開發 Mac OSX 。
 
 
 看樣子 2015年的確像是 Wayland 終於能用了 
