@@ -108,6 +108,13 @@ Wayland 是什麼？ `官網 <http://wayland.freedesktop.org/>`_ 這麼說::
 #. 爲了優化效率，在縮放窗口和移動窗口的過程中，窗口的內容不會得到重繪請求，
    必須等到縮放或者移動命令結束之後窗口纔會重繪。
 
+以上這些限制在早期的 X11 窗口管理器比如 twm 以及 XP 之前經典主題的 Windows
+或者經典的 Mac OS 上都能看到。
+在這些早期的窗口環境中，如果你拖動或者縮放一個窗口，那麼將顯示變化後的窗口邊界，
+這些用來預覽的邊界用快速的位圖反轉方式繪製。當你放開鼠標的時候纔會觸發窗口的
+重繪事件。
+雖然有很多方法或者說技巧能繞過這些限制，比如 Windows XP 上就支持了實時的
+重繪事件和不規則形狀的窗口剪裁，不過這些技巧都是一連串的 hack ，難以擴展。
 
 NeXTSTEP 與 Mac OS X 中混成器的發展
 ++++++++++++++++++++++++++++++++++++++++++++++++
@@ -120,12 +127,14 @@ NeXTSTEP 與 Mac OS X 中混成器的發展
 
 
 轉眼進入了千禧年， Windows 稱霸了 PC 產業，蘋果爲重振 Macintosh 請回了 Jobs 基於 NeXTSTEP_
-開發 Mac OSX 。 NeXTSTEP 在當時提供的 GUI 界面技術相比較於同年代的 X 和 Windows 有一個很特別的地方：
+開發 Mac OSX 。 
+
+NeXTSTEP 在當時提供的 GUI 界面技術相比較於同年代的 X 和 Windows 有一個很特別的地方：
 拖動滾動條或者移動窗口的時候，窗口的內容是實時更新的，這比只顯示一個縮放大小的框框來說被認爲更直觀。
 而實現這個特性的基礎是在 NeXTSTEP 中運用了
 `Display PostScript (DPS) <http://en.wikipedia.org/wiki/Display_PostScript>`_
-技術，簡單地說，就是每個窗口並非直接輸出到位圖，而是把內容輸出到 (Display) PostScript 格式表達的中間格式
-交給窗口管理器，然後窗口管理器再在需要的時候把 PostScript 解釋成位圖顯示在屏幕上。
+技術，簡單地說，就是每個窗口並非直接輸出到顯示設備，而是把內容輸出到 (Display) PostScript 
+格式交給窗口管理器，然後窗口管理器再在需要的時候把 PostScript 用軟件解釋器解釋成位圖顯示在屏幕上。
 
 .. _NeXTSTEP: http://en.wikipedia.org/wiki/NeXTSTEP
 
@@ -134,28 +143,36 @@ NeXTSTEP 與 Mac OS X 中混成器的發展
 	/--------\          +---------+     Window    +--------+
 	|        |  Render  |  Saved  |     Server    |        |
 	| Window |--------->|   DPS   |-------------->| Screen |
-	|cGRE    |          |cPNK {d} |               |cBLU    |
+	|cGRE    |          |cPNK  {d}|               |cBLU    |
 	\--------/          +---------+               +--------+
 
 
 比起讓窗口直接繪製，這種方案在滾動和移動窗口的時候不需要重新渲染保存好的 DPS ，
-所以能實現實時渲染。到了實現 Mac OS X 的時候，爲了同時兼容老的 Mac程序 API (carbon)
+所以能實現實時渲染。到了實現 Mac OS X 的時候，爲了同時兼容老的 Mac 程序 API (carbon)
 以及更快的渲染速度，以及考慮到 Adobe 對蘋果收取的高昂的 Display PostScript 授權費，
 Mac OS X 的 Quartz 技術在矢量圖的 PDF 格式和最終渲染之間又插入了一層抽象：
 
 .. ditaa::
 
+	
+	/--------\
+	| Carbon |
+	| Window |----------------------------------------\
+	|cGRE    |           QuickDraw                    |
+	\--------/                                        |
+	                                                  v
 	/--------\          +----------+             +----------+      Quartz        +--------+
 	| Cocoa  | Quartz2D | Internal |  Rasterize  | Rendered |    Compositor      |        |
 	| Window |--------->|   PDF    |------------>|  Bitmap  |------------------->| Screen |
-	|cGRE    |          |cPNK   {d}| (QuartzGL†) |cYEL  {d} | (Quartz Extreme†)  |cBLU    |
+	|cGRE    |          |cPNK   {d}| (QuartzGL†) |cYEL   {d}| (Quartz Extreme†)  |cBLU    |
 	\--------/          +----------+             +----------+                    +--------+
-	     |                                         ^      ^
-	     |                                         |      |            /--------\
-	     |               Core OpenGL               |      | QuickDraw  | Carbon |
-	     \-----------------------------------------/      \------------| Window |
-	                                                                   |cGRE    |
-	† Optional                                                         \--------/
+	                                                  ^      
+	/--------\                                        | 
+	| OpenGL |            Core OpenGL                 |      
+	| Window |----------------------------------------/        † Optional
+	|cGRE    |	         
+	\--------/	                                                                  
+
 
 
 .. panel-default::
@@ -168,13 +185,17 @@ Mac OS X 的 Quartz 技術在矢量圖的 PDF 格式和最終渲染之間又插�
 而後者再在需要的時候將位圖混成在屏幕上。這種設計使得 2001年3月發佈的 Mac OS X v10.0
 成爲了第一個廣泛使用的具有軟件混成器的操作系統。
 
-到了 Mac OX X v10.2 的時候，蘋果又引入了 Quartz Extreme 讓最後的混成渲染這一步發生在
+到了 Mac OS X v10.2 的時候，蘋果又引入了 Quartz Extreme 讓最後的混成渲染這一步發生在
 顯卡上。然後在 2003年1月公開亮相的 Mac OS X v10.3 中，他們公佈了 Exposé (後來改名爲
-Mission Control)功能，把窗口的縮略圖（而不是事先繪製的圖標）顯示在桌面上，
+Mission Control) 功能，把窗口的縮略圖（而不是事先繪製的圖標）並排顯示在桌面上，
 方便用戶挑選打開的窗口。
 
 由於有了混成器的這種實現方式，使得可能把窗口渲染的圖像做進一步加工，添加三維和動畫效果。
 這使得 Mac OS X 有了美輪美奐的動畫效果和 Exposé 這樣的方便易用的功能。
+或許對於喬布斯而言，更重要的是因爲有了混成器，窗口的形狀終於能顯示爲他 
+`夢寐以求 <http://www.folklore.org/StoryView.py?story=Round_Rects_Are_Everywhere.txt>`_ 
+的 `圓角矩形 <http://www.uiandus.com/blog/2009/7/26/realizations-of-rounded-rectangles.html>`_
+了！
 
 插曲：曇花一現的 Project Looking Glass 3D
 ++++++++++++++++++++++++++++++++++++++++++++++++
@@ -185,27 +206,65 @@ Mission Control)功能，把窗口的縮略圖（而不是事先繪製的圖標�
 	.. image:: {filename}/images/LG3D.jpg
 	  :alt: LG3D 圖片來自維基百科
 
+
 在蘋果那邊剛剛開始使用混成器渲染窗口的 2003 年，昔日的 :ruby:`昇陽公司|Sun Microsystems`
 則在 Linux 上用 Java3D 作出了另一個更炫酷到沒有朋友的東西，被他們命名爲
 `Project Looking Glass 3D <http://en.wikipedia.org/wiki/Project_Looking_Glass>`_
 （縮寫LG3D，別和 Google 的 Project Glass 混淆呀）。這個項目的炫酷實在難以用言語描述，
-好在還能找到兩段視頻。
+好在還能找到兩段視頻展示它的效果。
 
 .. youtube:: JXv8VlpoK_g
 
 .. youtube:: zcPIEMvyPy4
+
 
 如視頻中展示的那樣， LG3D 完全突破了傳統的棧式窗口管理方式，
 在三維空間中操縱二維的窗口平面，不僅像傳統的窗口管理器那樣可以縮放和移動窗口，
 還能夠旋轉角度甚至翻轉到背面去。從視頻中難以體會到的一點是， LG3D 在實現方式上與
 Mac OS X 中的混成器有一個本質上的不同，那就是處於（靜止或動畫中）縮放或旋轉狀態
 下的窗口是 **可以接受輸入事件** 的。這一重要區別在後面 Wayland 的說明中還會提到。
+LG3D 項目展示了窗口管理器將如何突破傳統的棧式管理，可以說代表了窗口管理器的未來發展趨勢。
 
 LG3D 雖然沒有放出實現的源代碼，不過官方曾經放出過一個
 `預覽版的 LiveCD <http://sourceforge.net/projects/lg3d-livecd/>`_
 。只可惜時隔久遠（12年前了）在我的 VirtualBox 上已經不能跑起來這個 LiveCD 了……
 
 
+只可惜這個項目剛剛公開展示出來的時候，喬布斯就致電昇陽，說如果繼續商業化這個
+產品，昇陽公司將涉嫌侵犯蘋果的知識產權。雖然和喬布斯的指控無關，昇陽公司本身的業務也
+着重於服務器端的業務，後來隨着昇陽的財政困難，這個項目也就停止開發並不了了之了。
+
+
+Windows 中的混成器
+++++++++++++++++++++++++++++++++++++++++++++++++
+
+上面說了，到 Windows XP 爲止， Windows 還沒有使用混成器繪製窗口。
+看着 Mac OS X 上有了美輪美奐的動畫， Windows 這邊自然不甘示弱。
+於是同樣在 2003 年展示的 Project Longhorn 中就演示了 wobbly 效果的窗口，
+並且跳票推遲多年之後的 Windows Vista 中實現了完整的混成器 
+`Desktop Window Manager (DWM) <http://en.wikipedia.org/wiki/Desktop_Window_Manager>`_
+。整個 DWM 的架構和 Mac OS X 上看到的很像：
+
+.. ditaa::
+
+	
+	/--------------\
+	| Windows cGRE |
+	| Presentation |----------------------------------\
+	| Foundation   |         DirectX 9                |
+	\--------------/                                  |
+	                                  Canonical       v       Desktop
+	/--------\          +----------+   Display   +---------+  Window    +--------+
+	|  GDI+  |  render  | Internal |    Driver   | DirectX |  Manager   |  WDDM  |
+	| Window |--------->|   WMF    |------------>| Surface |----------->| Screen |
+	|cGRE    |          |cPNK   {d}|             |cYEL  {d}|            |cBLU    |
+	\--------/          +----------+             +---------+            +--------+
+	                                                  ^
+	/---------\                                       |
+	| DirectX |                                       |
+	| Window  |---------------------------------------/
+	|cGRE     |           DirectX 9                    
+	\---------/                                        
 
 
 
