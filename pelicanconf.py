@@ -102,6 +102,8 @@ USE_LESS = False
 
 # Uncomment following line if you want document-relative URLs when developing
 RELATIVE_URLS = False
+CHECK_MODIFIED_METHOD = "md5"
+LOAD_CONTENT_CACHE = True
 
 # Theme options
 
@@ -145,3 +147,4 @@ ABOUT_ME = """<h3 style="text-align:center">
 <i class="mdi-communication-email" style="text-align:center"></i></a>
 </h3>
 """
+

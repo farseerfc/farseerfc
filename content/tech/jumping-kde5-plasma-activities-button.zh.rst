@@ -15,9 +15,7 @@ KDE5 Plasma 之跳動賣萌的活動按鈕
 
 .. PELICAN_END_SUMMARY
 
-.. youtube:: SSbf97jGSpI
-
-.. youku:: XODQ0NjM2MzQ4
+.. youtubeku:: SSbf97jGSpI XODQ0NjM2MzQ4
 
 
 .. PELICAN_BEGIN_SUMMARY
@@ -28,9 +26,7 @@ KDE5 Plasma 之跳動賣萌的活動按鈕
 
 .. PELICAN_END_SUMMARY
 
-.. youtube:: TRQJdRHYwrw
-
-.. youku:: XNjc4MjQ5NjE2
+.. youtubeku:: TRQJdRHYwrw XNjc4MjQ5NjE2
 
 .. PELICAN_BEGIN_SUMMARY
 

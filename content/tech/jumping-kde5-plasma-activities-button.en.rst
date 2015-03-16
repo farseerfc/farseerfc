@@ -15,9 +15,7 @@ Here is a video:
 
 .. PELICAN_END_SUMMARY
 
-.. youtube:: SSbf97jGSpI
-
-.. youku:: XODQ0NjM2MzQ4
+.. youtubeku:: SSbf97jGSpI XODQ0NjM2MzQ4
 
 .. PELICAN_BEGIN_SUMMARY
 
@@ -29,9 +27,7 @@ By comparison, the jumping window in Gnome3 is far worse than this:
 
 .. PELICAN_END_SUMMARY
 
-.. youtube:: TRQJdRHYwrw
-
-.. youku:: XNjc4MjQ5NjE2
+.. youtubeku:: TRQJdRHYwrw XNjc4MjQ5NjE2
 
 .. PELICAN_BEGIN_SUMMARY
 
