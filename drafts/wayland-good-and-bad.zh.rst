@@ -190,7 +190,7 @@ Mac OS X 的 Quartz 技術在矢量圖的 PDF 格式和最終渲染之間又插�
 Mission Control) 功能，把窗口的縮略圖（而不是事先繪製的圖標）並排顯示在桌面上，
 方便用戶挑選打開的窗口。
 
-由於有了混成器的這種實現方式，使得可能把窗口渲染的圖像做進一步加工，添加三維和動畫效果。
+由於有了混成器的這種實現方式，使得可能把窗口渲染的圖像做進一步加工，添加陰影、三維和動畫效果。
 這使得 Mac OS X 有了美輪美奐的動畫效果和 Exposé 這樣的方便易用的功能。
 或許對於喬布斯而言，更重要的是因爲有了混成器，窗口的形狀終於能顯示爲他 
 `夢寐以求 <http://www.folklore.org/StoryView.py?story=Round_Rects_Are_Everywhere.txt>`_ 
@@ -213,9 +213,9 @@ Mission Control) 功能，把窗口的縮略圖（而不是事先繪製的圖標
 （縮寫LG3D，別和 Google 的 Project Glass 混淆呀）。這個項目的炫酷實在難以用言語描述，
 好在還能找到兩段視頻展示它的效果。
 
-.. youtube:: JXv8VlpoK_g
+.. youtubeku:: JXv8VlpoK_g XOTEzMzM3MTY0
 
-.. youtube:: zcPIEMvyPy4
+.. youtubeku:: zcPIEMvyPy4 XOTEzMzQwMjky
 
 
 如視頻中展示的那樣， LG3D 完全突破了傳統的棧式窗口管理方式，
@@ -223,16 +223,16 @@ Mission Control) 功能，把窗口的縮略圖（而不是事先繪製的圖標
 還能夠旋轉角度甚至翻轉到背面去。從視頻中難以體會到的一點是， LG3D 在實現方式上與
 Mac OS X 中的混成器有一個本質上的不同，那就是處於（靜止或動畫中）縮放或旋轉狀態
 下的窗口是 **可以接受輸入事件** 的。這一重要區別在後面 Wayland 的說明中還會提到。
-LG3D 項目展示了窗口管理器將如何突破傳統的棧式管理，可以說代表了窗口管理器的未來發展趨勢。
+LG3D 項目展示了窗口管理器將如何突破傳統的棧式管理的框架，可以說代表了窗口管理器的未來發展趨勢。
 
 LG3D 雖然沒有放出實現的源代碼，不過官方曾經放出過一個
 `預覽版的 LiveCD <http://sourceforge.net/projects/lg3d-livecd/>`_
 。只可惜時隔久遠（12年前了）在我的 VirtualBox 上已經不能跑起來這個 LiveCD 了……
 
-
-只可惜這個項目剛剛公開展示出來的時候，喬布斯就致電昇陽，說如果繼續商業化這個
-產品，昇陽公司將涉嫌侵犯蘋果的知識產權（時間順序上來看，蘋果最初展示 Exposé
-是在 2003年6月23日的 Apple Worldwide Developers Conference ，而昇陽最初展示
+更爲可惜的是，就在這個項目剛剛公開展示出來的時候，喬布斯就致電昇陽，
+說如果繼續商業化這個產品，昇陽公司將涉嫌侵犯蘋果的知識產權
+（時間順序上來看，蘋果最初展示 Exposé 是在 2003年6月23日的 
+Apple Worldwide Developers Conference ，而昇陽最初展示
 LG3D 是在 2003年8月5日的 LinuxWorld Expo）。
 雖然和喬布斯的指控無關，昇陽公司本身的業務也着重於服務器端的業務，
 後來隨着昇陽的財政困難，這個項目也就停止開發並不了了之了。
@@ -241,8 +241,13 @@ LG3D 是在 2003年8月5日的 LinuxWorld Expo）。
 Windows 中的混成器
 ++++++++++++++++++++++++++++++++++++++++++++++++
 
-上面說了，到 Windows XP 爲止， Windows 還沒有使用混成器繪製窗口。
-看着 Mac OS X 上有了美輪美奐的動畫， Windows 這邊自然不甘示弱。
+.. panel-default::
+	:title: Longhorn 中的 Wobbly 效果
+
+	.. youtubeku:: X0idaN0MY1U XOTEzMzY5NjQ0
+
+上面說到， Windows 系列中到 XP 爲止都還沒有使用混成器繪製窗口。
+看着 Mac OS X 上有了美輪美奐的動畫效果， Windows 這邊自然不甘示弱。
 於是同樣在 2003 年展示的 Project Longhorn 中就演示了 wobbly 效果的窗口，
 並且跳票推遲多年之後的 Windows Vista 中實現了完整的混成器 
 `Desktop Window Manager (DWM) <http://en.wikipedia.org/wiki/Desktop_Window_Manager>`_
@@ -269,7 +274,30 @@ Windows 中的混成器
 	|cGRE     |           DirectX 9                    
 	\---------/                                        
 
+和 Mac OS X 的情況類似， Windows Vista 之後的應用程序有兩套主要的繪圖庫，一套是從早期 Win32API
+就沿用至今的 GDI（以及GDI+），另一套是隨着 Longhorn 計劃開發出的 WPF 。WPF 的所有用戶界面
+控件都繪製在 DirectX 平面上，所以使用了 WPF 的程序也可以看作是 DirectX 程序。
 
+值得注意的細節是，WPF 底層的繪圖庫幾乎肯定有 C/C++ 綁定對應， Windows 自帶的不少應用程序
+和 Office 2007 用了 Ribbon 之後的版本都採用這套繪圖引擎，不過微軟沒有公開這套繪圖庫的
+底層細節，而只能通過 .Net 框架的 WPF 訪問它。這一點和 OS X 上只能通過 Objective-C 下的
+Cocoa API 調用 Quartz 的情況類似。
+
+另外需要注意的細節是 DirectX 的單窗口限制在 Windows Vista 之後被放開了，或者嚴格的說是
+基於 WDDM 規範下的顯卡驅動支持了多個 DirectX 平面。
+在早期的 Windows 包括 XP 上，整個桌面上同一時刻只能有一個程序的窗口處於 DirectX 的
+**直接繪製** 模式，而別的窗口如果想用 DirectX 的話，要麼必須改用軟件渲染要麼就不能工作。
+這種現象可以通過打開多個播放器或者窗口化的遊戲界面觀察到。
+而在 WDDM 規範的 Vista 中，所有窗口最終都繪製到 DirectX 平面上，換句話說每個窗口都是
+DirectX 窗口。又或者我們可以認爲，整個界面上只有一個真正的窗口也就是 DWM 繪製的全屏窗口，
+只有 DWM 處於 DirectX 的直接渲染模式下，而別的窗口都輸出到 DirectX 平面裏（可能通過了硬件加速）。
+
+由於 DWM 實現了混成器，使得 Vista 和隨後的 Windows 7 有了
+`Aero Glass <http://en.wikipedia.org/wiki/Windows_Aero>`_ 的界面風格，
+有了 Flip 3D 、Aero Peek 等等的這些輔助功能和動畫效果。
+
+這套渲染方式延續到 Windows 8 之後，雖然 Windows 8 還提出了 Modern UI 
+不過傳統桌面上的渲染仍舊是依靠混成器來做的。
 
 換句話說， Wayland 相比較於現在的 Xorg 來說到底有什麼優勢 ？
 --------------------------------------------------------------------
