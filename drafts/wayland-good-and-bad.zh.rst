@@ -14,15 +14,15 @@
 	.. image:: {filename}/images/wayland.png
 	  :alt: Wayland
 
-連着 `五六年了 <http://www.phoronix.com/scan.php?page=news_topic&q=Wayland&selection=20>`_
+連着有 `五六年了 <http://www.phoronix.com/scan.php?page=news_topic&q=Wayland&selection=20>`_
 ，每年都有人說 Wayland_ 要來了， X11 即將壽終正寢了。
-畢竟 X11 這個顯示服務器遠在 Linux 誕生之前就有了，歲數都比我大，歷史遺留問題
-一大堆，安全性、擴展性都跟不上時代了。
+畢竟 X11 這個顯示服務器遠在 Linux 誕生之前就有了，歲數都比我大（我出生於X11R3和X11R4之間），
+歷史遺留問題一大堆，安全性、擴展性都跟不上時代了。
 
 .. _Wayland: http://wayland.freedesktop.org/
 
 
-看樣子 2015年的確像是 Wayland 終於能用了
+看樣子 2015年的確像是 Wayland 終於能用了 
 --------------------------------------------------------------------
 
 根據 `Arch 的 Wiki <https://wiki.archlinux.org/index.php/Wayland>`_
@@ -43,11 +43,7 @@ WM/Compositor 除了作爲實驗性參考實現的 weston 和上述 DE 之外，
 要回答這個問題，我們需要瞭解 Wayland 到底 **是什麼** 與 **不是什麼** ，
 瞭解它 **試圖解決的問題** 與它 **帶來的問題** ，說明我理解到的這些也就是我寫這篇文章的目的。
 
-
-先說說 Wayland 是何來歷
---------------------------------------------------------------------
-
-Wayland 是什麼？ `官網 <http://wayland.freedesktop.org/>`_ 這麼說::
+那麼 Wayland 是什麼？ `官網 <http://wayland.freedesktop.org/>`_ 這麼說::
 
 	Wayland is intended as a simpler replacement for X…
 
@@ -58,9 +54,13 @@ Wayland 是什麼？ `官網 <http://wayland.freedesktop.org/>`_ 這麼說::
 實現了 Wayland 協議的混成器可以用來替代我們的 X 圖形服務器。
 那麼 **混成器** 這又是個什麼東西，我們爲什麼需要它呢？
 要理解爲什麼我們需要 **混成器** （或者它的另一個叫法，
-:ruby:`混合窗口管理器|Compositing Window Manager` ），我們需要回顧一下歷史，
+:ruby:`混成窗口管理器|Compositing Window Manager` ），我們需要回顧一下歷史，
 瞭解一下混成器出現之前主要的窗口管理器，也就是
 :ruby:`棧式窗口管理器|Stacking Window Manager` 的實現方式。
+
+
+別的系統中混成器的發展史 
+--------------------------------------------------------------------
 
 
 早期的棧式窗口管理器
@@ -162,7 +162,7 @@ Mac OS X 的 Quartz 技術在矢量圖的 PDF 格式和最終渲染之間又插�
 	\--------/                                        |
 	                                                  v
 	/--------\          +----------+             +----------+      Quartz        +--------+
-	| Cocoa  | Quartz2D | Internal |  Rasterize  | Rendered |    Compositor      |        |
+	| Cocoa  | Quartz2D : Internal |  Rasterize  | Rendered |    Compositor      |        |
 	| Window |--------->|   PDF    |------------>|  Bitmap  |------------------->| Screen |
 	|cGRE    |          |cPNK   {d}| (QuartzGL†) |cYEL   {d}| (Quartz Extreme†)  |cBLU    |
 	\--------/          +----------+             +----------+                    +--------+
@@ -200,13 +200,6 @@ Mission Control) 功能，把窗口的縮略圖（而不是事先繪製的圖標
 插曲：曇花一現的 Project Looking Glass 3D
 ++++++++++++++++++++++++++++++++++++++++++++++++
 
-.. panel-default::
-	:title: LG3D 圖片來自維基百科
-
-	.. image:: {filename}/images/LG3D.jpg
-	  :alt: LG3D 圖片來自維基百科
-
-
 在蘋果那邊剛剛開始使用混成器渲染窗口的 2003 年，昔日的 :ruby:`昇陽公司|Sun Microsystems`
 則在 Linux 上用 Java3D 作出了另一個更炫酷到沒有朋友的東西，被他們命名爲
 `Project Looking Glass 3D <http://en.wikipedia.org/wiki/Project_Looking_Glass>`_
@@ -217,6 +210,12 @@ Mission Control) 功能，把窗口的縮略圖（而不是事先繪製的圖標
 
 .. youtubeku:: zcPIEMvyPy4 XOTEzMzQwMjky
 
+
+.. panel-default::
+	:title: LG3D 圖片來自維基百科
+
+	.. image:: {filename}/images/LG3D.jpg
+	  :alt: LG3D 圖片來自維基百科
 
 如視頻中展示的那樣， LG3D 完全突破了傳統的棧式窗口管理方式，
 在三維空間中操縱二維的窗口平面，不僅像傳統的窗口管理器那樣可以縮放和移動窗口，
@@ -263,7 +262,7 @@ Windows 中的混成器
 	\--------------/                                  |
 	                                  Canonical       v       Desktop
 	/--------\          +----------+   Display   +---------+  Window    +--------+
-	|  GDI+  |  render  | Internal |    Driver   | DirectX |  Manager   |  WDDM  |
+	|  GDI+  |  render  : Internal |   Driver    | DirectX |  Manager   |  WDDM  |
 	| Window |--------->|   WMF    |------------>| Surface |----------->| Screen |
 	|cGRE    |          |cPNK   {d}|             |cYEL  {d}|            |cBLU    |
 	\--------/          +----------+             +---------+            +--------+
@@ -271,20 +270,27 @@ Windows 中的混成器
 	/---------\                                       |
 	| DirectX |                                       |
 	| Window  |---------------------------------------/
-	|cGRE     |           DirectX 9                    
+	|cGRE     |              DirectX                   
 	\---------/                                        
 
-和 Mac OS X 的情況類似， Windows Vista 之後的應用程序有兩套主要的繪圖庫，一套是從早期 Win32API
-就沿用至今的 GDI（以及GDI+），另一套是隨着 Longhorn 計劃開發出的 WPF 。WPF 的所有用戶界面
-控件都繪製在 DirectX 平面上，所以使用了 WPF 的程序也可以看作是 DirectX 程序。
+和 Mac OS X 的情況類似， Windows Vista 之後的應用程序有兩套主要的繪圖庫，一套是從早期
+Win32API 就沿用至今的 GDI（以及GDI+），另一套是隨着 Longhorn 計劃開發出的 WPF 。
+WPF 的所有用戶界面控件都繪製在 DirectX 貼圖上，所以使用了 WPF 的程序也可以看作是
+DirectX 程序。而對老舊的 GDI 程序而言，它們並不是直接繪製到 DirectX 貼圖的。首先每一個
+GDI 的繪圖操作都對應一條
+`Windows Metafile (WMF) <http://en.wikipedia.org/wiki/Windows_Metafile>`_
+記錄，所以 WMF 就可以看作是 Mac OS X 的 Quartz 內部用的 PDF 或者 NeXTSTEP 內部用的
+DPS，它們都是矢量圖描述。隨後，這些 WMF 繪圖操作被通過一個
+Canonical Display Driver (cdd.dll) 的內部組建轉換到 DirectX 平面，並且保存起來交給
+DWM。最後， DWM 拿到來自 CDD 或者 DirectX 的平面，把它們混合起來繪製在屏幕上。
 
 值得注意的細節是，WPF 底層的繪圖庫幾乎肯定有 C/C++ 綁定對應， Windows 自帶的不少應用程序
 和 Office 2007 用了 Ribbon 之後的版本都採用這套繪圖引擎，不過微軟沒有公開這套繪圖庫的
-底層細節，而只能通過 .Net 框架的 WPF 訪問它。這一點和 OS X 上只能通過 Objective-C 下的
-Cocoa API 調用 Quartz 的情況類似。
+C/C++ 實現的底層細節，而只能通過 .Net 框架的 WPF 訪問它。這一點和 OS X 上只能通過 
+Objective-C 下的 Cocoa API 調用 Quartz 的情況類似。
 
 另外需要注意的細節是 DirectX 的單窗口限制在 Windows Vista 之後被放開了，或者嚴格的說是
-基於 WDDM 規範下的顯卡驅動支持了多個 DirectX 平面。
+基於 WDDM 規範下的顯卡驅動支持了多個 DirectX 繪圖平面。
 在早期的 Windows 包括 XP 上，整個桌面上同一時刻只能有一個程序的窗口處於 DirectX 的
 **直接繪製** 模式，而別的窗口如果想用 DirectX 的話，要麼必須改用軟件渲染要麼就不能工作。
 這種現象可以通過打開多個播放器或者窗口化的遊戲界面觀察到。
@@ -295,11 +301,44 @@ DirectX 窗口。又或者我們可以認爲，整個界面上只有一個真正
 由於 DWM 實現了混成器，使得 Vista 和隨後的 Windows 7 有了
 `Aero Glass <http://en.wikipedia.org/wiki/Windows_Aero>`_ 的界面風格，
 有了 Flip 3D 、Aero Peek 等等的這些輔助功能和動畫效果。
-
 這套渲染方式延續到 Windows 8 之後，雖然 Windows 8 還提出了 Modern UI 
 不過傳統桌面上的渲染仍舊是依靠混成器來做的。
 
-換句話說， Wayland 相比較於現在的 Xorg 來說到底有什麼優勢 ？
+
+X 上的混成器
+--------------------------------------
+
+上面簡單介紹了 Mac OS X 和 Windows 系統中的混成器的發展史和工作原理，
+話題回到我們的正題 Linux 系統上，來說說目前 X 中混成器是如何工作的。
+
+X 上沒有混成器時的渲染
++++++++++++++++++++++++++++++++++++++
+
+要瞭解混成器在 X 上的工作方式，我們先介紹一下沒有混成器的時候 X 是如何畫圖的。
+
+.. ditaa::
+
+	
+	/----------\                   /------\    /--------\ 
+	| GTK+ cGRE|     Cairo         :      |    |        |  
+	| Window   |-------------------+      +--->|        |
+	\----------/  (xlib/xcb)       |      |    |        |             
+	                               |      |    |        | 
+	/--------\                     |      |    |        |  
+	| QT cGRE|      QPaint         |      |    |        | 
+	| Window |---------------------+ Xorg +--->| Screen |
+	\--------/    (xlib/xcb)       |      |    |        |
+	                               |      |    |        |
+	/------------\                 |      |    |        |
+	| Xlib/XCB   |    xlib/xcb     |      |    |        |
+	| Window cGRE|-----------------+cGRE  +--->|cBLU    |
+	\------------/                 |      |    |        |
+	                               \------/    \--------/	
+	  
+	                              
+
+
+Wayland 與 Xorg 的區別 
 --------------------------------------------------------------------
 
 w
