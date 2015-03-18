@@ -3,7 +3,7 @@
 
 :slug: wayland-good-and-bad
 :lang: zh
-:date: 2015-03-12 22:45
+:date: 2015-03-18 22:45
 :tags: linux, wayland, xorg
 
 .. contents::
@@ -26,13 +26,13 @@
 --------------------------------------------------------------------
 
 根據 `Arch 的 Wiki <https://wiki.archlinux.org/index.php/Wayland>`_
-上跟蹤着的 wayland 進展，
+上跟蹤着的 Wayland 進展，
 `toolkit 方面 <https://wiki.archlinux.org/index.php/Wayland#GUI_libraries>`_
-GTK+ 3, Qt 5, EFL, Clutter, SDL 等等的幾個圖形庫都完整支持 wayland 並且在 archlinux
+GTK+ 3, Qt 5, EFL, Clutter, SDL 等等的幾個圖形庫都完整支持 Wayland 並且在 archlinux
 中默認啓用了。
 `WM 和 DE 方面 <https://wiki.archlinux.org/index.php/Wayland#Window_managers_and_desktop_shells>`_
 Gnome 3 已經有了實驗性支持， KDE 5 方面大部分 QT5 程序都已經支持了就等 kwin_wayland
-作爲 Session Manager 成熟起來，E19 很早就支持了，以及目前 wayland 上的
+作爲 Session Manager 成熟起來，E19 很早就支持了，以及目前 Wayland 上的
 WM/Compositor 除了作爲實驗性參考實現的 weston 和上述 DE 之外，還有不少
 `有趣 <https://github.com/Cloudef/loliwm>`_ 又
 `好玩 <https://github.com/evil0sheep/motorcar>`_ 的新 WM 。
@@ -41,27 +41,26 @@ WM/Compositor 除了作爲實驗性參考實現的 weston 和上述 DE 之外，
 
 於是問題就是 **我們是否應該換到 Wayland** ？
 要回答這個問題，我們需要瞭解 Wayland 到底 **是什麼** 與 **不是什麼** ，
-瞭解它 **試圖解決的問題** 與它 **帶來的問題** ，說明我理解到的這些也就是我寫這篇文章的目的。
+瞭解它 **試圖解決的問題** 與它 **帶來的問題**
+，從我理解到的角度說明這些問題也就是我寫這篇文章的目的。
 
 那麼 Wayland 是什麼？ `官網 <http://wayland.freedesktop.org/>`_ 這麼說::
 
 	Wayland is intended as a simpler replacement for X…
-
 	Wayland is a protocol for a compositor to talk to its clients
 	as well as a C library implementation of that protocol…
 
 也就是說 Wayland 是一個用來實現 :ruby:`混成器|Compositor` 的協議和庫，
 實現了 Wayland 協議的混成器可以用來替代我們的 X 圖形服務器。
+
+桌面系統中混成器的發展 
+--------------------------------------------------------------------
+
 那麼 **混成器** 這又是個什麼東西，我們爲什麼需要它呢？
 要理解爲什麼我們需要 **混成器** （或者它的另一個叫法，
 :ruby:`混成窗口管理器|Compositing Window Manager` ），我們需要回顧一下歷史，
 瞭解一下混成器出現之前主要的窗口管理器，也就是
 :ruby:`棧式窗口管理器|Stacking Window Manager` 的實現方式。
-
-
-其它桌面系統中混成器的發展史 
---------------------------------------------------------------------
-
 
 早期的棧式窗口管理器
 ++++++++++++++++++++++++++++++++++++++++++++++++
@@ -115,6 +114,25 @@ WM/Compositor 除了作爲實驗性參考實現的 weston 和上述 DE 之外，
 重繪事件。
 雖然有很多方法或者說技巧能繞過這些限制，比如 Windows XP 上就支持了實時的
 重繪事件和不規則形狀的窗口剪裁，不過這些技巧都是一連串的 hack ，難以擴展。
+
+Amiga 的硬件混成器 
+++++++++++++++++++++++++++++++++++++++++++++++++
+
+.. panel-default::
+	:title: AmigaOS4，圖片來自維基百科
+
+	.. image:: {filename}/images/AmigaOS4.png
+	  :alt: AmigaOS4，圖片來自維基百科
+
+
+根據 `維基百科頁對混成器歷史 <http://en.wikipedia.org/wiki/Compositing_window_manager#History>`_
+的記載，最早在桌面系統中使用的混成器要追溯到 1985 年發佈的
+`Amiga 系統 <http://en.wikipedia.org/wiki/AmigaOS>`_ 中用到的硬件混成器。
+
+早期的 Amiga 系統允許程序用系統調用分配一塊內存區域並且在其中繪製內容，然後 Amiga
+會由硬件將這些內容混成繪製到屏幕上，窗口的內容沒有修改的話應用程序就不需要多次重新繪製。
+早期的硬件混成的能力比較基礎，沒有提供後來在別的系統中能看到的動畫效果和3D效果。
+到後來的 AmigaOS 4 則能看到完整的混成器的樣子了。
 
 NeXTSTEP 與 Mac OS X 中混成器的發展
 ++++++++++++++++++++++++++++++++++++++++++++++++
@@ -201,7 +219,7 @@ Mission Control) 功能，把窗口的縮略圖（而不是事先繪製的圖標
 ++++++++++++++++++++++++++++++++++++++++++++++++
 
 在蘋果那邊剛剛開始使用混成器渲染窗口的 2003 年，昔日的 :ruby:`昇陽公司|Sun Microsystems`
-則在 Linux 上用 Java3D 作出了另一個更炫酷到沒有朋友的東西，被他們命名爲
+則在 Linux 上用 Java3D 作出了另一個炫酷到沒有朋友的東西，被他們命名爲
 `Project Looking Glass 3D <http://en.wikipedia.org/wiki/Project_Looking_Glass>`_
 （縮寫LG3D，別和 Google 的 Project Glass 混淆呀）。這個項目的炫酷實在難以用言語描述，
 好在還能找到兩段視頻展示它的效果。
@@ -310,78 +328,105 @@ X 中的混成器與 Composite 擴展
 
 上面簡單介紹了 Mac OS X 和 Windows 系統中的混成器的發展史和工作原理，
 話題回到我們的正題 Linux 系統上，來說說目前 X 中混成器是如何工作的。
+
+原始的 X 的繪圖模型
+++++++++++++++++++++++++++++++++++++
+
 首先，沒有混成器的時候 X 是這樣畫圖的：
 
 .. ditaa::
 	
-	/--------\        +----------+           /------\    /--------\ 
-	| GTK    | Cairo  | Internal | xlib/xcb  :      |    |        |  
-	| Window |------->|   XPM    |---------------------->|        |
-	|cGRE    |        |cPNK   {d}|           |      |    |        |             
-	\--------/        +----------+           |      |    |        |             
-	                                         :      :    |        | 
-	/--------\        +----------+           | Xorg |    |        |  
-	| QT     | QPaint | Internal | xlib/xcb  |      |    |        | 
-	| Window |------->|   XPM    |---------------------->| Screen |
-	|cGRE    |        |cPNK   {d}|           |      |    |        |
-	\--------/        +----------+           |      |    |        |
-	                                         :      :    |        |
-	/----------\                             |      |    |        |
-	| Xlib/XCB |          xlib/xcb           |      |    |        |
-	| Window   |---------------------------------------->|        |
-	|cGRE      |                             :      |    | cBLU   |
-	\----------/                             \------/    \--------/	
+	/--------\        +----------+  +----------+           /------\    /--------\ 
+	| GTK    | Cairo  : Internal |  | Internal | xlib/xcb  :      |    |        |  
+	| Window |------->|   PDF    |->|   XPM    |---------------------->|        |
+	|cGRE    |        |cPNK   {d}|  |cPNK   {d}|           |      |    |        |             
+	\--------/        +----------+  +----------+           |      |    |        |             
+	                                                       :      :    |        | 
+	/--------\        +----------+  +----------+           | Xorg |    |        |  
+	| QT     | QPaint : Internal |  | Internal | xlib/xcb  |      |    |        | 
+	| Window |------->|  Format  |->|   XPM    |---------------------->| Screen |
+	|cGRE    |        |cPNK   {d}|  |cPNK   {d}|           |      |    |        |
+	\--------/        +----------+  +----------+           |      |    |        |
+	                                                       :      :    |        |
+	/----------\                                           |      |    |        |
+	| Xlib/XCB |                   xlib/xcb                |      |    |        |
+	| Window   |------------------------------------------------------>|        |
+	|cGRE      |                                           :      |    | cBLU   |
+	\----------/                                           \------/    \--------/	
 
 
 	  
-X 的應用程序沒有統一的繪圖 API ，GTK+ 在 3.0 之後統一用 Cairo 繪圖，
+X 的應用程序沒有統一的繪圖 API 。GTK+ 在 3.0 之後統一用 Cairo 繪圖，
+而 Cairo 則是基於 PDF 1.4 的繪圖模型構建的，
 GTK 的 2.0 和之前的版本中也有很大一部分的繪圖是用 Cairo 進行，
 其餘則通過 xlib 或者 xcb 調用 X 核心協議提供的繪圖原語繪圖。
 QT 的情況也是類似，基本上用 QPaint 子系統繪製成位圖然後交給 X 的顯示服務器。
 顯示服務器拿到這些繪製請求之後，再在屏幕上的相應位置繪製整個屏幕。
 當然還有很多老舊的不用 GTK 或者 QT 的程序，他們則直接調用 X 核心協議提供的繪圖原語。
 
+值得注意一點是 X 上除了沒有統一的繪圖模型，也沒有統一的矢量圖格式。
+X 核心協議的繪圖原語提供的是像素單位的繪圖操作，沒有類似 GDI+ 或者 Quartz
+提供的 :ruby:`設備無關|Device Independence` 的「點」的抽象。所以只用 X
+的繪圖原語的話，我們可以把 (1,1) 這個像素點塗黑，但是不能把 (0.5, 0.5) 
+這個點塗黑，這一設計缺陷在
+`Unix Hater's Handbook <http://web.mit.edu/~simsong/www/ugh.pdf>`_
+中已經被吐槽過了。因爲這個缺陷，所以直接用 X 繪圖原語繪製的圖像不能像
+矢量圖那樣進行無損縮放。同樣的缺陷導致 X 繪圖原語繪製的字符不能做到
+:ruby:`子像素級|subpixel-level` :ruby:`抗鋸齒|anti-aliasing`
+（這解釋了默認配置下的 xterm 和
+`urxvt 中的字體渲染爲什麼難看 <http://arch.acgtyrant.com/2015/01/05/I-do-not-recommend-urxvt-again-now/>`_
+）。相比之下 GDI 有對應的 WMF 矢量圖格式， Quartz 有對應的 PDF 矢量圖格式，
+而 X 中沒有這樣的格式對應。因爲沒有統一的矢量圖格式，所以無論是 Cairo
+（內部基於 PDF 1.4 描述）、QPaint
+還是沒有用這些繪圖庫但是同樣在意字體和曲線渲染效果的程序（比如 Firefox 和
+Chromium）都需要首先渲染到內部的 `XPixMap <http://en.wikipedia.org/wiki/X_PixMap>`_
+位圖格式，做好子像素渲染和矢量縮放，然後再把渲染好的位圖轉交給 X 圖形服務器。
+
+Composite 擴展
+++++++++++++++++++++++++++++++++++++
+
 2004年發佈的 X11R6.8 版本的 Xorg 引入了
 `Composite 擴展 <http://freedesktop.org/wiki/Software/CompositeExt/>`_
-，這個擴展允許某個 X 程序做這幾件事情：
+。這個擴展背後的動機以及前因後果在一篇文章 
+`The (Re)Architecture of the X Window System <http://keithp.com/~keithp/talks/xarch_ols2004/xarch-ols2004-html/>`_ 
+中有詳細的表述。Composite 擴展允許某個 X 程序做這幾件事情：
 
-#. 將一個窗口樹中的所有窗口渲染重定向到 :ruby:`內部存儲|off-screen storage` 
-   。這通過 :code:`RedirectSubwindows` 調用實現。重定向的時候可以指定讓 X
-   自動更新窗口的內容到屏幕上或者不更新（由混成器手動更新）。
-#. 取得某個窗口的內部存儲，通過 :code:`NameWindowPixmap` 實現。
-#. 創建一個特殊的用於繪圖的窗口，對這個窗口上的繪製將覆蓋在屏幕的最上面，
-   通過 :code:`CompositeGetOverlayWindow` 實現。
-#. 取得某個窗口的邊界區域（不一定是矩形），通過 :code:`CreateRegionFromBorderClip`
-   實現。
+#. 通過 :code:`RedirectSubwindows` 調用將一個窗口樹中的所有窗口渲染重定向到
+   :ruby:`內部存儲|off-screen storage` 。重定向的時候可以指定讓 X
+   自動更新窗口的內容到屏幕上或者由混成器手動更新。
+#. 通過 :code:`NameWindowPixmap` 取得某個窗口的內部存儲。
+#. 通過 :code:`CompositeGetOverlayWindow` 獲得一個特殊的用於繪圖的窗口，
+   對這個窗口上的繪製將覆蓋在屏幕的最上面。
+#. 通過 :code:`CreateRegionFromBorderClip` 取得某個窗口的邊界剪裁區域（不一定是矩形）。
 
-這樣的話，一個 X 程序就可以調用這些 API 實現混成器。開啓了混成的 X 是這樣繪圖的：
+有了 Composite 擴展，一個 X 程序就可以調用這些 API 實現混成器。開啓了混成的 X 是這樣繪圖的：
 
 .. ditaa::
 	
-	/--------\        +----------+               /--------------\
-	| GTK    | Cairo  | Internal | xlib/xcb      |  +---------+ |
-	| Window |------->|   XPM    |----------------->| XPM {d} | |
-	|cGRE    |        |cPNK   {d}|           /------|cYEL     | |
-	\--------/        +----------+           |   |  +---------+ |
-	                                         |   :              :
-	/--------\        +----------+           |   |              |
-	| QT     | QPaint | Internal | xlib/xcb  |   |  +---------+ |
-	| Window |------->|   XPM    |----------------->| XPM {d} | |
-	|cGRE    |        |cPNK   {d}|           | /----|cYEL     | |
-	\--------/        +----------+           | | |  +---------+ |
-	                                         | | :              |
-	+-------------+    NameWindowPixmap      | | |     Xorg     |
-	| Compositor  |<-------------------------/ | |    Server    |   /--------\
-	| Overlay     |<---------------------------/ |              |   |        |
-	| Window      |------------------------------------------------>| Screen |
-	|cGRE         |<---------------------------\ |  XRender/    |   |cBLU    |
-	+-------------+                            | |  OpenGL/EGL  |   \--------/
-	                                           | :              :   
-	/----------\                               | |  +---------+ |
-	| Xlib/XCB |          xlib/xcb             \----| XPM {d} | |
-	| Window   |----------------------------------->|cYEL     | |
-	|cGRE      |                                 |  +---------+ |
-	\----------/                                 \--------------/
+	/--------\        +----------+  +----------+               /--------------\
+	| GTK    | Cairo  : Internal |  | Internal | xlib/xcb      |  +---------+ |
+	| Window |------->|   PDF    |->|   XPM    |----------------->| XPM {d} | |
+	|cGRE    |        |cPNK   {d}|  |cPNK   {d}|           /------|cYEL     | |
+	\--------/        +----------+  +----------+           |   |  +---------+ |
+	                                                       |   :              :
+	/--------\        +----------+  +----------+           |   |              |
+	| QT     | QPaint : Internal |  | Internal | xlib/xcb  |   |  +---------+ |
+	| Window |------->|  Format  |->|   XPM    |----------------->| XPM {d} | |
+	|cGRE    |        |cPNK   {d}|  |cPNK   {d}|           | /----|cYEL     | |
+	\--------/        +----------+  +----------+           | | |  +---------+ |
+	                                                       | | :              |
+	+-------------+             NameWindowPixmap           | | |     Xorg     |
+	| Compositor  |<---------------------------------------/ | |    Server    |   /--------\
+	| Overlay     |<-----------------------------------------/ |              |   |        |
+	| Window      |-------------------------------------------------------------->| Screen |
+	|cGRE         |<-----------------------------------------\ |  XRender/    |   |cBLU    |
+	+-------------+                                          | |  OpenGL/EGL  |   \--------/
+	                                                         | :              :   
+	/----------\                                             | |  +---------+ |
+	| Xlib/XCB |                   xlib/xcb                  \----| XPM {d} | |
+	| Window   |------------------------------------------------->|cYEL     | |
+	|cGRE      |                                               |  +---------+ |
+	\----------/                                               \--------------/
 
 整個 X 的混成器模型與 Mac OS X 的混成器模型相比，有如下幾點顯著的區別：
 
@@ -389,11 +434,28 @@ QT 的情況也是類似，基本上用 QPaint 子系統繪製成位圖然後交
    出於效率考慮，絕大多數 X 上的混成器額外使用了 XRender 擴展或者
    OpenGL/EGL 來加速繪製貼圖。
 #. :code:`RedirectSubwindows` 調用針對的是一個窗口樹，換句話說是一個窗口
-   及其全部子窗口，不同於 Mac OS X 中混成器能拿到全部窗口的輸出。
-   另外一個限制是，爲了讓窗口有輸出，窗口必須顯示在當前桌面上，不能處於最小化
+   及其全部子窗口，不同於 Mac OS X 中混成器會拿到全部窗口的輸出。
+   這個特點其實其實並不算是限制，因爲 X 中每個虛擬桌面都有一個根窗口，只要指定這個根
+   窗口就可以拿到整個虛擬桌面上的全部可見窗口輸出了。
+   反而這個設計提供了一定的自由度，比如我們可以用這個調用實現一個截圖程序，
+   拿到某個特定窗口的輸出，而不用在意別的窗口。
+#. 爲了讓窗口有輸出，窗口必須顯示在當前桌面上，不能處於最小化
    狀態或者顯示在別的虛擬桌面，用 X 的術語說就是窗口必須處於 :ruby:`被映射|mapped`
    的狀態。因此直接用上述方法不能得到沒有顯示的窗口的輸出，比如不能對最小化的窗口
-   直接實現 Windows 7 中的 Aero Peak 之類的效果。
+   直接實現 Windows 7 中的 Aero Peak 之類的效果。這個限制可以想辦法繞開，
+   比如在需要窗口輸出的時候臨時把窗口隱射到桌面上，拿到輸出之後再隱藏起來，
+   不過要實現這一點需要混成器和窗口管理器相互配合。
+#. 不像 Mac OS X 的基於 OpenGL Surface 的繪圖模型是 :ruby:`設備無關|device independent`
+   的，這裏 X 的繪圖模型是 :ruby:`設備相關|device dependent` 的。
+   這既是優點也是缺點。從缺點方面而言，顯示到 X 的位圖輸出因爲設備相關性，
+   所以嚴格對應顯示器的點陣，並不適合作爲文檔格式打印出來。當然無論是 Cairo
+   還是 QPaint 都提供了到 PostScript 或者 PDF 後端的輸出，所以實用層面這個並不構成問題。
+   設備相關這一點的優點在於，繪製到 XPM 位圖的時候，程序和繪圖庫是能拿到輸出設備（顯示器）
+   的特殊屬性的，從而繪圖庫能考慮不同的色彩、分辨率、 DPI 或者
+   :ruby:`子像素佈局|subpixel layout` 提供最好的顯示效果。
+   Mac OS X 10.4 在設計的時候也曾考慮過提供無極縮放的支持，而這種支持到了 Mac OS X
+   10.5 中就縮水變成了 Retina Display 的固定 2 倍縮放。這種局面在 X
+   上沒有發生正是因爲 X 的繪圖模型的這種設備相關性。
 
 以及，混成器用來繪製的 OverlayWindow 有個極其特殊的地方：它不是由混成器創建的，
 而是由 X 創建並返回給混成器的，從而它 **沒有消息隊列，不能獲得任何鍵盤或者鼠標輸入**
@@ -408,6 +470,8 @@ QT 的情況也是類似，基本上用 QPaint 子系統繪製成位圖然後交
    再換句話說，雖然 Composite 允許我們重定向窗口內容的輸出，但是它不允許我們重定向
    鼠標鍵盤事件。這個的直接結果是，任何處於縮放狀態的窗口都不能獲得焦點和事件，
    反之要獲得焦點和事件，那麼窗口本身不能被縮放。
+
+
 
 
 Wayland 與 Xorg 的區別 
