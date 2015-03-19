@@ -1,7 +1,7 @@
 我眼中的 Wayland 的是與非
 =====================================
 
-:slug: wayland-good-and-bad
+:slug: wayland-pros-and-cons
 :lang: zh
 :date: 2015-03-18 22:45
 :tags: linux, wayland, xorg
@@ -47,8 +47,7 @@ WM/Compositor 除了作爲實驗性參考實現的 weston 和上述 DE 之外，
 那麼 Wayland 是什麼？ `官網 <http://wayland.freedesktop.org/>`_ 這麼說::
 
 	Wayland is intended as a simpler replacement for X…
-	Wayland is a protocol for a compositor to talk to its clients
-	as well as a C library implementation of that protocol…
+	Wayland is a protocol for a compositor to talk to its clients as well as a C library implementation of that protocol…
 
 也就是說 Wayland 是一個用來實現 :ruby:`混成器|Compositor` 的協議和庫，
 實現了 Wayland 協議的混成器可以用來替代我們的 X 圖形服務器。
@@ -115,24 +114,6 @@ WM/Compositor 除了作爲實驗性參考實現的 weston 和上述 DE 之外，
 雖然有很多方法或者說技巧能繞過這些限制，比如 Windows XP 上就支持了實時的
 重繪事件和不規則形狀的窗口剪裁，不過這些技巧都是一連串的 hack ，難以擴展。
 
-Amiga 的硬件混成器 
-++++++++++++++++++++++++++++++++++++++++++++++++
-
-.. panel-default::
-	:title: AmigaOS4，圖片來自維基百科
-
-	.. image:: {filename}/images/AmigaOS4.png
-	  :alt: AmigaOS4，圖片來自維基百科
-
-
-根據 `維基百科頁對混成器歷史 <http://en.wikipedia.org/wiki/Compositing_window_manager#History>`_
-的記載，最早在桌面系統中使用的混成器要追溯到 1985 年發佈的
-`Amiga 系統 <http://en.wikipedia.org/wiki/AmigaOS>`_ 中用到的硬件混成器。
-
-早期的 Amiga 系統允許程序用系統調用分配一塊內存區域並且在其中繪製內容，然後 Amiga
-會由硬件將這些內容混成繪製到屏幕上，窗口的內容沒有修改的話應用程序就不需要多次重新繪製。
-早期的硬件混成的能力比較基礎，沒有提供後來在別的系統中能看到的動畫效果和3D效果。
-到後來的 AmigaOS 4 則能看到完整的混成器的樣子了。
 
 NeXTSTEP 與 Mac OS X 中混成器的發展
 ++++++++++++++++++++++++++++++++++++++++++++++++
@@ -376,14 +357,13 @@ X 核心協議的繪圖原語提供的是像素單位的繪圖操作，沒有類
 （這解釋了默認配置下的 xterm 和
 `urxvt 中的字體渲染爲什麼難看 <http://arch.acgtyrant.com/2015/01/05/I-do-not-recommend-urxvt-again-now/>`_
 ）。相比之下 GDI 有對應的 WMF 矢量圖格式， Quartz 有對應的 PDF 矢量圖格式，
-而 X 中沒有這樣的格式對應。因爲沒有統一的矢量圖格式，所以無論是 Cairo
-（內部基於 PDF 1.4 描述）、QPaint
+而 X 中沒有這樣的格式對應。因爲沒有統一的矢量圖格式，所以無論是 Cairo 、QPaint
 還是沒有用這些繪圖庫但是同樣在意字體和曲線渲染效果的程序（比如 Firefox 和
 Chromium）都需要首先渲染到內部的 `XPixMap <http://en.wikipedia.org/wiki/X_PixMap>`_
 位圖格式，做好子像素渲染和矢量縮放，然後再把渲染好的位圖轉交給 X 圖形服務器。
 
-Composite 擴展
-++++++++++++++++++++++++++++++++++++
+通過 Composite 擴展重定向窗口輸出
++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 2004年發佈的 X11R6.8 版本的 Xorg 引入了
 `Composite 擴展 <http://freedesktop.org/wiki/Software/CompositeExt/>`_
@@ -395,11 +375,12 @@ Composite 擴展
    :ruby:`內部存儲|off-screen storage` 。重定向的時候可以指定讓 X
    自動更新窗口的內容到屏幕上或者由混成器手動更新。
 #. 通過 :code:`NameWindowPixmap` 取得某個窗口的內部存儲。
-#. 通過 :code:`CompositeGetOverlayWindow` 獲得一個特殊的用於繪圖的窗口，
-   對這個窗口上的繪製將覆蓋在屏幕的最上面。
+#. 通過 :code:`GetOverlayWindow` 獲得一個特殊的用於繪圖的窗口，
+   在這個窗口上繪製的圖像將覆蓋在屏幕的最上面。
 #. 通過 :code:`CreateRegionFromBorderClip` 取得某個窗口的邊界剪裁區域（不一定是矩形）。
 
-有了 Composite 擴展，一個 X 程序就可以調用這些 API 實現混成器。開啓了混成的 X 是這樣繪圖的：
+有了 Composite 擴展，一個 X 程序就可以調用這些 API 實現混成器。
+這裏有篇 `教學解釋如何使用 Composite 擴展 <http://www.talisman.org/~erlkonig/misc/x11-composite-tutorial/>`_ 。開啓了混成的 X 是這樣繪圖的：
 
 .. ditaa::
 	
@@ -420,7 +401,7 @@ Composite 擴展
 	| Overlay     |<-----------------------------------------/ |              |   |        |
 	| Window      |-------------------------------------------------------------->| Screen |
 	|cGRE         |<-----------------------------------------\ |  XRender/    |   |cBLU    |
-	+-------------+                                          | |  OpenGL/EGL  |   \--------/
+	+-------------+                                          | |  OpenGL      |   \--------/
 	                                                         | :              :   
 	/----------\                                             | |  +---------+ |
 	| Xlib/XCB |                   xlib/xcb                  \----| XPM {d} | |
@@ -432,7 +413,8 @@ Composite 擴展
 
 #. 混成的部分是交由外部的程序完成的，對混成的繪製方式和繪製普通窗口一樣。
    出於效率考慮，絕大多數 X 上的混成器額外使用了 XRender 擴展或者
-   OpenGL/EGL 來加速繪製貼圖。
+   OpenGL/EGL 來加速繪製貼圖。不過即使如此，還是不能避免同樣的位圖（內容不一定完全一致，
+   比如 X 可以在窗口交給它的位圖上加上邊框然後再返還給混成器）在不同的三個程序之間來回複製。
 #. :code:`RedirectSubwindows` 調用針對的是一個窗口樹，換句話說是一個窗口
    及其全部子窗口，不同於 Mac OS X 中混成器會拿到全部窗口的輸出。
    這個特點其實其實並不算是限制，因爲 X 中每個虛擬桌面都有一個根窗口，只要指定這個根
@@ -452,29 +434,68 @@ Composite 擴展
    還是 QPaint 都提供了到 PostScript 或者 PDF 後端的輸出，所以實用層面這個並不構成問題。
    設備相關這一點的優點在於，繪製到 XPM 位圖的時候，程序和繪圖庫是能拿到輸出設備（顯示器）
    的特殊屬性的，從而繪圖庫能考慮不同的色彩、分辨率、 DPI 或者
-   :ruby:`子像素佈局|subpixel layout` 提供最好的顯示效果。
+   :ruby:`子像素佈局|subpixel layout` 這些屬性以提供最好的渲染效果。
    Mac OS X 10.4 在設計的時候也曾考慮過提供無極縮放的支持，而這種支持到了 Mac OS X
    10.5 中就縮水變成了 Retina Display 的固定 2 倍縮放。這種局面在 X
-   上沒有發生正是因爲 X 的繪圖模型的這種設備相關性。
-
-以及，混成器用來繪製的 OverlayWindow 有個極其特殊的地方：它不是由混成器創建的，
-而是由 X 創建並返回給混成器的，從而它 **沒有消息隊列，不能獲得任何鍵盤或者鼠標輸入**
-。對 OverlayWindow 的點擊會透過 OverlayWindow 直接作用到底下的窗口上。
-這帶來以下問題：
-
-#. 窗口管理器或者混成器無法接受來自 OverlayWindow 的事件。如果想要實現類似 Exposé
-   那樣的效果，即允許通過鼠標點擊選擇窗口，通常的做法是再在 OverlayWindow
-   下面覆蓋一層置頂的普通窗口，由它接收鼠標鍵盤事件。
-#. 如果要直接和窗口的內容交互，換句話說如果想要讓一般的窗口正常地接收鼠標鍵盤事件，
-   那麼 **混成器繪製的窗口位置和大小必須嚴格地和底下普通窗口的位置和大小保持一致** 。
-   再換句話說，雖然 Composite 允許我們重定向窗口內容的輸出，但是它不允許我們重定向
-   鼠標鍵盤事件。這個的直接結果是，任何處於縮放狀態的窗口都不能獲得焦點和事件，
-   反之要獲得焦點和事件，那麼窗口本身不能被縮放。
+   上沒有發生正是因爲 X 的繪圖模型的這種設備相關性，而 Mac OS X 的混成器纔用的
+   OpenGL Surface 則無視了這些設備相關的屬性。
 
 
+輸入事件的重定向，這可能做到麼？
+++++++++++++++++++++++++++++++++++++++++++
+
+通過上述 Composite 擴展提供的 API ，混成器可以把窗口的 **輸出** 重定向到自己的窗口上。
+但是僅僅重定向輸出，整個 X 還不處於可用狀態，因爲 **沒有重定向輸入** 。
+考慮一下用戶試圖用鼠標點擊某個按鈕或者文本框，這時鼠標處於的位置是在 OverlayWindow
+上繪製的位置，這個鼠標事件會交給 OverlayWindow ，而用戶期待這個事件被發送給他看到的按鈕上。
+
+需要重定向的事件主要有鍵盤和鼠標事件兩大類（暫時先不考慮觸摸屏之類的額外輸入）。
+由於 Composite 擴展並沒有直接提供這方面的重定向 API ，這使得輸入事件處理起來都比較麻煩，
+這一點在這篇博文中有更詳細的說明：
+`so you want to build a compositor <http://wingolog.org/archives/2008/07/26/so-you-want-to-build-a-compositor>`_ 。
+
+假設要重定向鍵盤事件，混成器需要效仿輸入法框架（fcitx, ibus, scim）
+那樣處理一部分按鍵事件並把其餘事件轉給具有輸入焦點的程序。
+看看現有的輸入法框架和諸多程序間的問題，我們就能知道這裏的坑有多深。
+於是 **大部分 X 的混成器都不處理鍵盤事件重定向** 
+。再來看重定向鼠標事件，這邊的坑比重定向鍵盤事件的坑更多，
+因爲不像重定向窗口輸出那樣只需要考慮 :ruby:`頂層|top-level` 窗口，
+重定向鼠標輸入的時候要考慮所有子窗口（它們有獨立的事件隊列），
+以及要準確記錄輸入事件事件發生時的鍵盤組合鍵狀態，還要正確實現 ICCCM/EWMH
+中描述的轉交窗口焦點的複雜規則，所有這些都已經在 X 中實現過的事情需要重新實現一遍。
+
+由於坑太多難以實現，所以所有 X 下的混成器的實現方式都是直接忽略這個繁重的任務，
+**不重定向輸入事件** 而把它交給 X 處理。具體的實現方式就是通過
+`XFixes <http://freedesktop.org/wiki/Software/FixesExt/>`_
+擴展提供的 :code:`SetWindowShapeRegion` API 將 OverlayWindow 的 **輸入區域**
+:code:`ShapeInput` 設爲空區域，從而忽略對這個 OverlayWindow 的一切鼠標鍵盤事件。
+這樣一來對 OverlayWindow 的點擊會透過 OverlayWindow 直接作用到底下的窗口上。
+
+因爲選擇了不重定向輸入事件， X 下的混成器通常會處於以下兩種狀態：
+
+#. 選擇狀態下可以縮放窗口的大小，扭曲窗口的形狀，並且可以把窗口繪製在任意想要繪製的位置上
+   （並不是移動窗口的位置）， **但是不能讓用戶與窗口的內容交互** 。
+#. 正常狀態下可以讓用戶與窗口的內容交互，但是
+   **繪製的窗口位置、大小和形狀必須嚴格地和 X 記錄的窗口的位置、大小和形狀保持一致**
+   。持續時間短暫的動畫效果可以允許位置和形狀稍有偏差，但是在動畫的過程中如果用戶點擊了
+   變形縮放過的窗口，那麼鼠標事件將發往錯誤的（ X 記錄中的而非顯示出的）窗口元素上。
+
+可以發現這兩種狀態就直接對應了 Gnome 3 的普通狀態和縮略圖狀態（點擊 :ruby:`活動|Activity`
+或者戳畫面左上角之後顯示的狀態），這也解釋了爲什麼儘管 Gnome 3
+的窗口有碩大的關閉按鈕，但是在縮略圖狀態下 Gnome 3 仍然需要給窗口加上額外的關閉按鈕：
+**因爲處於縮略狀態下的窗口只是一張畫而不能點** 。
+
+Composite 擴展的這些限制使得 X 下的混成器目前只能實現 Mac OS X 那樣的 Exposé
+效果，而不能實現 LG3D 那樣直接在 3D 空間中操縱窗口內容。
 
 
-Wayland 與 Xorg 的區別 
+於是我們有了 Wayland 
 --------------------------------------------------------------------
 
-w
+上面簡要說了 X 中目前實現混成器的基本情況，太多細節被我忽略了沒有提及，
+而我選擇性提到的這些問題都是我認爲重要的，對理解 Wayland 有幫助的問題。
+
+爲什麼我們需要 Wayland ？我覺得上面說到的兩點目前 Composite 的缺陷已經很明顯了，
+這裏再重複一遍：
+
+#. 同樣的位圖在進程間（應用程序→Xorg）來回傳遞
