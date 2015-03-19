@@ -15,6 +15,7 @@ from pelicanconf import *
 RELATIVE_URLS = False
 FEED_DOMAIN = SITEURL
 DELETE_OUTPUT_DIRECTORY = False
+
 USE_LESS = False
 
 # Following items are often useful when publishing
@@ -26,3 +27,4 @@ TAG_FEED_ATOM = 'feeds/tag-%s.atom.xml'
 FEED_ALL_ATOM = 'feeds/all.atom.xml'
 FEED_ATOM = 'feeds/atom.xml'
 CATEGORY_FEED_ATOM = 'feeds/%s.atom.xml'
+LOAD_CACHE_CONTENT=False
