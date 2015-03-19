@@ -7,6 +7,7 @@
 :tags: desktop, compositor, macosx, windows, window, manager
 :series: compositor and wayland
 
+.. contents::
 
 （原本是想寫篇關於 Wayland 的文章，後來越寫越長感覺能形成一個系列，
 於是就先把這篇背景介紹性質的部分發出來了。）

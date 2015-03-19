@@ -3,13 +3,16 @@ X 中的混成器與 Composite 擴展
 
 :slug: compositor-in-X-and-compositext
 :lang: zh
-:date: 2015-03-20 22:45
+:date: 2015-03-19 17:45
 :tags: linux, wayland, xorg, compositor
 :series: compositor and wayland
 
-在上篇文章 `「桌面系統的混成器簡史」 <{filepath}/tech/brief-history-of-compositors-in-desktop-os.zh.rst>`_
-中我介紹了 Mac OS X 和 Windows 系統中的混成器的發展史和工作原理，
+.. contents::
+
+在上篇文章 `「桌面系統的混成器簡史」 <{filename}/tech/brief-history-of-compositors-in-desktop-os.zh.rst>`_
+中我介紹了其它桌面系統中的混成器的發展史和工作原理，
 話題回到我們的正題 Linux 系統上，來說說目前 X 中混成器是如何工作的。
+這篇文章將比上一篇深入更多技術細節，不想看太多細節的可以直接跳過看 `結論 <#id6>`_ 。
 
 原始的 X 的繪圖模型
 ++++++++++++++++++++++++++++++++++++
@@ -38,13 +41,15 @@ X 中的混成器與 Composite 擴展
 
 
 	  
-X 的應用程序沒有統一的繪圖 API 。GTK+ 在 3.0 之後統一用 Cairo 繪圖，
+X 的應用程序沒有統一的繪圖 API 。GTK+ 在 3.0 之後統一用 Cairo_ 繪圖，
 而 Cairo 則是基於 PDF 1.4 的繪圖模型構建的，
 GTK 的 2.0 和之前的版本中也有很大一部分的繪圖是用 Cairo 進行，
 其餘則通過 xlib 或者 xcb 調用 X 核心協議提供的繪圖原語繪圖。
 QT 的情況也是類似，基本上用 QPaint 子系統繪製成位圖然後交給 X 的顯示服務器。
 顯示服務器拿到這些繪製請求之後，再在屏幕上的相應位置繪製整個屏幕。
 當然還有很多老舊的不用 GTK 或者 QT 的程序，他們則直接調用 X 核心協議提供的繪圖原語。
+
+.. _Cairo: http://cairographics.org/
 
 值得注意一點是 X 上除了沒有統一的繪圖模型，也沒有統一的矢量圖格式。
 X 核心協議的繪圖原語提供的是像素單位的繪圖操作，沒有類似 GDI+ 或者 Quartz
@@ -69,7 +74,7 @@ Chromium）都需要首先渲染到內部的 `XPixMap <http://en.wikipedia.org/w
 2004年發佈的 X11R6.8 版本的 Xorg 引入了
 `Composite 擴展 <http://freedesktop.org/wiki/Software/CompositeExt/>`_
 。這個擴展背後的動機以及前因後果在一篇文章 
-`The (Re)Architecture of the X Window System <http://keithp.com/~keithp/talks/xarch_ols2004/xarch-ols2004-html/>`_ 
+`The (Re)Architecture of the X Window System`_ 
 中有詳細的表述。Composite 擴展允許某個 X 程序做這幾件事情：
 
 #. 通過 :code:`RedirectSubwindows` 調用將一個窗口樹中的所有窗口渲染重定向到
@@ -152,8 +157,6 @@ Chromium）都需要首先渲染到內部的 `XPixMap <http://en.wikipedia.org/w
 
 需要重定向的事件主要有鍵盤和鼠標事件兩大類（暫時先不考慮觸摸屏之類的額外輸入）。
 由於 Composite 擴展並沒有直接提供這方面的重定向 API ，這使得輸入事件處理起來都比較麻煩，
-這一點在這篇博文中有更詳細的說明：
-`so you want to build a compositor <http://wingolog.org/archives/2008/07/26/so-you-want-to-build-a-compositor>`_ 。
 
 假設要重定向鍵盤事件，混成器需要效仿輸入法框架（fcitx, ibus, scim）
 那樣處理一部分按鍵事件並把其餘事件轉給具有輸入焦點的程序。
@@ -187,7 +190,74 @@ Chromium）都需要首先渲染到內部的 `XPixMap <http://en.wikipedia.org/w
 **因爲處於縮略狀態下的窗口只是一張畫而不能點** 。
 
 Composite 擴展的這些限制使得 X 下的混成器目前只能實現 Mac OS X 那樣的 Exposé
-效果，而不能實現 LG3D 那樣直接在 3D 空間中操縱窗口內容。
+效果，而不能實現 LG3D_ 那樣直接在 3D 空間中操縱窗口內容。
 
-擴展閱讀
+解決重定向問題曾經的一縷曙光是 :ruby:`昇陽公司|Sun Microsystems` 在開發 LG3D_ 的過程中同時提議過另一個 X
+擴展叫做 Event Interception 或者簡稱 XEvIE_ ，這個擴展的設計目的就是提供 API
+讓某個程序接收並操縱全部的鍵盤和鼠標事件。可惜這個擴展隨着昇陽公司本身的隕落而
+處於無人維護的狀態，這一點也在它的官方網頁上說明了：
+
+	It has been suggested that this extension should not be used 
+	because it is broken and maintainerless.
+
+
+.. _LG3D: {filename}/tech/brief-history-of-compositors-in-desktop-os.zh.rst#project-looking-glass-3d
+.. _XEvIE: http://freedesktop.org/wiki/Software/XEvIE/
+
+Composite 擴展的不足 
 ++++++++++++++++++++++++++++++++++
+
+通過上面的介紹，我們就已經可以看到 Composite 擴展的不足之處了。
+總結起來說，主要有兩大不足：
+
+#. 繪圖效率低。因爲同樣的位圖從應用程序傳到 Xorg ，再從 Xorg 傳到混成器，
+   最後從混成器再繪製到屏幕上，繞了一個大彎。這就是爲什麼 Wayland 的開發者在他的slide
+   `the real story behind Wayland and X <http://people.freedesktop.org/~daniels/lca2013-wayland-x11.pdf>`_
+   裏這麼說：
+
+	   and what's the X server? really bad IPC
+
+	   那麼 X 服務器到底做了什麼呢？ 非常糟糕的進程間通訊
+
+#. 沒有重定向輸入事件。如果我們要在 X 的混成器裏做這個事情，
+   基本上我們要全部重寫一遍 X 已經寫好的窗口事件分發邏輯。
+
+既然同樣要重寫，爲什麼不直接重寫一遍 X 呢，扔掉那些歷史負擔，扔掉那些無用的 API
+，重新設計可擴展的 API ，做好快速安全的 IPC —— 嗯，重寫 X 就是 Wayland 的目的。
+
+不過這麼重寫了的 Wayland 還是我們熟悉可愛的 X 麼？它有哪些地方變樣了？
+這將是我下一篇文章的內容。
+
+附錄：擴展閱讀
+++++++++++++++++++++++++++++++++++
+
+我自己沒有寫過窗口管理器，沒有寫過混成器，沒有寫過 Wayland
+程序，以上說的都是我從互聯網上看到的整理出來的內容。寫下本文的過程中我參考了這些文章：
+
+`The (Re)Architecture of the X Window System`_ 這篇2004年寫的文章描述了 Composite
+擴展出現的動機和歷史，介紹了繪圖庫的實現情況，涉及了上面所說的那些 X 擴展被用到的情況和可能。
+同時這篇文章還展望了很多現在的 X 已然實現了的功能，比如 OpenGL 和 X 的結合方面我們有了 GLX_ 和 AIGLX_
+，比如內核的顯卡支持方面我們有了 DRI_ 和 KMS_ 。總之這是一篇描述 Linux
+桌面未來的發展軌跡的非常有閱讀價值的歷史文獻。
+
+.. _`The (Re)Architecture of the X Window System`: http://keithp.com/~keithp/talks/xarch_ols2004/xarch-ols2004-html/
+.. _GLX: http://en.wikipedia.org/wiki/GLX
+.. _AIGLX: http://en.wikipedia.org/wiki/AIGLX
+.. _DRI: http://en.wikipedia.org/wiki/Direct_Rendering_Infrastructure
+.. _KMS: http://en.wikipedia.org/wiki/Mode_setting
+
+`so you want to build a compositor`_ 這是一篇 2008 年寫的博文，介紹如何用 Clutter
+實現一個最簡單的混成器。
+
+.. _`so you want to build a compositor`: http://wingolog.org/archives/2008/07/26/so-you-want-to-build-a-compositor
+
+`Composite tutorial`_ 這是另一篇介紹如何實現一個簡單的混成器的博文，用 Qt 實現，但是同樣很底層。
+
+.. _`Composite tutorial`: http://www.talisman.org/~erlkonig/misc/x11-composite-tutorial/
+
+`unagi`_ 這是一個可用的（但是已經長期沒有開發的）類似 xcompmgr 的混成器。這個項目貌似
+是一位研究生的碩士畢業設計，同時他公開了碩士學位的畢業論文
+`Master thesis: Writing an X compositing manager <http://projects.mini-dweeb.org/attachments/download/3/report.pdf>`_
+其中也對實現一個簡單的混成器做了詳盡描述，包括介紹了相關的 X 擴展和調用。
+
+.. _`unagi`: http://projects.mini-dweeb.org/projects/unagi
