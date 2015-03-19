@@ -27,4 +27,4 @@ TAG_FEED_ATOM = 'feeds/tag-%s.atom.xml'
 FEED_ALL_ATOM = 'feeds/all.atom.xml'
 FEED_ATOM = 'feeds/atom.xml'
 CATEGORY_FEED_ATOM = 'feeds/%s.atom.xml'
-LOAD_CACHE_CONTENT=False
+LOAD_CONTENT_CACHE=False
