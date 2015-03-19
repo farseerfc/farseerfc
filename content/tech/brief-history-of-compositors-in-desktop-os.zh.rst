@@ -268,6 +268,11 @@ Objective-C 下的 Cocoa API 調用 Quartz 的情況類似。
 DirectX 窗口。又或者我們可以認爲，整個界面上只有一個真正的窗口也就是 DWM 繪製的全屏窗口，
 只有 DWM 處於 DirectX 的直接渲染模式下，而別的窗口都輸出到 DirectX 平面裏（可能通過了硬件加速）。
 
+由 DWM 的這種實現方式，可以解釋爲什麼
+`窗口模式下的遊戲總是顯得比較慢 <http://gaming.stackexchange.com/questions/13066/why-is-windowed-mode-always-slower-in-games>`_
+，原因是整個桌面有很多不同的窗口都需要 DWM 最後混成，而如果在全屏模式下，只有遊戲
+處於 DirectX 的直接渲染方式，從而不會浪費對遊戲而言寶貴的 GPU 資源。
+
 由於 DWM 實現了混成器，使得 Vista 和隨後的 Windows 7 有了
 `Aero Glass <http://en.wikipedia.org/wiki/Windows_Aero>`_ 的界面風格，
 有了 Flip 3D 、Aero Peek 等等的這些輔助功能和動畫效果。
