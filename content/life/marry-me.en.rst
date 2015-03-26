@@ -24,6 +24,6 @@ Above is a image, the playable version is below:
     <script type="text/javascript" src="/static/FirstPersonControls.js"></script>
     <script type="text/javascript" src="/static/helvetiker_regular.typeface.js"></script>
     <script type="text/javascript" src="/static/214game.js"></script>
-    <div id="game_area" style="width: 600px; height: 450px; margin-left: 10px;">
+    <div id="game_area" style="width: 600px; height: 450px; margin-left: 10px;clear:both">
     </div>
     <p style="margin-left: 100px; margin-top: 10px; ">* Use WASD←→ to move，need WebGL support</p>
