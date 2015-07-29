@@ -143,7 +143,7 @@ Chromium）都需要首先渲染到內部的 `XPixMap <http://en.wikipedia.org/w
    :ruby:`子像素佈局|subpixel layout` 這些屬性以提供最好的渲染效果。
    Mac OS X 10.4 在設計的時候也曾考慮過提供無極縮放的支持，而這種支持到了 Mac OS X
    10.5 中就縮水變成了 Retina 的固定 2 倍縮放。這種局面在 X
-   上沒有發生正是因爲 X 的繪圖模型的這種設備相關性，而 Mac OS X 的混成器纔用的
+   上沒有發生正是因爲 X 的繪圖模型的這種設備相關性，而 Mac OS X 的混成器採用的
    OpenGL Surface 則無視了這些設備相關的屬性。
 
 
