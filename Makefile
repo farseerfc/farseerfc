@@ -68,7 +68,7 @@ stopserver:
 	@echo 'Stopped Pelican and SimpleHTTPServer processes running in background.'
 
 theme:
-	(cd theme && scons -Q)
+	(cd theme && (scons -Q || make) )
 
 publish: rmdrafts cc theme
 	[ ! -d $(OUTPUTDIR) ] || (cd $(OUTPUTDIR) && find -not -type d -not -wholename "*/.git*"  -not -iname "*.pdf" -not -iname "*.png" -delete)
