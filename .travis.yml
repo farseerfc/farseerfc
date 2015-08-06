@@ -25,11 +25,7 @@ before_install:
     - sudo rm /etc/parallel/config
 
 install:
-    - sudo pip install pelican
-    - sudo pip install jinja2
-    - sudo pip install py3babel
-    - sudo pip install beautifulsoup4
-    - sudo pip install markdown
+    - sudo pip install pelican jinja2 py3babel babel beautifulsoup4 markdown
     - sudo npm install -g less
     - wget "http://downloads.sourceforge.net/project/plantuml/plantuml.jar?r=&ts=1424308684&use_mirror=jaist" -O plantuml.jar
     - sudo mkdir -p /opt/plantuml
