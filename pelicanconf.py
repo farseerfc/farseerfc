@@ -17,7 +17,7 @@ DATE_FORMATS = {
     'en': ((u'en_US', 'utf8'), u'%a, %d %b %Y',),
     'zh': ((u'zh_HK', 'utf8'), u'%Y年%m月%d日(週%a)',),
     'zhs': ((u'zh_CN', 'utf8'), u'%Y年%m月%d日(周%a)',),
-    'jp': ((u'ja_JP', 'utf8'), u'%Y年%m月%d日(%a)',),
+    'jp': ((u'ja_JP', 'utf8'), u'%Y年%m月%d日(%a曜日)',),
 }
 
 
@@ -145,4 +145,3 @@ ABOUT_ME = """<h3 style="text-align:center">
 <i class="mdi-communication-email" style="text-align:center"></i></a>
 </h3>
 """
-
