@@ -11,8 +11,8 @@ About This Blog
 -----------------------------------------------------------------------
 I will use 3 languages, namely Chinese(zh), Japanese(jp) and English(en)
 to write this blog whenever it make sense. Chinese has both traditional(zh)
-simplified(zhs) version, and I will always write as the traditional 
-version first and then translate it into simplified version by using 
+simplified(zhs) version, and I will always write as the traditional
+version first and then translate it into simplified version by using
 OpenCC_ automatically.
 
 .. _OpenCC : http://opencc.org/
@@ -20,20 +20,20 @@ OpenCC_ automatically.
 Currently
 ------------------------------------------
 
-My Name is YANG Jiachen(楊嘉晨) 
+My Name is YANG Jiachen(楊嘉晨)
 
 born in June 1989
 
-I am currently pursuing PhD degree in 
-        
+I am currently pursuing PhD degree in
+
         Graduate School of Information Science and Technology,
 
         Osaka University (http://sdl.ist.osaka-u.ac.jp/)
 
-I graduated from 
-        
-        School of Software, Shanghai Jiao Tong University. 
-        
+I graduated from
+
+        School of Software, Shanghai Jiao Tong University.
+
         F0703701 (http://se.sjtu.edu.cn/)
 
 Contact
@@ -62,7 +62,7 @@ facebook: http://www.facebook.com/farseerfc
 
 telegram: http://telegram.me/farseerfc
 
-tox: farseerfc@toxme.se
+tox: https://toxme.se/u/farseerfc
 
 Current Avatar
 ------------------------------------------
@@ -75,4 +75,3 @@ Current Avatar
 	Izayoi is a character from Touhou Project, and she is my favorite character in many released games
 	of Touhou Project, including :ruby:`妖々夢|Perfect Cherry Blossom` , :ruby:`永夜抄|Imperishable Night` ,
 	:ruby:`緋想天|Scarlet Weather Rhapsody` , :ruby:`非想天則|Hisōtensoku` .
-	

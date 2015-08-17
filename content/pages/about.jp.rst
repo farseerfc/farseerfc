@@ -20,20 +20,20 @@ OpenCC_ を使って繁体を簡体に自動的に変更します。
 現状
 ------------------------------------------
 
-私の名前は 楊　嘉晨 
+私の名前は 楊　嘉晨
 
 平成元年6月に生まれ
 
-今は 
+今は
 
-        大阪大学大学院 情報科学研究科 コンピューターサイエンス専攻 
-        
+        大阪大学大学院 情報科学研究科 コンピューターサイエンス専攻
+
         博士後期課程2年生 (http://sdl.ist.osaka-u.ac.jp/)
 
-卒業した大学は 
+卒業した大学は
 
-        上海交通大学 ソフトウェア学院 ソフトウェア工学部 
-        
+        上海交通大学 ソフトウェア学院 ソフトウェア工学部
+
         F0703701 (http://se.sjtu.edu.cn/)
 
 連絡方法
@@ -60,7 +60,7 @@ facebook: http://www.facebook.com/farseerfc
 
 telegram: http://telegram.me/farseerfc
 
-tox: farseerfc@toxme.se
+tox: https://toxme.se/u/farseerfc
 
 
 今使っているアバター
@@ -73,6 +73,6 @@ tox: farseerfc@toxme.se
 	が描いた :ruby:`十六夜|いざよい` :ruby:`咲夜|さくや` ，
 	`pixiv id=41143207 <http://www.pixiv.net/member_illust.php?mode=medium&illust_id=41143207>`_ ようようむ
 	あまりにも素晴らしく描いていたから勝手にアバターとして使いました。
-	十六夜は東方プロジェクトの :ruby:`妖々夢|ようようむ` 、 
+	十六夜は東方プロジェクトの :ruby:`妖々夢|ようようむ` 、
 	:ruby:`永夜抄|えいやしょう` や :ruby:`緋想天|ひそうてん`、:ruby:`非想天則|ひそうてんそく` などに出てきた
 	キャラクターで、一番使いこなす子の原因で気に入ります。
