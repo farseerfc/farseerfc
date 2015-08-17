@@ -48,11 +48,7 @@ About
 
 Skype: farseerfc
 
-GTalk: farseerfc@gmail.com
-
-MSN: firechildren@hotmail.com
-
-Tencent QQ: 76635424 (farseerfc@qq.com)
+GMail: farseerfc@gmail.com
 
 twitter: http://twitter.com/farseerfc
 
@@ -62,8 +58,9 @@ weibo(微博): http://weibo.com/farseerfc
 
 facebook: http://www.facebook.com/farseerfc
 
-renren（人人）: http://renren.com/farseer
+telegram: http://telegram.me/farseerfc
 
+tox: farseerfc@toxme.se
 
 關於現在用的頭像
 ------------------------------------------
