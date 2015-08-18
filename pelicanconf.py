@@ -102,6 +102,7 @@ USE_LESS = False
 RELATIVE_URLS = False
 CHECK_MODIFIED_METHOD = "md5"
 LOAD_CONTENT_CACHE = True
+CACHE_CONTENT = True
 
 # Theme options
 
