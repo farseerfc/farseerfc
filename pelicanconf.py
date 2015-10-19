@@ -58,15 +58,18 @@ THEME = "theme"
 I18N_SUBSITES = {
     'jp': dict(
         LOCALE='ja_JP.utf8',
-        SITENAME="Farseerfcの巣"
+        SITENAME="Farseerfcの巣",
+        STATIC_PATHS=STATIC_PATHS
     ),
     'en': dict(
         LOCALE='en_US.utf8',
-        SITENAME="Farseerfc's Nest"
+        SITENAME="Farseerfc's Nest",
+        STATIC_PATHS=STATIC_PATHS
     ),
     'zhs': dict(
         LOCALE='zh_CN.utf8',
-        SITENAME="Farseerfc的小窝"
+        SITENAME="Farseerfc的小窝",
+        STATIC_PATHS=STATIC_PATHS
     ),
 }
 I18N_UNTRANSLATED_ARTICLES = "remove"
