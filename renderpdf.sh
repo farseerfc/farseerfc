@@ -19,4 +19,5 @@ find . -iname "*.html" \
 	! -iname "search.html" \
 	! -iname "index*.html" \
 | sed "s#\.\/##g" | xargs -n 16 phantomjs rasterize.js
+sleep 10
 kill $SERVPID

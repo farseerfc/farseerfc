@@ -25,7 +25,7 @@
 .. PELICAN_BEGIN_SUMMARY
 
 不知不覺間放任這邊長草很久了，從上次
-`折騰主題 <{filename}/tech/try_pelican.zh.rst>`_ 到現在都快三年了，
+`折騰主題 <{filename}/tech/try-pelican.zh.rst>`_ 到現在都快三年了，
 而從上次 `寫了篇告白信 <{filename}/life/marry-me.zh.rst>`_ 到現在也有快兩年了。
 這期間曾經把主題配色從 `Bootstrap 2 <http://getbootstrap.com/2.3.2/>`_ 默認的
 白底黑字改成了讓眼睛更舒適的黑底白字，也不過是用 drop-in 的配色方案而已，沒有本質上的改進。
