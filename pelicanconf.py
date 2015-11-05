@@ -45,6 +45,7 @@ EXTRA_PATH_METADATA = {
     'images/favicon.ico': {'path': 'favicon.ico'},
     'static/CNAME': {'path': 'CNAME'},
     'static/robots.txt': {'path': 'robots.txt'},
+    'static/manifest.json': {'path': 'manifest.json'},
 }
 
 PAGE_URL = "{slug}.html"

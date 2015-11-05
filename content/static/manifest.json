@@ -1,0 +1,14 @@
+{
+  "short_name": "FcBlog",
+  "name": "Farseerfc's Blog",
+  "icons": [
+    {
+      "src": "images/avatar.jpg",
+      "sizes": "498x499",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/index.html",
+  "display": "standalone",
+  "orientation": "portrait"
+}
