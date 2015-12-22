@@ -87,6 +87,6 @@ Links
 
 .. friend:: frantic1048
 	:nick: `Frantic1048 Chino Kafuu 智乃 香風 <https://frantic1048.com/>`_
-	:gravatar: Archer@frantic1048.com
+	:gravatar: archer@frantic1048.com
 
 	萌萌的智乃，喜歡一切萌物，前端技藝精湛，C++ 作業都用 Emscripten 轉換到前端去的高手。貌似正在構建新的博客框架，翹首以待中。
