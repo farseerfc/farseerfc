@@ -78,3 +78,9 @@ Links
 	:logo: https://lastavenger.github.io/assets/avatar_big.jpg
 
 	有 `自己寫的內核 <https://github.com/LastAvenger/OS67>`_ 的厲害的LA的博客。
+
+.. friend:: yoitsu
+	:nick: `ヨイツの賢狼ホロ <https://yoitsu.xyz/>`_
+	:logo: https://yoitsu.xyz/w/images/c/c9/Logo.png
+
+	來自約伊茲的萌狼，博客是用 MediaWiki 搭的，是個萌物。
