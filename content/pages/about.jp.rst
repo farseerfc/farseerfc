@@ -28,7 +28,7 @@ OpenCC_ を使って繁体を簡体に自動的に変更します。
 
         大阪大学大学院 情報科学研究科 コンピューターサイエンス専攻
 
-        博士後期課程2年生 (http://sdl.ist.osaka-u.ac.jp/)
+        博士後期課程3年生 (http://sdl.ist.osaka-u.ac.jp/)
 
 卒業した大学は
 
@@ -62,6 +62,7 @@ telegram: http://telegram.me/farseerfc
 
 tox: https://toxme.se/u/farseerfc
 
+pgp: 4B1D E545 A801 D454 9BFD  3FEF 90CB 3D62 C13D 4796
 
 今使っているアバター
 ------------------------------------------
