@@ -26,7 +26,7 @@ About
 
         大阪大學大學院 情報科學研究科 計算機科學專攻
 
-        博士2年級 (http://sdl.ist.osaka-u.ac.jp/)
+        博士3年級 (http://sdl.ist.osaka-u.ac.jp/)
 
 本科畢業於
 
@@ -61,6 +61,8 @@ facebook: http://www.facebook.com/farseerfc
 telegram: http://telegram.me/farseerfc
 
 tox: https://toxme.se/u/farseerfc
+
+pgp: 4B1D E545 A801 D454 9BFD  3FEF 90CB 3D62 C13D 4796
 
 關於現在用的頭像
 ------------------------------------------
