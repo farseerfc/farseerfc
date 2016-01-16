@@ -31,7 +31,7 @@ FEED_ATOM = None
 FEED_ALL_ATOM = None
 CATEGORY_FEED_ATOM = None
 
-TWITTER_USERNAME = 'farseerfc'
+# TWITTER_USERNAME = 'farseerfc'
 
 DEFAULT_PAGINATION = 12
 
@@ -130,8 +130,8 @@ OUTPUT_SOURCES_EXTENSION = '.rst'
 DIRECT_TEMPLATES = (('search', 'index', 'categories', 'authors', 'archives',
                      'tags'))
 
-TWITTER_USERNAME = 'farseerfc'
-TWITTER_WIDGET_ID = "538997172142759936"
+# TWITTER_USERNAME = 'farseerfc'
+# TWITTER_WIDGET_ID = "538997172142759936"
 
 AVATAR = 'images/avatar.jpg'
 ABOUT_PAGE = "about.html"
