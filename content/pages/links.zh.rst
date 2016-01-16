@@ -80,13 +80,13 @@ Links
 	有 `自己寫的內核 <https://github.com/LastAvenger/OS67>`_ 的厲害的LA的博客。
 
 .. friend:: yoitsu
-	:nick: `ヨイツの賢狼ホロ <https://yoitsu.moe/>`_
+	:nick: `ヨイツの賢狼ホロ <https://blog.yoitsu.moe/>`_
 	:logo: https://yoitsu.moe/w/images/c/c9/Logo.png
 
-	來自約伊茲的萌狼，博客是用 MediaWiki 搭的，是個萌物。
+	來自約伊茲的萌狼，博客 :del:`是用 MediaWiki 搭的|也換到 Pelican 啦`，是個萌物。
 
 .. friend:: frantic1048
-	:nick: `Frantic1048 Chino Kafuu 智乃 香風 <https://frantic1048.com/>`_
+	:nick: `Frantic1048 Chino Kafuu <https://frantic1048.com/>`_
 	:gravatar: archer@frantic1048.com
 
 	萌萌的智乃，喜歡一切萌物，前端技藝精湛，C++ 作業都用 Emscripten 轉換到前端去的高手。貌似正在構建新的博客框架，翹首以待中。
