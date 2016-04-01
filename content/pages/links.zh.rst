@@ -81,7 +81,7 @@ Links
 
 .. friend:: yoitsu
 	:nick: `ヨイツの賢狼ホロ <https://blog.yoitsu.moe/>`_
-	:logo: https://yoitsu.moe/w/images/c/c9/Logo.png
+	:gravatar: horo@yoitsu.moe
 
 	來自約伊茲的萌狼，博客 :del:`是用 MediaWiki 搭的|也換到 Pelican 啦`，是個萌物。
 
