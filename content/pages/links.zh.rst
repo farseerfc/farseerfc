@@ -93,6 +93,6 @@ Links
 
 .. friend:: petercai
 	:nick: `Peter Cai 颠倒的阿卡林型次元 PeterCxy <https://typeblog.net/>`_
-	:gravatar: archer@frantic1048.com
+	:gravatar: peter@typeblog.net
 
 	彼得菜，據說高中用 AIDE 在手機上徒手擼出了 `BlackLight <https://github.com/PaperAirplane-Dev-Team/BlackLight>`_ 的大大，博客用漂亮的 MD 主題。
