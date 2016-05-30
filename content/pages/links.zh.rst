@@ -63,7 +63,7 @@ Links
 
 .. friend:: mazk
 	:nick: `mazk <https://mazk.github.io/>`_
-	:logo: https://mazk.github.io/images/avatar.jpg
+	:logo: https://mazk.net/images/avatar.jpg
 
 	我的完整博客模板的第一個用戶，似乎還是高中生，前途無量呀。
 
