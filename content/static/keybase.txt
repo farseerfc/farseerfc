@@ -1,0 +1,54 @@
+==================================================================
+https://keybase.io/farseerfc
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://farseerfc.me
+  * I am farseerfc (https://keybase.io/farseerfc) on keybase.
+  * I have a public key ASAfsBGLbRZcnLDyBAkAxdrJh48z-JYrzvcV2HH6T2y6kQo
+
+To do so, I am signing this object:
+
+{
+    "body": {
+        "key": {
+            "eldest_kid": "01018fad9d7ec357e4e8e47bcd6eea81f8e64719473a62eb005fe70e1a6cdbddeee30a",
+            "host": "keybase.io",
+            "kid": "01201fb0118b6d165c9cb0f2040900c5dac9878f33f8962bcef715d871fa4f6cba910a",
+            "uid": "59296de360de57e66660ec52d6d2eb19",
+            "username": "farseerfc"
+        },
+        "service": {
+            "hostname": "farseerfc.me",
+            "protocol": "https:"
+        },
+        "type": "web_service_binding",
+        "version": 1
+    },
+    "client": {
+        "name": "keybase.io go client",
+        "version": "1.0.16"
+    },
+    "ctime": 1466330765,
+    "expire_in": 504576000,
+    "merkle_root": {
+        "ctime": 1466330505,
+        "hash": "1f5925128c562ff2c399b6374c233d274491b1a35b921093ebe7e5f7d36c6cfbc8029bb65146fe38ff7a7d79fdcc69bc393b3fe3bba4c073d986b9a4106598be",
+        "seqno": 493081
+    },
+    "prev": "1da9e1154493a84c525702a638c5da82b4c11236a986978c3153bbed8a136402",
+    "seqno": 12,
+    "tag": "signature"
+}
+
+which yields the signature:
+
+hKRib2R5hqhkZXRhY2hlZMOpaGFzaF90eXBlCqNrZXnEIwEgH7ARi20WXJyw8gQJAMXayYePM/iWK873Fdhx+k9supEKp3BheWxvYWTFAvZ7ImJvZHkiOnsia2V5Ijp7ImVsZGVzdF9raWQiOiIwMTAxOGZhZDlkN2VjMzU3ZTRlOGU0N2JjZDZlZWE4MWY4ZTY0NzE5NDczYTYyZWIwMDVmZTcwZTFhNmNkYmRkZWVlMzBhIiwiaG9zdCI6ImtleWJhc2UuaW8iLCJraWQiOiIwMTIwMWZiMDExOGI2ZDE2NWM5Y2IwZjIwNDA5MDBjNWRhYzk4NzhmMzNmODk2MmJjZWY3MTVkODcxZmE0ZjZjYmE5MTBhIiwidWlkIjoiNTkyOTZkZTM2MGRlNTdlNjY2NjBlYzUyZDZkMmViMTkiLCJ1c2VybmFtZSI6ImZhcnNlZXJmYyJ9LCJzZXJ2aWNlIjp7Imhvc3RuYW1lIjoiZmFyc2VlcmZjLm1lIiwicHJvdG9jb2wiOiJodHRwczoifSwidHlwZSI6IndlYl9zZXJ2aWNlX2JpbmRpbmciLCJ2ZXJzaW9uIjoxfSwiY2xpZW50Ijp7Im5hbWUiOiJrZXliYXNlLmlvIGdvIGNsaWVudCIsInZlcnNpb24iOiIxLjAuMTYifSwiY3RpbWUiOjE0NjYzMzA3NjUsImV4cGlyZV9pbiI6NTA0NTc2MDAwLCJtZXJrbGVfcm9vdCI6eyJjdGltZSI6MTQ2NjMzMDUwNSwiaGFzaCI6IjFmNTkyNTEyOGM1NjJmZjJjMzk5YjYzNzRjMjMzZDI3NDQ5MWIxYTM1YjkyMTA5M2ViZTdlNWY3ZDM2YzZjZmJjODAyOWJiNjUxNDZmZTM4ZmY3YTdkNzlmZGNjNjliYzM5M2IzZmUzYmJhNGMwNzNkOTg2YjlhNDEwNjU5OGJlIiwic2Vxbm8iOjQ5MzA4MX0sInByZXYiOiIxZGE5ZTExNTQ0OTNhODRjNTI1NzAyYTYzOGM1ZGE4MmI0YzExMjM2YTk4Njk3OGMzMTUzYmJlZDhhMTM2NDAyIiwic2Vxbm8iOjEyLCJ0YWciOiJzaWduYXR1cmUifaNzaWfEQDNPV9MLFQMOz8D44wyGtUhFQs3gLv/lnMTOWxkgKUmDHYMzjOpJvSr/wCFbUn38yRcxQ7yx6rmvez6IE8KVxg2oc2lnX3R5cGUgpGhhc2iCpHR5cGUIpXZhbHVlxCASJ5NflM+IVHY/fmKOjTZG5vK5lvQaQUZdFP/cZ3KjHaN0YWfNAgKndmVyc2lvbgE=
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/farseerfc
+
+==================================================================
