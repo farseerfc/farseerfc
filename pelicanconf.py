@@ -44,6 +44,7 @@ EXTRA_PATH_METADATA = {
     'static/CNAME': {'path': 'CNAME'},
     'static/robots.txt': {'path': 'robots.txt'},
     'static/manifest.json': {'path': 'manifest.json'},
+    'static/keybase.txt': {'path': 'keybase.txt'},
 }
 
 PAGE_URL = "{slug}.html"
