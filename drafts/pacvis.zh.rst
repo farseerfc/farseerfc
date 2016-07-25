@@ -41,19 +41,14 @@ ArchWiki 上的流程一路走下來的話，最關鍵的一條命令就是 :cod
 #. 找出那些體積大而且佔地方的包
 #. 釐清系統中安裝了的包之間的關係
 
-.. figure:: {filename}/images/Diagram_of_Mac_OS_X_architecture.jpg
-  :alt: Diagram of Mac OS X architecture
-
-  `macOS 系統架構 <https://en.wikipedia.org/wiki/Architecture_of_OS_X>`_
-
-
 .. figure:: {filename}/images/Android-System-Architecture.jpg
   :alt: Android System Architecture
 
   `Android 系統架構 <https://en.wikipedia.org/wiki/Android_(operating_system)>`_
 
-關於最後一點「釐清包的關係」，我曾經看到過 macOS 的系統架構圖和 Android 
-的系統架構圖，對其中的層次化架構印象深刻，之後就一直在想，是否能畫出現代
+關於最後一點「釐清包的關係」，我曾經看到過
+`macOS 系統架構圖 <https://en.wikipedia.org/wiki/Architecture_of_OS_X>`_ 
+和 Android 的系統架構圖，對其中的層次化架構印象深刻，之後就一直在想，是否能畫出現代
 Linux 桌面系統上類似的架構圖呢？又或者 Linux 桌面系統是否會展現完全不同的樣貌？
 從維基百科或者別的渠道能找到 Linux 內核、或者 Linux 圖形棧，
 或者某個桌面環境的架構，但是沒有找到覆蓋一整個發行版的樣貌的。
@@ -251,7 +246,15 @@ man-pages 和 licenses 。這些包在圖中位於最頂端，拓撲層級是 0 
 
 循環依賴
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-有些包的依賴關係形成了循環依賴。
+
+有些包的依賴關係形成了循環依賴，一個例子是 freetype2 和 harfbuzz，freetype2
+是繪製字體的庫，harfbuzz 是解析 OpenType 字形的庫，兩者對對方互相依賴。
+另一個例子是 KDE 的 kio 和 kinit，前者提供類似 FUSE 的資源訪問抽象層，
+後者初始化 KDE 桌面環境。
+
+因爲這些循環依賴的存在，使得 PacVis 在實現時不能直接拓撲排序，我採用環探測
+算法找出有向圖中所有的環，並且打破這些環，然後再使用拓撲排序。
+因此我在圖中用紅色的箭頭表示這些會導致環的依賴關係。
 
 依賴層次
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -275,7 +278,8 @@ man-pages 和 licenses 。這些包在圖中位於最頂端，拓撲層級是 0 
 
 大體上符合直觀的感受，不過細節上有很多有意思的地方，比如 zsh 因爲 gdbm
 間接依賴了 bash，這也說明我們不可能在系統中用 zsh 完全替代掉 bash。
-
+再比如 python （在 Arch Linux 中是 python3）和 python2 和 pypy
+幾乎在同一個拓撲層級。
 
 只看依賴關係的話 Linux 內核完全不重要
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -283,5 +287,8 @@ man-pages 和 licenses 。這些包在圖中位於最頂端，拓撲層級是 0 
 所有用戶空間的程序都依賴着 glibc ，而 glibc 則從定義良好的 syscall 調用內核。
 因此理所當然地，如果只看用戶空間的話， glibc 和別的 GNU 組建是整個 GNU/Linux
 發行版的中心，而 Linux 則是位於依賴層次中很深的位置，甚至在我的 demo 服務器上
-Linux 位於整個圖中的最低端，因爲它的安裝腳本依賴 mkinitcpio
+Linux 位於整個圖中的最底端，因爲它的安裝腳本依賴 mkinitcpio
 而後者依賴了系統中的衆多組建。
+
+qt5-base < qt4 < gtk2 < gtk3
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
