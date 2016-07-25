@@ -23,7 +23,7 @@
 .. _Wayland: http://wayland.freedesktop.org/
 
 
-看樣子 2015年的確像是 Wayland 終於能用了 
+看樣子 2016 年的確像是 Wayland 終於能用了 
 --------------------------------------------------------------------
 
 根據 `Arch 的 Wiki <https://wiki.archlinux.org/index.php/Wayland>`_
@@ -59,7 +59,7 @@ WM/Compositor 除了作爲實驗性參考實現的 weston 和上述 DE 之外，
 關於目前 X 上實現混成器的方式和其限制，請看上一篇文章
 `X 中的混成器與 Composite 擴展 <{filepath}/tech/compositor-in-X-and-compositext.zh.rst>`_ 。
 
-於是我們有了 Wayland 
+於是我們有了 Wayland
 --------------------------------------------------------------------
 
 上面簡要說了 X 中目前實現混成器的基本情況，太多細節被我忽略了沒有提及，
