@@ -31,8 +31,6 @@ FEED_ATOM = None
 FEED_ALL_ATOM = None
 CATEGORY_FEED_ATOM = None
 
-TWITTER_USERNAME = 'farseerfc'
-
 DEFAULT_PAGINATION = 12
 
 STATIC_PATHS = ['static',
@@ -46,6 +44,7 @@ EXTRA_PATH_METADATA = {
     'static/CNAME': {'path': 'CNAME'},
     'static/robots.txt': {'path': 'robots.txt'},
     'static/manifest.json': {'path': 'manifest.json'},
+    'static/keybase.txt': {'path': 'keybase.txt'},
 }
 
 PAGE_URL = "{slug}.html"
@@ -123,6 +122,7 @@ CC_LICENSE = "CC-BY-NC-SA"
 DISPLAY_TAGS_INLINE = True
 OUTPUT_SOURCES = True
 OUTPUT_SOURCES_EXTENSION = '.rst'
+
 # WEIBO_WIDGET = True
 # WEIBO_APPKEY = "NANnN"
 # WEIBO_APPKEYN = "498769639"
@@ -130,8 +130,8 @@ OUTPUT_SOURCES_EXTENSION = '.rst'
 DIRECT_TEMPLATES = (('search', 'index', 'categories', 'authors', 'archives',
                      'tags'))
 
-TWITTER_USERNAME = 'farseerfc'
-TWITTER_WIDGET_ID = "538997172142759936"
+# TWITTER_USERNAME = 'farseerfc'
+# TWITTER_WIDGET_ID = "538997172142759936"
 
 AVATAR = 'images/avatar.jpg'
 ABOUT_PAGE = "about.html"

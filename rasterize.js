@@ -25,7 +25,7 @@ function render(target){
                 pageWidth = 456;
                 pageHeight = parseInt(pageWidth * 3/4, 10);
                 page.viewportSize = { width: pageWidth, height: pageHeight };
-                
+
                 var clipRect = page.evaluate(function(){
                     return document.querySelector("#article-content").getBoundingClientRect();
                 });
@@ -50,7 +50,7 @@ for(var i = 1; i< system.args.length; ++i){
 }
 console.log("Total "+ (system.args.length - 1) + " pages" );
 window.setTimeout(function () {
-    console.log("Writed "+ writedPdf + " pdf" );
-    console.log("Writed "+ writedPng + " png" );
+    console.log("Write "+ writedPdf + " pdf" );
+    console.log("Write "+ writedPng + " png" );
     phantom.exit();
 }, system.args.length*1000);

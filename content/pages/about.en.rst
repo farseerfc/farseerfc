@@ -64,6 +64,8 @@ telegram: http://telegram.me/farseerfc
 
 tox: https://toxme.se/u/farseerfc
 
+pgp: 4B1D E545 A801 D454 9BFD  3FEF 90CB 3D62 C13D 4796
+
 Current Avatar
 ------------------------------------------
 
