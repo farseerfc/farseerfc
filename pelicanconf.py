@@ -149,4 +149,8 @@ ABOUT_ME = """<h3 style="text-align:center">
 <a href="mailto:farseerfc@gmail.com" target="_blank">
 <i class="mdi-communication-email" style="text-align:center"></i></a>
 </h3>
+<div data-width="190px" class="zhihu-card" data-userhash="b74efb573bbdb13e54ac55171a4f5644"></div>
+<script src="//cdn.jsdelivr.net/zhihu-card/latest/widget.js"></script>
+<div class="github-card" data-github="farseerfc" data-width="190" data-height="155" data-theme="default"></div>
+<script src="//cdn.jsdelivr.net/github-cards/latest/widget.js"></script>
 """
