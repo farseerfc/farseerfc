@@ -261,6 +261,7 @@ python-setuptools ，其中 pyalpm 又依賴 pacman 。圖中用
 
 .. figure:: {filename}/images/pacvis-zsh-bash.png
   :alt: zsh depends on bash because of gdbm
+  :width: 45%
 
   zsh 因爲 gdbm 間接依賴了 bash
 
@@ -280,6 +281,7 @@ qt5 因爲被拆成了數個包所以比 qt4 更低級這可以理解，而 gtk 
 
 .. figure:: {filename}/images/pacvis-freetype2-harfbuzz.png
   :alt: freetype2 harfbuzz
+  :width: 45%
 
   freetype2 和 harfbuzz 之間的循環依賴
 
@@ -293,6 +295,7 @@ qt5 因爲被拆成了數個包所以比 qt4 更低級這可以理解，而 gtk 
 
 .. figure:: {filename}/images/pacvis-level0.png
   :alt: PacVis Level 0
+  :width: 45%
 
   man-pages 和 licenses 沒有依賴關係
 
