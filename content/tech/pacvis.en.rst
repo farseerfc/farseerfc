@@ -137,7 +137,7 @@ pacgraph
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. panel-default::
-  :title: pacgraph 的輸出
+  :title: The output of pacgraph
 
   .. image:: {filename}/images/pacvis-pacgraph.png
       :alt: pacgraph
@@ -270,7 +270,7 @@ Some facts you can learn from PacVis
 
 
 .. panel-default::
-  :title: PacVis's result of a KDE desktop PacVis `Full image（17M） <{filename}/images/pacvis-16384.png>`_
+  :title: A normal KDE desktop `Full image（17M） <{filename}/images/pacvis-16384.png>`_
 
   .. image:: {filename}/images/pacvis-4096-anno.png
     :alt: A normal KDE desktop in PacVis
