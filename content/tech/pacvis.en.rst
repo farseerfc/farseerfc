@@ -19,7 +19,7 @@ Motivation for PacVis
 
 I must admit that I love Arch Linux, largely because Arch Linux made me feel
 like I really **own** the whole system. In my Arch Linux system, I know clearly
-each package that I have installed and why I installed it. I can find which
+every package I have installed and why I installed it. I can find which
 package brings in a give file. A Debian/Fedora/openSUSE user with enough experience
 may achieve this with their favorite package manager too, but they must overcome
 a much higher complexity with their distro's fine-grinding packaging strategy.
@@ -34,22 +34,23 @@ step in the installation guide on ArchWiki is a command
 and call :code:`pacman -S base` inside that root to install the whole base
 group. And that's basically all you will get after the install. The initial
 system has nearly nothing. Everything you need will be installed afterwards,
-manually by using :code:`pacman`. It is nothing unnecessary, only for **your** need.
+manually by using :code:`pacman`. It is nothing unnecessary, only for
+**your** own need.
 
 But after using the system for a long time, there are unavoidably some packages
 inside the system which are installed and used for awhile and abandoned.
 They are like the old furnitures inside your house, taking space and covered by
-ash. We have :code:`pacman -Qtd` to help you find all packages that are
-**installed as dependency for other packages once but not needed for now**
-, but for those manually installed packages, we have no good tool but manually
+dusts. We have :code:`pacman -Qtd` to help you find all orphan packages, namely
+those **installed as dependency for other packages once but not needed for now**
+, but for manually installed packages, we have no good tool but manually
 checking them one by one.
 
 So I was looking for a tool to help me understand the relations in my system.
 In particular, I want a tool to help me do these things:
 
-#. Find the packages that I installed manually but not needed now
+#. Find packages that I installed manually but not needed now
 #. Find those large and space-consuming packages
-#. Understand th relationship between packages
+#. Understand the relationships between packages
 
 
 .. figure:: {filename}/images/Android-System-Architecture.jpg
@@ -60,10 +61,11 @@ In particular, I want a tool to help me do these things:
 About the last thing "relations between packages", I once saw the diagram of
 `macOS Architecture <https://en.wikipedia.org/wiki/Architecture_of_OS_X>`_
 and Android System Architecture, and I was impressed by the layered hierarchy
-in these diagrams. I was wondering since then that *is it possible to draw a
+in these diagrams. I was wondering since then, *is it possible to draw a
 similar layered architecture diagram for modern Linux desktop* ?
-Or will it be much different? I can find hierarchy diagram for Linux kernel or
-Xorg graphic stack on Wikipedia or other sites, but I don't know such a diagram
+Or *will a Linux desktop be much different*?
+I can find out hierarchy diagrams for Linux kernel or
+Xorg graphic stack on Wikipedia or other sites, but I don't know such diagrams
 for the whole distribution. And further I thought, can I *draw such diagram from
 the dependency relationships between packages automatically*?
 
@@ -203,6 +205,16 @@ PacVis on my Arch Linux server :
 https://pacvis.farseerfc.me/ . It is showing a minimal server setup, that might
 load and layout faster than a normal desktop system.
 
+.. panel-default::
+  :title: PacVis on Windows msys2
+
+  .. image:: {filename}/images/pacvis-msys2.png
+      :alt: PacVis on Windows msys2
+
+As a side note, pacvis only depends on pyalpm and tornado, so there should be
+no problem running it on other pacman-based systems, including 
+`msys2 on Windows <https://msys2.github.io/>`_ (altough building a msys2
+python-tornado may take some non-trival effort).
 
 The legend and usage of PacVis
 ----------------------------------------
@@ -293,7 +305,7 @@ The packages in the system is clearly divided into several layers:
 * chromium etc. GUI Applications
 * Plasma/Gnome etc. Desktop environments
 
-This largely suit my overall understanding, but some details are interesting to
+This largely meet my overall understanding, but some details are interesting to
 me. For example, zsh dependes on gdbm which in-turn depends on bash, which means
 that you can not get rid of bash even if you only use zsh.
 For another example, python package (which is python3 in Arch Linux) and
@@ -361,6 +373,23 @@ graph. On my demo server the Linux package is even located on the most bottom
 level because it depends on mkinitcpio which in-turn depend on many components
 in the system.
 
+
+pacman -Qtd cannot find orphan packages with circle dependency
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. figure:: {filename}/images/pacvis-circledeps-Qtd.png
+  :alt: pacman -Qtd cannot find packages with circle dependency
+  :width: 45%
+
+  msys2 packages with circle dependency
+
+
+I saw an archipelago of packages from mingw repo when testing PacVis on msys2.
+To my surprise, they don't connected to any manually installed packages, 
+something strange as I routinely run :code:`pacman -Qtd` and remove the results on
+all my systems. After zoomed in I found that they contained a circle dependency
+which indicated :code:`pacman -Qtd` cannot find these orphan packages,
+not like a GC algorithm.
 
 The future of PacVis
 ----------------------------------------

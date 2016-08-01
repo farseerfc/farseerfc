@@ -178,6 +178,16 @@ pacgraph 還支持通過參數指定只繪製個別包的依賴關係，就像 p
 的樣子了。僅僅作爲嘗試也可以直接打開跑在我的服務器上的 demo:
 https://pacvis.farseerfc.me/ ，這個作爲最小安裝的服務器載入速度大概比普通的桌面系統快一點。
 
+.. panel-default::
+  :title: 在 Windows msys2 跑 PacVis
+
+  .. image:: {filename}/images/pacvis-msys2.png
+      :alt: PacVis on Windows msys2
+
+另外補充一下，因爲 PacVis 只依賴 pyalpm 和 tornado ，所以在別的基於 pacman
+的系統上跑它應該也沒有任何問題，包括
+`Windows 上的 msys2 <https://msys2.github.io/>`_ 裏（儘管在 msys2 上編譯
+tornado 的包可能要花些功夫）。
 
 PacVis 的圖例和用法
 ----------------------------------------
@@ -313,6 +323,24 @@ man-pages 和 licenses 。這些包在圖中位於最頂端，拓撲層級是 0 
 發行版的中心，而 Linux 則是位於依賴層次中很深的位置，甚至在我的 demo 服務器上
 Linux 位於整個圖中的最底端，因爲它的安裝腳本依賴 mkinitcpio
 而後者依賴了系統中的衆多組件。
+
+
+
+pacman -Qtd 不能找到帶有循環依賴的孤兒包
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. figure:: {filename}/images/pacvis-circledeps-Qtd.png
+  :alt: pacman -Qtd cannot find packages with circle dependency
+  :width: 45%
+
+  msys2 中帶有循環依賴的孤兒包
+
+
+這是我在 msys2 上測試 PacVis 的時候發現的，我看到在渲染的圖中有一片羣島，
+沒有連上任何手動安裝的包。這種情況很不正常，因爲我一直在我的所有系統中跑
+:code:`pacman -Qtd` 找出孤兒包並刪掉他們。放大之後我發現這些包中有一條循環依賴，
+這說明 :code:`pacman -Qtd` 不能像語言的垃圾回收機制那樣找出有循環依賴的孤兒包。
+
 
 PacVis 的未來
 ----------------------------------------
