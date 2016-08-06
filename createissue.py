@@ -12,7 +12,8 @@ s = requests.Session()
 
 def github_list_issues():
   if 'GH_TOKEN' not in os.environ:
-    return None
+    print("Error: please set GH_TOKEN env var")
+    sys.exit(1)
   token = os.environ['GH_TOKEN']
   headers = {'Authorization': "token " + token}
   url = 'https://api.github.com/repos/%s/issues' % GITHUB_REPO
@@ -62,7 +63,7 @@ def main():
         print("WARN: file %s should have issueid %s" % (path, slug2ids[slug]))
         continue
       if issueid != slug2ids[slug]:
-        print("ERROR: file %s with slug %s have issue id %s mismatch github issue id %s " % (path, slug, issueid, slug2ids[slug]))
+        print("ERROR: file %s with slug %s have id %s mismatch github id %s " % (path, slug, issueid, slug2ids[slug]))
         continue
     if issueid == None:
       message = "This issue is reserved for https://farseerfc.me/%s.html" % slug
