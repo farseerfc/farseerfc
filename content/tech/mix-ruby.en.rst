@@ -5,6 +5,7 @@ PyRuby
 :lang: en
 :date: 2012-03-02 23:09
 :tags: python, ruby
+:issueid: 42
 
 Today I saw a package called `PyRuby <https://github.com/danielfm/pyruby>`_ in Github. The readme says: 
 

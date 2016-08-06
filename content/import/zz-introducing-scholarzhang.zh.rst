@@ -4,6 +4,7 @@
 :slug: zz-introducing-scholarzhang
 :lang: zh
 :tags: zz
+:issueid: 32
 
 從 `farseerfc.wordpress.com <http://farseerfc.wordpress.com/>`_ 導入
 

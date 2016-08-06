@@ -5,6 +5,7 @@ Write a program to keep CPU usage as sin funcion
 :lang: en
 :date: 2008-06-02 23:27
 :tags: java, microsoft
+:issueid: 30
 
 Imported from:
 `renren <http://blog.renren.com/blog/230263946/298871889>`_.

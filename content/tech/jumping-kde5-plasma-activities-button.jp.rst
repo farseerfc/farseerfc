@@ -5,6 +5,7 @@ KDE5 Plasma の踊る活動ボタン
 :lang: jp
 :date: 2014-12-09 01:54
 :tags: kde5, plasma, linux, gnome3
+:issueid: 39
 
 .. PELICAN_BEGIN_SUMMARY
 

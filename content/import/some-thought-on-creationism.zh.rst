@@ -5,6 +5,7 @@
 :lang: zh
 :date: 2008-05-12 11:16
 :tags: creationism
+:issueid: 31
 
 導入自
 `renren <http://blog.renren.com/blog/230263946/292274803>`_

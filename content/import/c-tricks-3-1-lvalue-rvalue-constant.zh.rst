@@ -6,6 +6,7 @@ C++ Tricks 3.1 左值右值與常量性(lvalue，rvalue & constant)
 :tags: C++
 :series: CPP_Tricks
 :series_index: 11
+:issueid: 24
 
 從 `farseerfc.wordpress.com <http://farseerfc.wordpress.com/>`_ 導入
 

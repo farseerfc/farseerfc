@@ -6,7 +6,7 @@
 :date: 2015-01-26 23:32
 :tags: pelican, domain, cloudflare, github
 :series: pelican
-
+:issueid: 48
 
 
 上個月就在 :ruby:`狗爹|godaddy` 上買了個自己的域名 :code:`farseerfc.me` 準備用在這個

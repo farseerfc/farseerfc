@@ -6,6 +6,7 @@
 :date: 2015-03-19 13:45
 :tags: desktop, compositor, macosx, windows, window, manager
 :series: compositor and wayland
+:issueid: 34
 
 .. contents::
 

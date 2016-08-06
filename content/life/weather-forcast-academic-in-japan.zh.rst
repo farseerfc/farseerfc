@@ -5,6 +5,7 @@
 :lang: zh
 :date: 2015-02-18 21:00
 :tags: japan, academic
+:issueid: 10
 
 最近 :fref:`mazk` 說我 `life 分類裏的文章太少 <{filename}/pages/about.zh.rst#comment-1856339316>`_
 ，所以想了想寫了這篇。

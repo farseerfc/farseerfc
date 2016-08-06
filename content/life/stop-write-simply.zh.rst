@@ -5,6 +5,7 @@
 :lang: zh
 :date: 2015-03-11 22:00
 :tags: blog, writing
+:issueid: 9
 
 我的 RSS 訂閱着一個博客叫 `The Old New Thing <http://blogs.msdn.com/b/oldnewthing/>`_ 
 ，作者是Windows開發者之一的 Raymond Chen ，記錄 Windows 中的很多有趣的技術細節。

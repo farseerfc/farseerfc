@@ -6,6 +6,7 @@
 :date: 2014-12-12 17:06
 :tags: c, linux, stdio, tty, unix, ugh, ncurses, termcap, terminfo
 :series: 飲水思源C板
+:issueid: 38
 
 .. contents::
 

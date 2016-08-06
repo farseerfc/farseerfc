@@ -5,6 +5,7 @@ KDE5 Plasma 之跳動賣萌的活動按鈕
 :lang: zh
 :date: 2014-12-09 01:54
 :tags: kde5, plasma, linux, gnome3
+:issueid: 39
 
 .. PELICAN_BEGIN_SUMMARY
 

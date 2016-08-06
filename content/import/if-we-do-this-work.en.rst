@@ -5,6 +5,7 @@
 :lang: en
 :date: 2011-03-14 20:34
 :tags: microsoft, linux, acpi
+:issueid: 28
 
 Imported from
 `renren <http://blog.renren.com/blog/230263946/716517729>`_

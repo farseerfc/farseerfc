@@ -6,6 +6,7 @@ X 中的混成器與 Composite 擴展
 :date: 2015-03-19 17:45
 :tags: linux, wayland, xorg, compositor
 :series: compositor and wayland
+:issueid: 35
 
 .. contents::
 

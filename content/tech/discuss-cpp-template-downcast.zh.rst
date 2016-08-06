@@ -6,6 +6,7 @@
 :date: 2012-02-26 05:54:57
 :tags: template, C
 :series: 飲水思源C板
+:issueid: 36
 
 .. contents::
 

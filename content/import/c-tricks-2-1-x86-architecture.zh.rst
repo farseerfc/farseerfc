@@ -6,6 +6,7 @@ C++ Tricks 2.1 X86概述
 :tags: C++
 :series: CPP_Tricks
 :series_index: 04
+:issueid: 17
 
 從 `farseerfc.wordpress.com <http://farseerfc.wordpress.com/>`_ 導入
 

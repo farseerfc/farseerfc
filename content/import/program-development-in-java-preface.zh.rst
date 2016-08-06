@@ -4,6 +4,7 @@ Program Development in Java Preface
 :slug: program-development-in-java-preface
 :lang: zh
 :tags: Java
+:issueid: 29
 
 從 `farseerfc.wordpress.com <http://farseerfc.wordpress.com/>`_ 導入
 

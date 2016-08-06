@@ -6,6 +6,7 @@ C++ Tricks 3.2 標號、goto，以及switch的實現
 :tags: C++
 :series: CPP_Tricks
 :series_index: 12
+:issueid: 25
 
 從 `farseerfc.wordpress.com <http://farseerfc.wordpress.com/>`_ 導入
 

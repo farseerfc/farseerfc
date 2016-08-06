@@ -5,6 +5,7 @@ PyRuby
 :lang: jp
 :date: 2012-03-02 23:09
 :tags: python, ruby
+:issueid: 42
 
 きょう、Githubに `PyRuby <https://github.com/danielfm/pyruby>`_ というプロジェクトを見ました。それの説明にこう書いています: 
 

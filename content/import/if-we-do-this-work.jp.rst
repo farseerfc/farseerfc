@@ -5,7 +5,7 @@
 :lang: jp
 :date: 2011-03-14 20:34
 :tags: microsoft, linux, acpi
-
+:issueid: 28
 
 `renren <http://blog.renren.com/blog/230263946/716517729>`_
 から導入した。

@@ -6,6 +6,7 @@
 :date: 2015-02-20 11:10
 :tags: pelican, github, pages, travis, travis-ci, ubuntu
 :series: pelican
+:issueid: 49
 
 .. contents::
 

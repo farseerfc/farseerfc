@@ -6,6 +6,7 @@ C++ Tricks 2.5 I386平臺的邊界對齊(Align)
 :tags: C++
 :series: CPP_Tricks
 :series_index: 08
+:issueid: 21
 
 從 `farseerfc.wordpress.com <http://farseerfc.wordpress.com/>`_ 導入
 

@@ -5,6 +5,7 @@ MSR 2012 @ ICSE
 :lang: jp
 :date: 2012-06-02 10:42
 :tags: msr, icse, mining, software, repository
+:issueid: 8
 
 .. contents::
 

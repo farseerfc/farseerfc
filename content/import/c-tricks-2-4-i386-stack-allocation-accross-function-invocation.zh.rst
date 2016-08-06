@@ -6,6 +6,7 @@ C++ Tricks 2.4 I386平臺C函數調用邊界的棧分配
 :tags: C++
 :series: CPP_Tricks
 :series_index: 07
+:issueid: 20
 
 從 `farseerfc.wordpress.com <http://farseerfc.wordpress.com/>`_ 導入
 

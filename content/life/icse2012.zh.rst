@@ -5,6 +5,7 @@ ICSE 2012
 :lang: zh
 :date: 2012-06-06 10:42
 :tags: icse, software
+:issueid: 6
 
 .. contents::
 

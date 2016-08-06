@@ -6,6 +6,7 @@ Discuss C++ Template Downcast
 :date: 2012-02-26 05:54:57
 :tags: template, C
 :series: YSSY_C
+:issueid: 36
 
 .. contents::
 

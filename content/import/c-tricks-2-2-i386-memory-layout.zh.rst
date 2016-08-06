@@ -6,6 +6,7 @@ C++ Tricks 2.2 I386平臺的內存佈局
 :tags: C++
 :series: CPP_Tricks
 :series_index: 05
+:issueid: 18
 
 從 `farseerfc.wordpress.com <http://farseerfc.wordpress.com/>`_ 導入
 

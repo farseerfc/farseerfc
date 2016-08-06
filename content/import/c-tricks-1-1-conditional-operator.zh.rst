@@ -6,6 +6,7 @@ C++ Tricks 1.1	條件運算符(?:)
 :tags: C++
 :series: CPP_Tricks
 :series_index: 02
+:issueid: 15
 
 從 `farseerfc.wordpress.com <http://farseerfc.wordpress.com/>`_ 導入
 

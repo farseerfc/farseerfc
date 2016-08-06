@@ -6,6 +6,7 @@ C++ Tricks 2.6 I386平臺C函數的可變參數表(Variable Arguments)
 :tags: C++
 :series: CPP_Tricks
 :series_index: 09
+:issueid: 22
 
 從 `farseerfc.wordpress.com <http://farseerfc.wordpress.com/>`_ 導入
 

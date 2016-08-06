@@ -6,6 +6,7 @@
 :date: 2015-01-25 22:45
 :tags: python, pelican, bootstrap, material, subsite
 :series: pelican
+:issueid: 46
 
 .. contents::
 

@@ -6,6 +6,7 @@ C++ Tricks 2.3 I386平臺C函數內部的棧分配
 :tags: C++
 :series: CPP_Tricks
 :series_index: 06
+:issueid: 19
 
 從 `farseerfc.wordpress.com <http://farseerfc.wordpress.com/>`_ 導入
 
