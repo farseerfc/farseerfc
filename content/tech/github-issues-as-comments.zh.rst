@@ -21,14 +21,15 @@
 
 換用 GitHub Issue 另一方面是最近聽說 Disqus 被部分牆了，想必以後牆也會越來越
 高。之前曾經試過在這個博客換上多說，然而效果我並不喜歡，多說喜歡侵入頁面加
-很多奇怪的東西……也試過結合新浪微博的評論，而新浪微博越來越封閉，
-API 也越來越不靠譜。
+很多奇怪的東西，比如用戶的頭像通常是 http 的……
+也試過結合新浪微博的評論，而新浪微博越來越封閉，API 也越來越不靠譜。
 
-使用 GitHub Issue 作爲評論的方式很簡單，上面那篇博客裏面提到了，代碼量不比
-加載 Disqus 多多少，而且沒有了 iframe 的困擾。
-`我參考上面的實現在這裏 <https://github.com/farseerfc/pelican-bootstrap3/blob/master/templates/includes/comments.html#L23>`_ 。
+使用 GitHub Issue 作爲評論的方式比較簡單，上面那篇博客裏面提到了，代碼量不比
+加載 Disqus 多多少，而且沒有了 iframe 的困擾，唯一麻煩的地方就是要稍微設計一下佈局方式讓它融入
+現有的頁面佈局。
+`我參考上面的實現在這裏 <https://github.com/farseerfc/pelican-bootstrap3/blob/master/templates/includes/comments.html#L32>`_ 。
 這個加載代碼使用兩個變量加載 Issue Comments ，一個是在 pelicanconf.py 裏的
-:code:`GITHUB_REPO` ，可以指向任何 Repo ，我指向 farseerfc.github.io
+:code:`GITHUB_REPO` ，可以指向任何 Repo ，我指向 farseerfc/farseerfc.github.io
 的這個 GitHub Page repo ，另一個變量是每篇文章裏需要加上 :code:`issueid`
 的元數據，關連文章到每個 Issue 上。
 
@@ -38,3 +39,13 @@ API 也越來越不靠譜。
 文章創建 issue 。
 
 好啦新的留言系統的外觀樣式還在測試中，希望大家多留言幫我測試一下！
+
+.. label-warning::
+
+    **2016年8月7日19:30更新**
+
+新增了對 GitHub Issue comments 裏面
+`reactions <https://developer.github.com/v3/issues/comments/#reactions-summary>`_
+的支持，套用 font-awesome 的圖標（似乎沒 GitHub 上的圖標好看）。這個還屬於 GitHub API
+的實驗性功能，要加入 :code:`Accept: application/vnd.github.squirrel-girl-preview`
+HTTP 頭纔能拿到。
