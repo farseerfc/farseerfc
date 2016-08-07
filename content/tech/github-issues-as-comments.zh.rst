@@ -52,3 +52,21 @@ http 的……也試過結合新浪微博的評論，而新浪微博越來越封
 的支持，套用 font-awesome 的圖標（似乎沒 GitHub 上的圖標好看）。這個還屬於 GitHub API
 的實驗性功能，要加入 :code:`Accept: application/vnd.github.squirrel-girl-preview`
 HTTP 頭纔能拿到。
+
+.. label-warning::
+
+    **2016年8月7日23:16更新**
+
+感謝 @iovxw 的測試讓我發現 github 的高亮回復和郵件回復是需要特殊處理的。
+高亮回復用上了 `這裏的 CSS <https://github.com/sindresorhus/github-markdown-css>`_
+郵件引言的展開事件直接用 jQuery 做了：
+
+.. code-block:: javascript
+
+	  $(".email-hidden-toggle > a").on("click", function (e){
+        e.preventDefault();
+        $(".email-hidden-reply", this.parent).toggle();
+      });
+
+
+還得注意郵件的回復需要 CSS 裏面 :code:`white-space: pre-wrap` 。
