@@ -1,0 +1,40 @@
+啓用 GitHub Issue 作爲博客留言系統
+====================================================
+
+:slug: github-issues-as-comments
+:lang: zh
+:date: 2016-08-07 16:28
+:tags: pelican, github, pages, issues
+:series: pelican
+:issueid: 52
+
+
+從今天起本博客將啓用 GitHub Issue 作爲留言系統。
+原本使用的 Disqus 將繼續保留一段時間，目前沒有關閉的計劃。
+
+換用 GitHub Issue 是計劃了好久的事情了，最初重做這個主題的時候就有考慮過。
+這個想法的契機是看到了這篇
+`GitHub hosted comments for GitHub hosted blogs <http://ivanzuzak.info/2011/02/18/github-hosted-comments-for-github-hosted-blogs.html>`_
+，然後立馬覺得這個想法很符合寄宿在 GitHub Pages 上的博客。
+一個限制是要求評論者必須有 GitHub
+賬戶，考慮到我的博客的受衆這個要求估計不算太過分。
+
+換用 GitHub Issue 另一方面是最近聽說 Disqus 被部分牆了，想必以後牆也會越來越
+高。之前曾經試過在這個博客換上多說，然而效果我並不喜歡，多說喜歡侵入頁面加
+很多奇怪的東西……也試過結合新浪微博的評論，而新浪微博越來越封閉，
+API 也越來越不靠譜。
+
+使用 GitHub Issue 作爲評論的方式很簡單，上面那篇博客裏面提到了，代碼量不比
+加載 Disqus 多多少，而且沒有了 iframe 的困擾。
+`我參考上面的實現在這裏 <https://github.com/farseerfc/pelican-bootstrap3/blob/master/templates/includes/comments.html#L23>`_ 。
+這個加載代碼使用兩個變量加載 Issue Comments ，一個是在 pelicanconf.py 裏的
+:code:`GITHUB_REPO` ，可以指向任何 Repo ，我指向 farseerfc.github.io
+的這個 GitHub Page repo ，另一個變量是每篇文章裏需要加上 :code:`issueid`
+的元數據，關連文章到每個 Issue 上。
+
+還有一個稍微麻煩的事情是現在每寫一篇文章之後都要新建一個 issue 了。
+手動操作有點累人，於是我 `寫了個腳本 <https://github.com/farseerfc/farseerfc/blob/master/createissue.py>`_
+自動搜索 pelican 的 content 文件夾裏面文章的 slug 並且對沒有 issueid 關連的
+文章創建 issue 。
+
+好啦新的留言系統的外觀樣式還在測試中，希望大家多留言幫我測試一下！
