@@ -1,4 +1,4 @@
-为什么 Linus Torvalds 不愿意将 Linux 变成 GPLv3 授权？
+爲什麼 Linus Torvalds 不願意將 Linux 變成 GPLv3 授權？
 ====================================================================
 
 :date: 2016-08-08 16:15
@@ -23,6 +23,11 @@
 	裏面 Linus 對自己的觀點澄清得很清楚了。
 	看u2b或者聽英語有困難的請留評論，我抽空可以試着翻譯一下。
 
+
+.. panel-default::
+	:title: DebConf 14: Q&A with Linus Torvalds
+
+	.. youtubeku:: 1Mg5_gxNXTo&t=47m20s XMTY3NjIzNDU0NA==
 
 然後接下來就是我承諾的翻譯了
 ------------------------------------------------------------
@@ -53,7 +58,7 @@ L: 什麼？
 	I understand why people would want to do them but I think it should have
 	been a completely new license.
 
-L: 哦我討厭 GPLv3 ，我是在故意貶低它。我實際上覺得 GPLv3 的擴展非常可怕。
+L: 哦我討厭 GPLv3 ，我是在故意貶低它。實際上我覺得 GPLv3 的擴展非常可怕。
 我能理解爲什麼人們想要做這個，但是我覺得它本應是一個全新的協議。
 
 	Emm my argument for liking version 2, and I still think version 2 is a
@@ -61,7 +66,7 @@ L: 哦我討厭 GPLv3 ，我是在故意貶低它。我實際上覺得 GPLv3 的
 	changes back, we are even." Right? That's my take on GPL version 2, right,
 	it's that simple.
 
-嗯我喜歡版本2的那些理由，並且我仍然覺得版本 2 是一個非常棒的協議，
+嗯我喜歡版本 2 的那些理由，並且我仍然覺得版本 2 是一個非常棒的協議，
 理由是：「我給你源代碼，你給我你對它的修改，我們就扯平了」
 對吧？這是我用 GPL 版本 2 的理由，就是這麼簡單。
 
@@ -72,9 +77,9 @@ L: 哦我討厭 GPLv3 ，我是在故意貶低它。我實際上覺得 GPLv3 的
 	version 2 stood for. And I understand why the FSF did it because I know
 	what the FSF wants.	But to me it's not the same license at all. 
 
-然後版本3的擴展在某些方面讓我個人覺得非常不舒服，也就是說「我給你源代碼，
+然後版本 3 的擴展在某些方面讓我個人覺得非常不舒服，也就是說「我給你源代碼，
 這意味着你必須服從我的一些規則，否則你不能把它用在你的設備上。」
-對我來說，這是違反了版本2協議所追求的所有目的。然而我理解爲什麼 FSF 要這麼做，
+對我來說，這是違反了版本 2 協議所追求的所有目的。然而我理解爲什麼 FSF 要這麼做，
 因爲我知道 FSF 想要達成什麼，但是對我來說這完全是不同的協議了。
 
 	So I was very upset and made it very clear, and this was months before
@@ -92,7 +97,7 @@ L: 哦我討厭 GPLv3 ，我是在故意貶低它。我實際上覺得 GPLv3 的
 事實上幾年之前，那時我就說過：「不，這不可能工作」。
 並且在那個早期的討論階段我已經在內核裏寫好了「嘿，我可沒有寫過版本 2
 或者更高版本」。所以之後也沒有過（爭議）……隨後版本 3 出來的時候我非常開心，
-因爲我早就在大概 5 年前做了預防，之後也就再也沒有過關於內核的協議究竟是哪個
+因爲我早在大概 5 年前做了預防，之後也就再也沒有過關於內核的協議究竟是哪個
 版本的討論。
 
 	But I actually thought that version 3 is ... Uh, no ... I actually think
@@ -131,9 +136,9 @@ L: 哦我討厭 GPLv3 ，我是在故意貶低它。我實際上覺得 GPLv3 的
 	the Tivoization part", right. This is ... How many people heard this
 	particular statement from the FSF? (Please raise your hands)
 
-L: 沒錯，Tivoization 的事情一直是我的主要反對版本 3 的根據。並且，FSF
+L: 沒錯，Tivoization 的事情一直是我反對版本 3 的主要根據。並且，FSF
 在這件事上表現得極不誠實。「嘿，其實我們允許你無效化 Tivoization 條款」，這樣他們試圖，
-應該他們明白着欺騙別人，並且說「嘿，這意味着你可以使用除去 Tivoization 部分的 GPLv3」。
+應該說他們是在明白着欺騙別人，並且說「嘿，這意味着你可以使用除去 Tivoization 部分的 GPLv3」。
 這很……在場的諸位中有誰從 FSF 那兒聽過這個說法？（請舉手）
 
 	Ok, maybe they only tried to convince me with that one.
@@ -162,7 +167,7 @@ GPLv3 寫驅動。」然後我就囧了。我的困境在於說「嘿，我給�
 	I overstated that a bit, right. The FSF has a lot of nice people in it,
 	but some of them are bit too extreme.
 
-所以 FSF 是，我是說那時暗地裏他們做的那些事情，讓我當下決定永遠不再和 FSF 有任何瓜葛。
+所以 FSF 是，我是說那時他們暗地裏做的那些事情，讓我當下決定永遠不再和 FSF 有任何瓜葛。
 所以如果你想捐錢給一個行善的組織，那就捐給 EFF 吧。FSF 充滿了瘋狂難處的人。這只是我的觀點。
 呃其實我……嗯……我說得有點過分了。FSF 裏有很多不錯的人，不過其中有些人有點過激。
 
