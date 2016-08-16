@@ -15,7 +15,7 @@ cache:
 
 before_install:
     - sudo apt-get update
-    - sudo apt-get install nodejs ditaa parallel graphviz phantomjs
+    - sudo apt-get install nodejs ditaa parallel graphviz phantomjs node-less
     - ditaa -h || true
     - wget -O source-han-sans-1.004R.tar.gz https://github.com/adobe-fonts/source-han-sans/archive/1.004R.tar.gz
     - tar xf source-han-sans-1.004R.tar.gz
@@ -27,7 +27,6 @@ before_install:
 
 install:
     - sudo pip install pelican jinja2 py3babel babel beautifulsoup4 markdown
-    - sudo npm install -g less
     - wget "http://downloads.sourceforge.net/project/plantuml/plantuml.jar?r=&ts=1424308684&use_mirror=jaist" -O plantuml.jar
     - sudo mkdir -p /opt/plantuml
     - sudo cp plantuml.jar /opt/plantuml
