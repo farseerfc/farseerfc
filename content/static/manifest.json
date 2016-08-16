@@ -3,8 +3,8 @@
   "name": "Farseerfc's Blog",
   "icons": [
     {
-      "src": "images/avatar.jpg",
-      "sizes": "498x499",
+      "src": "images/android-chrome-192x192.png",
+      "sizes": "192x192",
       "type": "image/png"
     }
   ],
