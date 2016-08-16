@@ -1,7 +1,10 @@
+sudo: required
+dist: trusty
+
 language: python
 
 python:
-    - "3.4"
+    - "3.5"
 
 env:
     - secure: "Hl7Mg82Li3e+rPRsll4dH1HgLvJKtJH2RASi/qX/lGsMALzsROJDYTJoTa2LHsFM46bbX+hp2zVCUs6o++S4sRTvOk50YnJUN0b3eqN/FmUbLs5ba7Y49QAoxbTduShTKxtmrkA3wizqTIS/TSCwrjtlt4Io/9PKz3g1Y+1SSDI="
@@ -11,14 +14,13 @@ cache:
     - cache
 
 before_install:
-    - sudo apt-add-repository ppa:chris-lea/node.js -y
     - sudo apt-get update
     - sudo apt-get install nodejs ditaa parallel graphviz phantomjs
     - ditaa -h || true
-    - wget -O source-han-sans-1.001R.tar.gz https://github.com/adobe-fonts/source-han-sans/archive/1.001R.tar.gz
-    - tar xf source-han-sans-1.001R.tar.gz
+    - wget -O source-han-sans-1.004R.tar.gz https://github.com/adobe-fonts/source-han-sans/archive/1.004R.tar.gz
+    - tar xf source-han-sans-1.004R.tar.gz
     - mkdir -p ~/.fonts
-    - cp -r source-han-sans-1.001R/* ~/.fonts
+    - cp -r source-han-sans-1.004R/* ~/.fonts
     - mkdir -p ~/.config/fontconfig/
     - curl http://cfp.vim-cn.com/cbJQ > ~/.config/fontconfig/fonts.conf
     - cp ~/.config/fontconfig/fonts.conf ~/.fonts.conf
