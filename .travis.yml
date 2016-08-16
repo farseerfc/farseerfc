@@ -10,8 +10,7 @@ env:
     - secure: "Hl7Mg82Li3e+rPRsll4dH1HgLvJKtJH2RASi/qX/lGsMALzsROJDYTJoTa2LHsFM46bbX+hp2zVCUs6o++S4sRTvOk50YnJUN0b3eqN/FmUbLs5ba7Y49QAoxbTduShTKxtmrkA3wizqTIS/TSCwrjtlt4Io/9PKz3g1Y+1SSDI="
 
 cache:
-  directories:
-    - cache
+    - pip
 
 before_install:
     - sudo apt-get update
