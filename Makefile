@@ -28,7 +28,7 @@ help:
 	@echo '                                                                       '
 
 
-html: theme
+html:
 	$(PELICAN) $(INPUTDIR) -o $(OUTPUTDIR) -s $(CONFFILE) $(PELICANOPTS)
 
 drafts:
@@ -70,7 +70,7 @@ stopserver:
 theme:
 	(cd theme && (scons -Q || make) )
 
-publish: rmdrafts cc theme
+publish: rmdrafts cc
 	[ ! -d $(OUTPUTDIR) ] || (cd $(OUTPUTDIR) && find -not -type d -not -wholename "*/.git*"  -not -iname "*.pdf" -not -iname "*.png" -delete)
 	echo $(SITEURL) > content/static/CNAME
 	$(PELICAN) $(INPUTDIR) -o $(OUTPUTDIR) -s $(PUBLISHCONF) $(PELICANOPTS)
