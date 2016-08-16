@@ -23,9 +23,7 @@ before_install:
     - cp -r source-han-sans-1.004R/* ~/.fonts
     - mkdir -p ~/.config/fontconfig/
     - curl http://cfp.vim-cn.com/cbJQ > ~/.config/fontconfig/fonts.conf
-    - cp ~/.config/fontconfig/fonts.conf ~/.fonts.conf
     - sudo fc-cache -v
-    - sudo rm /etc/parallel/config
 
 install:
     - sudo pip install pelican jinja2 py3babel babel beautifulsoup4 markdown
