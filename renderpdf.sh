@@ -21,5 +21,5 @@ find . -iname "*.html" \
 | sed "s#\.\/##g" | xargs -n 16 phantomjs rasterize.js
 sleep 30
 kill $SERVPID
-find . -iname "*.png" | parallel optipng
+find . -iname "*.png" | parallel optipng || true
 
