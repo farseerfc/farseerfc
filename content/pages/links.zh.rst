@@ -76,7 +76,7 @@ Links
 
 .. friend:: lastavengers
 	:nick: `LastAvengers 谷月轩 <http://tech.lastavenger.me/>`_
-    :gravatar: lastavengers@outlook.com
+	:gravatar: lastavengers@outlook.com
 
 	有 `自己寫的內核 <https://github.com/LastAvenger/OS67>`_ 的厲害的LA的博客。
 
