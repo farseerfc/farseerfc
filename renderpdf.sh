@@ -19,5 +19,7 @@ find . -iname "*.html" \
 	! -iname "search.html" \
 	! -iname "index*.html" \
 | sed "s#\.\/##g" | xargs -n 16 phantomjs rasterize.js
-sleep 10
+sleep 30
 kill $SERVPID
+find . -iname "*.png" | parallel optipng -o5
+

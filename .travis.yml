@@ -14,7 +14,7 @@ cache:
 
 before_install:
     - sudo apt-get update
-    - sudo apt-get install ditaa parallel graphviz phantomjs
+    - sudo apt-get install ditaa parallel graphviz phantomjs optipng
     - ditaa -h || true
     - wget -O source-han-sans-1.004R.tar.gz https://github.com/adobe-fonts/source-han-sans/archive/1.004R.tar.gz
     - tar xf source-han-sans-1.004R.tar.gz
