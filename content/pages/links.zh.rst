@@ -75,8 +75,8 @@ Links
 	Golang大大的漂亮Hugo博客。
 
 .. friend:: lastavengers
-	:nick: `LastAvengers 谷月轩 <http://lastavenger.github.io/>`_
-	:logo: https://lastavenger.github.io/assets/avatar_big.jpg
+	:nick: `LastAvengers 谷月轩 <http://tech.lastavenger.me/>`_
+    :gravatar: lastavengers@outlook.com
 
 	有 `自己寫的內核 <https://github.com/LastAvenger/OS67>`_ 的厲害的LA的博客。
 
