@@ -152,3 +152,7 @@ ABOUT_ME = """<h3 style="text-align:center">
 <i class="mdi-communication-email" style="text-align:center"></i></a>
 </h3>
 """
+
+SIDEBAR_PROMOTION = """<a href="https://www.vultr.com/?ref=6924747-3B">
+<img src="https://www.vultr.com/media/banner_4.png" width="160" height="600">
+</a>"""
