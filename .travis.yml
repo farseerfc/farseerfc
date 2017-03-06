@@ -16,13 +16,6 @@ before_install:
     - sudo apt-get update
     - sudo apt-get install ditaa parallel graphviz phantomjs optipng
     - ditaa -h || true
-    - wget -O source-han-sans-1.004R.tar.gz https://github.com/adobe-fonts/source-han-sans/archive/1.004R.tar.gz
-    - tar xf source-han-sans-1.004R.tar.gz
-    - mkdir -p ~/.fonts
-    - cp -r source-han-sans-1.004R/* ~/.fonts
-    - mkdir -p ~/.config/fontconfig/
-    - curl http://cfp.vim-cn.com/cbJQ > ~/.config/fontconfig/fonts.conf
-    - sudo fc-cache -v
 
 install:
     - sudo pip install pelican jinja2 py3babel babel beautifulsoup4 markdown
@@ -49,7 +42,6 @@ install:
     - sudo locale-gen ja_JP.UTF-8
     - locale -a
     - pelican --version
-    - fc-match -s "Source Han Sans"
 
 script:
     - git config --global user.email "$GIT_EMAIL"
