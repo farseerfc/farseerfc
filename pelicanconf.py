@@ -75,10 +75,12 @@ I18N_SUBSITES = {
 }
 I18N_UNTRANSLATED_ARTICLES = "remove"
 
-MD_EXTENSIONS = ['admonition',
-                 'toc',
-                 'codehilite(css_class=highlight,linenums=False)',
-                 'extra']
+MARKDOWN = {'extension_configs': {
+    'admonition': {},
+    'toc': {},
+    'codehilite': {'css_class': 'highlight', 'linenums': False },
+    'extra': {}
+    }}
 
 PLUGINS = ["i18n_subsites",
            "better_codeblock_line_numbering",
@@ -110,7 +112,7 @@ CACHE_CONTENT = True
 
 # Theme options
 
-JINJA_EXTENSIONS = ['jinja2.ext.i18n']
+JINJA_ENVIRONMENT = {'extensions': ['jinja2.ext.i18n']}
 
 DOCUTIL_CSS = True
 TYPOGRIFY = False
@@ -119,6 +121,7 @@ GITHUB_USER = 'farseerfc'
 GITHUB_SHOW_USER_LINK = True
 GITHUB_REPO = 'farseerfc/farseerfc.github.io'
 DISPLAY_BREADCRUMBS = True
+DISPLAY_PAGES_ON_MENU = True
 DISPLAY_CATEGORY_IN_BREADCRUMBS = True
 CC_LICENSE = "CC-BY-NC-SA"
 DISPLAY_TAGS_INLINE = True
