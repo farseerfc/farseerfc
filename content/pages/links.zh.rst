@@ -2,7 +2,7 @@
 =======================================
 
 :slug: links
-:lang: zh_HK
+:lang: zh
 :date: 2015-02-10 00:50:34
 :tags: links
 :issueid: 4
