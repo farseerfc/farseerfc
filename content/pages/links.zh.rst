@@ -118,3 +118,9 @@
 	:logo: https://avatars3.githubusercontent.com/u/9009218
 	
 	:ruby:`暱稱|老婆` 有點多，最近是宮水三葉，醫學菊苣， :del:`白帽子` 。相當 :del:`黏人` 可愛。
+
+.. friend:: nanpuyue
+	:nick: `南浦月 <https://blog.nanpuyue.com/links.html/>`_
+	:logo: https://avatars2.githubusercontent.com/u/1524609
+	
+	南老師，在線直播，聲音甜美。アスナ粉，貢獻過很多 deepin 組件不過現在似乎不在了。修了 powerline 的 `fontpatcher <https://github.com/nanpuyue/fontpatcher>`_ 。
