@@ -4,10 +4,7 @@ dist: trusty
 language: python
 
 python:
-    - "3.5"
-
-env:
-    - secure: "Hl7Mg82Li3e+rPRsll4dH1HgLvJKtJH2RASi/qX/lGsMALzsROJDYTJoTa2LHsFM46bbX+hp2zVCUs6o++S4sRTvOk50YnJUN0b3eqN/FmUbLs5ba7Y49QAoxbTduShTKxtmrkA3wizqTIS/TSCwrjtlt4Io/9PKz3g1Y+1SSDI="
+    - "3.6"
 
 cache:
     - pip
@@ -51,8 +48,6 @@ script:
     - git clone --depth 1 https://github.com/farseerfc/pelican-bootstrap3 theme
     - git clone --depth 1 https://$GH_TOKEN@github.com/farseerfc/farseerfc.github.io output
     - env SITEURL="farseerfc.me" make publish
-
-after_success:
     - cd output
     - git add -A .
     - git commit -m "update from travis" 
