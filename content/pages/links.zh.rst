@@ -124,3 +124,10 @@
 	:logo: https://avatars2.githubusercontent.com/u/1524609
 	
 	南老師，在線直播，聲音甜美。アスナ粉，自稱裝機民工的 linux 桌面環境開發者。修了 powerline 的 `fontpatcher <https://github.com/nanpuyue/fontpatcher>`_ 。
+
+.. friend:: xuanwo
+	:nick: `Xuanwo <https://xuanwo.org/>`_
+	:logo: https://avatars1.githubusercontent.com/u/5351546
+	
+	漩渦的 Hugo 博客很乾淨也很技術，厲害的後端工程師！
+
