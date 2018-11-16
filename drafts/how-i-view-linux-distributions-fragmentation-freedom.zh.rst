@@ -64,7 +64,7 @@ Linux 確有很多發行版， 寫這篇的時候
 .. panel-default::
    :title: Linux 發行版雷達圖，`來自這裏 <http://tuxradar.com/content/best-distro-2011>`_
 
-   .. image:: {filename}/images/distro_stats_lg.png
+   .. image:: {static}/images/distro_stats_lg.png
       :alt: Linux 發行版雷達圖
 
 這些經驗試圖從穩定性、易用性等各方面對這些發行版下個定論，就好像 RPG
@@ -113,7 +113,7 @@ Linux 確有很多發行版， 寫這篇的時候
 .. panel-default::
    :title: 我眼中的各 Linux 發行版用戶，`來自知乎提問 <https://www.zhihu.com/question/22605825>`_
 
-   .. image:: {filename}/images/how-i-view-linux-users.jpg
+   .. image:: {static}/images/how-i-view-linux-users.jpg
       :alt: 我眼中的各 Linux 發行版用戶
 
 我們傾向於用這些指標評價 Linux 發行版的另一個原因，或許是因爲很多 Linux

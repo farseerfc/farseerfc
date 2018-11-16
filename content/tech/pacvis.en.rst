@@ -13,7 +13,7 @@ PacVis: visualize pacman local database
 .. panel-default::
   :title: PacVis
 
-  .. image:: {filename}/images/pacvis-first.png
+  .. image:: {static}/images/pacvis-first.png
       :alt: Demo of PacVis
 
 Motivation for PacVis
@@ -55,7 +55,7 @@ In particular, I want a tool to help me do these things:
 #. Understand the relationships between packages
 
 
-.. figure:: {filename}/images/Android-System-Architecture.jpg
+.. figure:: {static}/images/Android-System-Architecture.jpg
   :alt: Android System Architecture
 
   `Android System Architecture <https://en.wikipedia.org/wiki/Android_(operating_system)>`_
@@ -93,7 +93,7 @@ then we can render this diagram using dot command:
 .. panel-default::
   :title: :code:`pactree pacvis-git -d3 --graph | dot -Tpng >pacvis-pactree.png`
 
-  .. image:: {filename}/images/pacvis-pactree.png
+  .. image:: {static}/images/pacvis-pactree.png
       :alt: pactree --graph
 
 .. code-block:: console
@@ -143,7 +143,7 @@ pacgraph
 .. panel-default::
   :title: The output of pacgraph
 
-  .. image:: {filename}/images/pacvis-pacgraph.png
+  .. image:: {static}/images/pacvis-pacgraph.png
       :alt: pacgraph
 
 
@@ -180,7 +180,7 @@ So here is PacVis
 .. panel-default::
   :title: PacVis on startup
 
-  .. image:: {filename}/images/pacvis-second.png
+  .. image:: {static}/images/pacvis-second.png
       :alt: PacVis on startup
 
 With these predecessors, I started working on PacVis. The development takes
@@ -210,7 +210,7 @@ load and layout faster than a normal desktop system.
 .. panel-default::
   :title: PacVis on Windows msys2
 
-  .. image:: {filename}/images/pacvis-msys2.png
+  .. image:: {static}/images/pacvis-msys2.png
       :alt: PacVis on Windows msys2
 
 As a side note, pacvis only depends on pyalpm and tornado, so there should be
@@ -227,7 +227,7 @@ There is a side panel on the right top corner and you can hide it when you don't
 need it. There are some zoom buttons on the right bottom corner.
 
 
-.. figure:: {filename}/images/pacvis-pacvis-git.png
+.. figure:: {static}/images/pacvis-pacvis-git.png
   :alt: PacVis showing pacvis-git
 
   The dependencies of pacvis-git package
@@ -284,9 +284,9 @@ Some facts you can learn from PacVis
 
 
 .. panel-default::
-  :title: A normal KDE desktop `Full image（17M） <{filename}/images/pacvis-16384.png>`_
+  :title: A normal KDE desktop `Full image（17M） <{static}/images/pacvis-16384.png>`_
 
-  .. image:: {filename}/images/pacvis-4096-anno.png
+  .. image:: {static}/images/pacvis-4096-anno.png
     :alt: A normal KDE desktop in PacVis
 
 You may find many facts by playing around in PacVis. An example will be the
@@ -313,7 +313,7 @@ that you can not get rid of bash even if you only use zsh.
 For another example, python package (which is python3 in Arch Linux) and
 python2 and pypy sit roughly on the same topo-level in the diagram.
 
-.. figure:: {filename}/images/pacvis-zsh-bash.png
+.. figure:: {static}/images/pacvis-zsh-bash.png
   :alt: zsh indirectly depends on bash because of gdbm
   :width: 45%
 
@@ -335,7 +335,7 @@ They depend on each other. Another example is kio and kinit of KDE.
 kio provides VFS-like and FUSE-like resource abstraction for KDE applications,
 while kinit is in charge of initializing KDE desktop environment.
 
-.. figure:: {filename}/images/pacvis-freetype2-harfbuzz.png
+.. figure:: {static}/images/pacvis-freetype2-harfbuzz.png
   :alt: freetype2 harfbuzz
   :width: 45%
 
@@ -350,7 +350,7 @@ circle as red arrows in the diagram.
 Some packages don't have dependency relationship
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. figure:: {filename}/images/pacvis-level0.png
+.. figure:: {static}/images/pacvis-level0.png
   :alt: PacVis Level 0
   :width: 45%
 
@@ -379,7 +379,7 @@ in the system.
 pacman -Qtd cannot find orphan packages with circle dependency
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. figure:: {filename}/images/pacvis-circledeps-Qtd.png
+.. figure:: {static}/images/pacvis-circledeps-Qtd.png
   :alt: pacman -Qtd cannot find packages with circle dependency
   :width: 45%
 

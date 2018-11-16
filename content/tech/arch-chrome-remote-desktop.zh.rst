@@ -27,7 +27,7 @@ Xorg 上常用的遠程桌面工具有很多，基於 VNC 協議的、基於NX�
 .. panel-default:: 
 	:title: Chrome Remote Desktop 插件
 
-	.. image:: {filename}/images/chrome-remote-desktop-plugin.png
+	.. image:: {static}/images/chrome-remote-desktop-plugin.png
 	  :alt: Chrome Remote Desktop 插件
 
 Chrome Remote Desktop 的客戶端
@@ -100,7 +100,7 @@ Archlinux 上設置遠程登錄的服務器
 接下來需要從 Chrome 的插件裏啓用遠程桌面。打開 Chrome 的 Remote Desktop 插件，這時
 應該可以看到一個「啓用遠程鏈接」的按鈕。
 
-.. figure:: {filename}/images/chrome-remote-desktop-enable-button.png
+.. figure:: {static}/images/chrome-remote-desktop-enable-button.png
   :alt: Chrome Remote Desktop 插件中「啓用遠程鏈接」的按鈕
 
   Chrome Remote Desktop 插件中「啓用遠程鏈接」的按鈕
@@ -123,7 +123,7 @@ Archlinux 上設置遠程登錄的服務器
 點擊「啓用遠程鏈接」，設定一個 PIN 密碼（不需要很複雜，這裏首先有 Google 帳號驗證保證只有
 你纔能訪問），然後就能看到這套電腦的 hostname 出現在「我的電腦」列表裏。
 
-.. figure:: {filename}/images/chrome-remote-desktop-after-enabled.png
+.. figure:: {static}/images/chrome-remote-desktop-after-enabled.png
   :alt: 啓用遠程鏈接之後的樣子
 
   啓用遠程鏈接之後的樣子
@@ -146,14 +146,14 @@ Archlinux 上設置遠程登錄的服務器
 如果上面的設置一切正常，就可以看到 chrome-remote-desktop 啓動了另外一個 Xorg 執行你
 剛剛指定的桌面環境：
 
-.. figure:: {filename}/images/chrome-remote-desktop-htop.png
+.. figure:: {static}/images/chrome-remote-desktop-htop.png
   :alt: htop 中看到的 chrome-remote-desktop 啓動的另外一個 Xorg
 
   htop 中看到的 chrome-remote-desktop 啓動的另外一個 Xorg
 
 然後就可以試着通過 Remote Desktop 插件登錄到這個新開的 Xorg 了：
 
-.. figure:: {filename}/images/chrome-remote-desktop-xfce4.png
+.. figure:: {static}/images/chrome-remote-desktop-xfce4.png
   :alt: 「遠程」登錄到新的 XFCE4
 
   「遠程」登錄到新的 XFCE4
@@ -179,7 +179,7 @@ Bonus： 手機遠程登錄
 .. panel-default:: 
 	:title: 手機上的 Chrome 遠程桌面 App
 
-	.. image:: {filename}/images/chrome-remote-desktop-android.png
+	.. image:: {static}/images/chrome-remote-desktop-android.png
 	  :alt: 手機上的 Chrome 遠程桌面 App
 
 通過上面的設置就可以從任何一個 Chrome 遠程桌面客戶端登錄剛剛設置的這臺電腦了。
@@ -189,7 +189,7 @@ Bonus： 手機遠程登錄
 除了桌面的 Chrome 之外還有一個客戶端是 Android 上的
 `Chrome 遠程桌面 App <https://play.google.com/store/apps/details?id=com.google.chromeremotedesktop>`_ 經過上面的設置之後，從這個 App 也能看到並登錄： 
 
-.. figure:: {filename}/images/chrome-remote-desktop-android-logined.png
+.. figure:: {static}/images/chrome-remote-desktop-android-logined.png
   :alt: 手機遠程登錄
 
   手機遠程登錄

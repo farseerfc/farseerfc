@@ -38,7 +38,7 @@ Linux 系統上要迎來 Wayland 了，或許大家能從各種渠道打聽到 W
 .. panel-default::
 	:title: 棧式窗口管理器的例子，Windows 3.11 的桌面
 
-	.. image:: {filename}/images/Windows_3.11_workspace.png
+	.. image:: {static}/images/Windows_3.11_workspace.png
 	  :alt: 棧式窗口管理器的例子，Windows 3.11 的桌面
 
 .. PELICAN_BEGIN_SUMMARY
@@ -93,7 +93,7 @@ NeXTSTEP 與 Mac OS X 中混成器的發展
 .. panel-default::
 	:title: NeXTSTEP 桌面
 
-	.. image:: {filename}/images/NeXTSTEP_desktop.png
+	.. image:: {static}/images/NeXTSTEP_desktop.png
 	  :alt: NeXTSTEP 桌面
 
 
@@ -149,7 +149,7 @@ Mac OS X 的 Quartz 技術在矢量圖的 PDF 描述模型和最終渲染之間�
 .. panel-default::
 	:title: Mission Control
 
-	.. image:: {filename}/images/Mac_OS_X_Lion_Preview_-_Mission_Control.jpg
+	.. image:: {static}/images/Mac_OS_X_Lion_Preview_-_Mission_Control.jpg
 	  :alt: Mission Control
 
 也就是說在 Mac OS X 中無論窗口用何種方式繪圖，都會繪製輸出成一副內存中的位圖交給混成器，
@@ -185,7 +185,7 @@ Mission Control) 功能，把窗口的縮略圖（而不是事先繪製的圖標
 .. panel-default::
 	:title: LG3D
 
-	.. image:: {filename}/images/LG3D.jpg
+	.. image:: {static}/images/LG3D.jpg
 	  :alt: LG3D
 
 如視頻中展示的那樣， LG3D 完全突破了傳統的棧式窗口管理方式，

@@ -69,7 +69,7 @@ Android 的 SL4A_ 環境下的 python 中跑 pelican ，還要配合一個
 需要編譯的 repo ，這樣 Travis-CI 就會監視對這個 repo 的所有 push 操作，並且對
 每個 push 調用測試了。
 
-.. figure:: {filename}/images/travis-repo-enable.png
+.. figure:: {static}/images/travis-repo-enable.png
 	:alt: 在 Travis-CI 中開啓對 Github Repo 的持續整合
 
 	在 Travis-CI 中開啓對 Github Repo 的持續整合
@@ -146,7 +146,7 @@ ssh key 添加到 github 賬戶就可以了，在編譯細節都通過 github re
 .. panel-default::
 	:title: Github 上創建 Personal Access Token
 
-	.. image:: {filename}/images/travis-blog-push.png
+	.. image:: {static}/images/travis-blog-push.png
 	  :alt: Github 上創建 Personal Access Token
 
 好在 Github 支持通過 `Personal Access Token <https://github.com/settings/applications>`_
@@ -262,7 +262,7 @@ push 的條件。目前 after_success 的成功與否不會影響到 build 的�
 這樣設置之後的另一個好處就在於可以利用 Github 的 Web 界面編輯文章內容。在 Github 裏
 編輯和保存之後會自動作爲一個 commit 提交，所以也會觸發 Travis-CI 的自動編譯。
 
-.. figure:: {filename}/images/travis-edit-github-web.png
+.. figure:: {static}/images/travis-edit-github-web.png
 	:alt: 在 Github 的 Web 界面中直接編輯文章內容
 
 	在 Github 的 Web 界面中直接編輯文章內容

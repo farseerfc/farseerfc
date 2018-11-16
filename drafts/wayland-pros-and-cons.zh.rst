@@ -12,7 +12,7 @@
 .. panel-default::
 	:title: Wayland
 
-	.. image:: {filename}/images/wayland.png
+	.. image:: {static}/images/wayland.png
 	  :alt: Wayland
 
 連着有 `五六年了 <http://www.phoronix.com/scan.php?page=news_topic&q=Wayland&selection=20>`_

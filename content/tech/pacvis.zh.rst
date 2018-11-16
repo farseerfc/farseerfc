@@ -12,7 +12,7 @@ PacVis: 可視化 pacman 本地數據庫
 .. panel-default::
   :title: PacVis
 
-  .. image:: {filename}/images/pacvis-first.png
+  .. image:: {static}/images/pacvis-first.png
       :alt: Demo of PacVis
 
 我爲什麼要做 PacVis
@@ -42,7 +42,7 @@ ArchWiki 上的流程一路走下來的話，最關鍵的一條命令就是 :cod
 #. 找出那些體積大而且佔地方的包
 #. 釐清系統中安裝了的包之間的關係
 
-.. figure:: {filename}/images/Android-System-Architecture.jpg
+.. figure:: {static}/images/Android-System-Architecture.jpg
   :alt: Android System Architecture
 
   `Android 系統架構 <https://en.wikipedia.org/wiki/Android_(operating_system)>`_
@@ -75,7 +75,7 @@ pactree 曾經是一個
 .. panel-default::
   :title: :code:`pactree pacvis-git -d3 --graph | dot -Tpng >pacvis-pactree.png`
 
-  .. image:: {filename}/images/pacvis-pactree.png
+  .. image:: {static}/images/pacvis-pactree.png
       :alt: pactree --graph
 
 .. code-block:: console
@@ -124,7 +124,7 @@ pacgraph
 .. panel-default::
   :title: pacgraph 的輸出
 
-  .. image:: {filename}/images/pacvis-pacgraph.png
+  .. image:: {static}/images/pacvis-pacgraph.png
       :alt: pacgraph
 
 
@@ -155,7 +155,7 @@ pacgraph 還支持通過參數指定只繪製個別包的依賴關係，就像 p
 .. panel-default::
   :title: PacVis 剛打開的樣子
 
-  .. image:: {filename}/images/pacvis-second.png
+  .. image:: {static}/images/pacvis-second.png
       :alt: PacVis on startup
 
 總結了老前輩們的優勢與不足，我便開始利用空餘時間做我心目中的 PacVis 。
@@ -182,7 +182,7 @@ https://pacvis.farseerfc.me/ ，這個作爲最小安裝的服務器載入速度
 .. panel-default::
   :title: 在 Windows msys2 跑 PacVis
 
-  .. image:: {filename}/images/pacvis-msys2.png
+  .. image:: {static}/images/pacvis-msys2.png
       :alt: PacVis on Windows msys2
 
 另外補充一下，因爲 PacVis 只依賴 pyalpm 和 tornado ，所以在別的基於 pacman
@@ -198,7 +198,7 @@ PacVis 的圖例和用法
 縮放、拖拽，右上角有個側邊欄，不需要的話可以點叉隱藏掉，右下角有縮放的按鈕和
 回到全局視圖的按鈕，用起來應該還算直觀。
 
-.. figure:: {filename}/images/pacvis-pacvis-git.png
+.. figure:: {static}/images/pacvis-pacvis-git.png
   :alt: PacVis showing pacvis-git
 
   pacvis-git 包的依賴
@@ -242,9 +242,9 @@ python-setuptools ，其中 pyalpm 又依賴 pacman 。圖中用
 
 
 .. panel-default::
-  :title: 一個 KDE 桌面的 PacVis 結果全圖， `放大（17M） <{filename}/images/pacvis-16384.png>`_
+  :title: 一個 KDE 桌面的 PacVis 結果全圖， `放大（17M） <{static}/images/pacvis-16384.png>`_
 
-  .. image:: {filename}/images/pacvis-4096-anno.png
+  .. image:: {static}/images/pacvis-4096-anno.png
     :alt: A normal KDE desktop in PacVis
 
 稍微玩一下 PacVis 就能發現不少有趣現象，上述「絕大多數包依賴 glibc 」就是一例。
@@ -270,7 +270,7 @@ python-setuptools ，其中 pyalpm 又依賴 pacman 。圖中用
 幾乎在同一個拓撲層級。
 
 
-.. figure:: {filename}/images/pacvis-zsh-bash.png
+.. figure:: {static}/images/pacvis-zsh-bash.png
   :alt: zsh depends on bash because of gdbm
   :width: 45%
 
@@ -290,7 +290,7 @@ qt5 因爲被拆成了數個包所以比 qt4 更低級這可以理解，而 gtk 
 後者初始化 KDE 桌面環境。
 
 
-.. figure:: {filename}/images/pacvis-freetype2-harfbuzz.png
+.. figure:: {static}/images/pacvis-freetype2-harfbuzz.png
   :alt: freetype2 harfbuzz
   :width: 45%
 
@@ -304,7 +304,7 @@ qt5 因爲被拆成了數個包所以比 qt4 更低級這可以理解，而 gtk 
 有些包沒有依賴關係
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. figure:: {filename}/images/pacvis-level0.png
+.. figure:: {static}/images/pacvis-level0.png
   :alt: PacVis Level 0
   :width: 45%
 
@@ -330,7 +330,7 @@ Linux 位於整個圖中的最底端，因爲它的安裝腳本依賴 mkinitcpio
 pacman -Qtd 不能找到帶有循環依賴的孤兒包
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. figure:: {filename}/images/pacvis-circledeps-Qtd.png
+.. figure:: {static}/images/pacvis-circledeps-Qtd.png
   :alt: pacman -Qtd cannot find packages with circle dependency
   :width: 45%
 

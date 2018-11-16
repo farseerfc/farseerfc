@@ -64,7 +64,7 @@
 #. 服務器設置的一步需要將 :ruby:`域名解析服務器|DNS nameservers` 從狗爹的服務器改到
    CloudFlare 的，如下圖：
 
-.. figure:: {filename}/images/godaddy.png
+.. figure:: {static}/images/godaddy.png
     :alt: 更改狗爹的域名服務器
 
     更改狗爹的域名服務器
@@ -72,7 +72,7 @@
 申請好之後就由 CloudFlare 接管域名解析了，接下來在 CloudFlare 的 DNS 設置添加一條
 `A 類規則指向 github pages 的 IP <https://help.github.com/articles/tips-for-configuring-an-a-record-with-your-dns-provider/>`_ 。
 
-.. figure:: {filename}/images/cloudflaredns.png
+.. figure:: {static}/images/cloudflaredns.png
     :alt: 更改CloudFlare的DNS規則
 
     更改CloudFlare的DNS規則
@@ -106,7 +106,7 @@
 
 然後把生成的靜態網站 push 到 github 之後可以從項目設置裏看到域名的變化：
 
-.. figure:: {filename}/images/githubdomain.png
+.. figure:: {static}/images/githubdomain.png
     :alt: Github 配置好自定義域名之後的變化
 
     Github 配置好自定義域名之後的變化

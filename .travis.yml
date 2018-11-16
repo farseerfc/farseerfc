@@ -15,7 +15,7 @@ before_install:
     - ditaa -h || true
 
 install:
-    - sudo pip install 'pelican<4.0.0' 
+    - sudo pip install 'pelican'
     - sudo pip install jinja2 py3babel babel beautifulsoup4 markdown
     - wget "http://downloads.sourceforge.net/project/plantuml/plantuml.jar?r=&ts=1424308684&use_mirror=jaist" -O plantuml.jar
     - sudo mkdir -p /opt/plantuml
@@ -25,7 +25,7 @@ install:
     - sudo install -m 755 -D plantuml /usr/bin/plantuml
     - plantuml -version
     - git clone --depth 1 https://github.com/farseerfc/opencc-bin opencc-bin
-    - cd opencc-bin 
+    - cd opencc-bin
     - sudo install -t /usr/bin src/opencc
     - sudo install -t /usr/lib src/libopencc.so
     - sudo install -t /usr/lib src/libopencc.so.1.0.0
@@ -51,6 +51,6 @@ script:
     - env SITEURL="farseerfc.me" make publish
     - cd output
     - git add -A .
-    - git commit -m "update from travis" 
+    - git commit -m "update from travis"
     - git push --quiet
 

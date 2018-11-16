@@ -45,7 +45,7 @@ Pelican 的主題，配合一些我覺得有用的插件。於是本博客就變
   :title: 在邁阿密參加 `ICSR 2015 <http://icsr2015.ipd.kit.edu/>`_ 的時候
           拍到的街邊一家叫 Pelican 的旅館
 
-  .. image:: {filename}/images/pelican.jpg
+  .. image:: {static}/images/pelican.jpg
       :alt: Pelican Hotel
 
 
