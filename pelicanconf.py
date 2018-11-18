@@ -74,6 +74,7 @@ I18N_SUBSITES = {
     ),
 }
 I18N_UNTRANSLATED_ARTICLES = "remove"
+I18N_TEMPLATES_LANG="en"
 
 MARKDOWN = {'extension_configs': {
     'admonition': {},
