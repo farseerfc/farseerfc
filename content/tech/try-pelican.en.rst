@@ -1,7 +1,7 @@
 Give a try to Pelican
 =====================
 
-:slug: try-pelican
+:id: try-pelican
 :lang: en
 :date: 2012-02-24 17:33
 :tags: python, pelican

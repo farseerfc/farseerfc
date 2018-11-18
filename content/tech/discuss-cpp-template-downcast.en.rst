@@ -1,7 +1,7 @@
 Discuss C++ Template Downcast
 =============================
 
-:slug: discuss-cpp-template-downcast
+:id: discuss-cpp-template-downcast
 :lang: en
 :date: 2012-02-26 05:54:57
 :tags: template, C

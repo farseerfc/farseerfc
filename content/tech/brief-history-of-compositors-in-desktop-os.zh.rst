@@ -1,7 +1,7 @@
 桌面系統的混成器簡史
 =====================================
 
-:slug: brief-history-of-compositors-in-desktop-os
+:id: brief-history-of-compositors-in-desktop-os
 :lang: zh
 :date: 2015-03-19 13:45
 :tags: desktop, compositor, macosx, windows, window, manager

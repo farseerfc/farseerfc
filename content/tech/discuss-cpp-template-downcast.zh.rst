@@ -1,7 +1,7 @@
 關於C++模板的類型轉換的討論
 =======================================
 
-:slug: discuss-cpp-template-downcast
+:id: discuss-cpp-template-downcast
 :lang: zh
 :date: 2012-02-26 05:54:57
 :tags: template, C

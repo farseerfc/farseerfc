@@ -1,7 +1,7 @@
 重新設計了 Pelican 的主題與插件
 =======================================
 
-:slug: redesign-pelican-theme
+:id: redesign-pelican-theme
 :lang: zh
 :date: 2015-01-25 22:45
 :tags: python, pelican, bootstrap, material, subsite

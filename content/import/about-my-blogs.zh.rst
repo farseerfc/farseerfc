@@ -1,7 +1,7 @@
 關於我的Blogs
 #############
 :date: 2011-09-27 02:35
-:slug: about-my-blogs
+:id: about-my-blogs
 :lang: zh
 :issueid: 13
 

@@ -1,7 +1,7 @@
 PacVis: visualize pacman local database
 ===============================================
 
-:slug: pacvis
+:id: pacvis
 :lang: en
 :date: 2016-07-31 03:52
 :tags: python, pacvis, pacman, arch, linux, pacgraph

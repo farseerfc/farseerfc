@@ -1,7 +1,7 @@
 我眼中的 Wayland 的是與非
 =====================================
 
-:slug: wayland-pros-and-cons
+:id: wayland-pros-and-cons
 :lang: zh
 :date: 2015-03-21 22:45
 :tags: linux, wayland, xorg

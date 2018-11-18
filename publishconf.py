@@ -23,9 +23,9 @@ USE_LESS = False
 
 #DISQUS_SITENAME = ""
 #GOOGLE_ANALYTICS = ""
-TAG_FEED_ATOM = 'feeds/tag-%s.atom.xml'
+TAG_FEED_ATOM = 'feeds/tag-{slug}.atom.xml'
 FEED_ALL_ATOM = 'feeds/all.atom.xml'
 FEED_ATOM = 'feeds/atom.xml'
-CATEGORY_FEED_ATOM = 'feeds/%s.atom.xml'
+CATEGORY_FEED_ATOM = 'feeds/{slug}.atom.xml'
 
 LOAD_CONTENT_CACHE = False

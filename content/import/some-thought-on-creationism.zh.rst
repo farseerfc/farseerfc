@@ -1,7 +1,7 @@
 關於神創論的一些見解 
 ===============================
 
-:slug: some-thought-on-creationism
+:id: some-thought-on-creationism
 :lang: zh
 :date: 2008-05-12 11:16
 :tags: creationism

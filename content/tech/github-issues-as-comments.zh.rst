@@ -1,7 +1,7 @@
 啓用 GitHub Issue 作爲博客留言系統
 ====================================================
 
-:slug: github-issues-as-comments
+:id: github-issues-as-comments
 :lang: zh
 :date: 2016-08-07 16:28
 :tags: pelican, github, pages, issues

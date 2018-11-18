@@ -1,7 +1,7 @@
 [zz]“西廂計劃”原理小解
 ######################
 :date: 2010-03-17 09:40
-:slug: zz-introducing-scholarzhang
+:id: zz-introducing-scholarzhang
 :lang: zh
 :tags: zz
 :issueid: 32

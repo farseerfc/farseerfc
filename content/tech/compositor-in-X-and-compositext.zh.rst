@@ -1,7 +1,7 @@
 X 中的混成器與 Composite 擴展
 =====================================
 
-:slug: compositor-in-X-and-compositext
+:id: compositor-in-X-and-compositext
 :lang: zh
 :date: 2015-03-19 17:45
 :tags: linux, wayland, xorg, compositor

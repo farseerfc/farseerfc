@@ -1,7 +1,7 @@
 “…if we do this work … ” --Bill Gates
 =========================================================================================
 
-:slug: if-we-do-this-work
+:id: if-we-do-this-work
 :lang: en
 :date: 2011-03-14 20:34
 :tags: microsoft, linux, acpi

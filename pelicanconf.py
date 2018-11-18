@@ -55,7 +55,7 @@ PAGE_SAVE_AS = "{slug}.html"
 PLUGIN_PATHS = ['plugins']
 THEME = "theme"
 
-
+SLUGIFY_SOURCE='basename'
 I18N_SUBSITES = {
     'jp': dict(
         LOCALE='ja_JP.utf8',
@@ -113,7 +113,6 @@ CACHE_CONTENT = True
 # Theme options
 
 JINJA_ENVIRONMENT = {'extensions': ['jinja2.ext.i18n']}
-#JINJA_EXTENSIONS = ['jinja2.ext.i18n']
 
 DOCUTIL_CSS = True
 TYPOGRIFY = False

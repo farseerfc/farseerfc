@@ -1,7 +1,7 @@
 Write a program to keep CPU usage as sin funcion
 ================================================
 
-:slug: sine-cpu
+:id: sine-cpu
 :lang: en
 :date: 2008-06-02 23:27
 :tags: java, microsoft

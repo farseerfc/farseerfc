@@ -1,7 +1,7 @@
 Pelicanを試してみた
 =========================
 
-:slug: try-pelican
+:id: try-pelican
 :lang: jp
 :date: 2012-02-24 17:33
 :tags: python, pelican

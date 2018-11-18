@@ -1,7 +1,7 @@
 archlinux 上用 chrome 實現 :del:`透明計算` 遠程登錄 
 ====================================================================
 
-:slug: arch-chrome-remote-desktop
+:id: arch-chrome-remote-desktop
 :lang: zh
 :date: 2015-02-13 20:39
 :tags: linux, archlinux, arch, chrome, remote, desktop

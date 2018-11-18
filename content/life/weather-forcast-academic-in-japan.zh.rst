@@ -1,7 +1,7 @@
 從天氣預報談談日本的學術氛圍
 ================================================================
 
-:slug: weather-forcast-academic-in-japan
+:id: weather-forcast-academic-in-japan
 :lang: zh
 :date: 2015-02-18 21:00
 :tags: japan, academic

@@ -1,7 +1,7 @@
 C++ Tricks 1.1	條件運算符(?:)
 ##########################################################
 :date: 2007-08-22 18:05
-:slug: c-tricks-1-1-conditional-operator
+:id: c-tricks-1-1-conditional-operator
 :lang: zh
 :tags: C++
 :series: CPP_Tricks
@@ -19,7 +19,7 @@ C++ Tricks 1.1	條件運算符(?:)
 operator)，用於在表達式中作條件判斷，通常可以替換if語句，與Visual
 Basic中的iif函數、Excel中的if函數有同樣的作用。語法形式如下：
 
-\ *condition*\  ? *true\_value* : *false\_value*\ 
+\ *condition*\  ? *true\_value* : *false\_value*\
 
 其中\ *condition
 *\ 條件是任何可以轉換爲bool類型的表達式，包括但不僅限於\ **bool**\ 、\ **int**\ 、指針。與\ **if**\ 和\ **while**\ 的條件部分稍顯不同的是，這裏不能定義變量，否則會導致語法錯誤。
@@ -32,7 +32,7 @@ Basic中的iif函數、Excel中的if函數有同樣的作用。語法形式如�
 
 這裏，只有當pi的值不爲0時，它纔會被提領(dereference)。這種語義保證了程序的正確性，因爲提領一個空指針將導致致命的運行期錯誤(通常是非法操作的警告)。同時，正因爲條件運算符控制運算流程的特點，使得它不能用類似iif的普通函數來模擬：
 
-\ **int**\  iif(\ **int**\  con,\ **int**\  t,\ **int**\ 
+\ **int**\  iif(\ **int**\  con,\ **int**\  t,\ **int**\
 f){\ **if**\ (c)\ **return**\  t;\ **return**\  f;}//試圖模擬?:
 
 …//in some function

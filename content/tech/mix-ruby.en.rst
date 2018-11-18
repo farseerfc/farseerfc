@@ -1,7 +1,7 @@
 PyRuby
 ======
 
-:slug: mix-ruby
+:id: mix-ruby
 :lang: en
 :date: 2012-03-02 23:09
 :tags: python, ruby

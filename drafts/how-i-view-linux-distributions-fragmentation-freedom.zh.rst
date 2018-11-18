@@ -1,7 +1,7 @@
 我看 Linux 發行版：碎片化？這是自由
 ===========================================
 
-:slug: how-i-view-linux-distributions-fragmentation-freedom
+:id: how-i-view-linux-distributions-fragmentation-freedom
 :lang: zh
 :date: 2016-08-26 22:45
 :tags: linux, distributions, freedom

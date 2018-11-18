@@ -1,7 +1,7 @@
 填補信仰、喚醒良知
 ########################
 :date: 2006-08-07 21:36
-:slug: filling-believings-calling-conscience
+:id: filling-believings-calling-conscience
 :lang: zh
 :issueid: 27
 

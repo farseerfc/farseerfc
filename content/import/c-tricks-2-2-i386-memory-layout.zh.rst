@@ -1,7 +1,7 @@
 C++ Tricks 2.2 I386平臺的內存佈局
 #################################
 :date: 2007-08-28 14:30
-:slug: c-tricks-2-2-i386-memory-layout
+:id: c-tricks-2-2-i386-memory-layout
 :lang: zh
 :tags: C++
 :series: CPP_Tricks

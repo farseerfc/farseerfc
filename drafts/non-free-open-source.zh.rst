@@ -1,7 +1,7 @@
 論不自由的開源軟件
 =====================================
 
-:slug: non-free-open-source
+:id: non-free-open-source
 :lang: zh
 :date: 2015-02-15 22:45
 :tags: linux, free, open, source, software, GPL, Apple, Ubuntu, Deepin

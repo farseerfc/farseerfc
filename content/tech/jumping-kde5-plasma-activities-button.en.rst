@@ -1,7 +1,7 @@
 Jumping KDE5 Plasma Activities Button 
 ==========================================================
 
-:slug: jumping-kde5-plasma-activities-button
+:id: jumping-kde5-plasma-activities-button
 :lang: en
 :date: 2014-12-09 01:54
 :tags: kde5, plasma, linux, gnome3

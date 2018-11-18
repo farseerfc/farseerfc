@@ -1,7 +1,7 @@
 C++ Tricks
 ####################
 :date: 2007-08-28 14:28
-:slug: c-tricks
+:id: c-tricks
 :lang: zh
 :tags: C++
 :series: CPP_Tricks
