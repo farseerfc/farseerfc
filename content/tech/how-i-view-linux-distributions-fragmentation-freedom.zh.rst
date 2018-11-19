@@ -5,6 +5,7 @@
 :lang: zh
 :date: 2016-08-26 22:45
 :tags: linux, distributions, freedom
+:status: draft
 
 .. contents::
 
@@ -38,13 +39,13 @@ Linux 發行版衆多，該選擇的是社區
 ------------------------------------------------
 
 Linux 確有很多發行版， 寫這篇的時候
-`DistroWatch 上列出 825 個之多 <https://distrowatch.com/search.php?status=All>`_
+`DistroWatch 上列出 895 個之多 <https://distrowatch.com/search.php?status=All>`_
 ，必然還有很多是他們沒能跟蹤到的。單看數字的確是有很多，但是考慮到大部分發行版
 其實是別的發行版的衍生，看獨立活躍的發行版就
-`只有 57 個了 <https://distrowatch.com/search.php?ostype=All&category=All&origin=All&basedon=Independent&notbasedon=None&desktop=All&architecture=All&package=All&rolling=All&isosize=All&netinstall=All&status=Active>`_
+`只有 65 個了 <https://distrowatch.com/search.php?ostype=All&category=All&origin=All&basedon=Independent&notbasedon=None&desktop=All&architecture=All&package=All&rolling=All&isosize=All&netinstall=All&status=Active>`_
 ，其中還包括 FreeBSD 和 ReactOS 這些不知是否該被列入發行版的行列。
 
-.. panel-primary::
+.. panel-warning::
    :title: 這些「經驗」不是我的觀點
 
    不要根據這些片面之詞選擇你的第一個發行版
@@ -73,11 +74,11 @@ Linux 確有很多發行版， 寫這篇的時候
 就好像如果新人選擇了那個攻高血厚的發行版就能輕易上陣，
 而如果想領略遊戲的精髓和趣味，務必打穿一週目之後去選那個一開始
 看起來攻低血薄超高難度的 Arch Linux 或者全數值爲 0 的噩夢難度的 Gentoo 。
-這些經驗或許是反應了高手們的個人感受，或許是來自前人代代相傳的耳濡目染。
+這些經驗或許是反映了高手們的個人感受，或許是來自前人代代相傳的耳濡目染。
 我以前也經常這樣向詢問我的人們介紹發行版們的優劣，或者反駁別人這樣的介紹中
 不符合我的感受的部分。這樣的數值評價通常適用於產品的宣傳，
 每個發行版的自豪的用戶們都像是傳銷組織培訓出來的傳銷員，
-努力向新手兜售自己所用發行版的不足，抨擊別的發行版的短處。
+努力向新手兜售自己所用發行版的優勢，抨擊別的發行版的不足。
 而從剛入門的新人的角度來看，這些宣傳員們的互相抨擊只會讓他們更加困惑，
 使他們覺得整個 Linux 用戶羣就像一個教派衆多的邪教組織，肆意發展新的信徒。
 
@@ -93,7 +94,8 @@ Linux 確有很多發行版， 寫這篇的時候
 
 那些通常認爲的衡量發行版優劣的指標，大多數都是對社區的間接評價，
 還有少數只是人云亦云的謠傳。比如 **硬件支持** 這個指標，大家都是用同樣的內核樹，
-硬件支持方面理應是一樣的。如果說有些商業發行版比如 RedHat 和 SUSE 有硬件廠商
+同樣的內核版本硬件支持方面理應是一樣的，區別只在於有些發行版有提供工具自動偵測加載驅動，
+另一些發行版可能需要用戶手動安裝。如果說有些商業發行版比如 RedHat 和 SUSE 有硬件廠商
 （亦或發行版的內核組）直接提供的二進制驅動支持這還稍顯可信
 （而這種情況通常發生在預期使用 Linux 的服務器上），而說 Ubuntu
 因爲在安裝嚮導裏加入了對顯卡閉源驅動的自動檢測和支持就說它的硬件支持遠好於別的
@@ -143,7 +145,7 @@ Linux 發行版用戶的樣子，網上也流傳着各種版本的「我眼中�
 一個 Linux 發行版代表了一個政治理念
 ------------------------------------------------
 
-或許很多人會反感在「技術」領域談到「政治」這個詞，尤其是在中國大陸的政治環境中
+或許很多人會反感在 **「技術」** 領域談到 **「政治」** 這個詞，尤其是在中國大陸的政治環境中
 成長起來的技術者們眼中，「政治」這個詞或多或少帶有某種「非我族類」的貶義。
 但是請不要害怕「政治」這個詞，尤其讓我們來看看這個詞本來的意思：
 
@@ -175,3 +177,17 @@ Linux 發行版用戶的樣子，網上也流傳着各種版本的「我眼中�
 :Arch Linux: `簡潔(Simplicity)、現代(Modernity)、實用(Pragmatism)、用戶中心(User centrality)、可定製(Versatility) <https://wiki.archlinux.org/index.php/Arch_Linux>`_
 :Gentoo: `社區驅動(Community)、高效(Efficiency)、靈活(Flexibility)、可伸縮(Scalability)、安全(Security) <https://wiki.gentoo.org/wiki/Benefits_of_Gentoo>`_
 :Fedora: `自由(Freedom)、友愛(Friends)、功能(Features)、領先（First） <https://fedoraproject.org/wiki/Foundations>`_
+:Debian: `理念與社區(Philosophy and Community)、實用與可用性(Utility and usability)、實現品質(Quality of implementation)、
+功能與軟件選擇(Feature set and Selection of Software)、內核與用戶空間(Kernels and User Land)、維護與管理(Maintenance and administration)、
+可移植性與硬件支持(Portability and Hardware Support)、源碼構建(Source Builds)、安全性和可靠性(Security and Reliability)、
+可擴展性與性能(Scalability and Performance) <https://wiki.debian.org/WhyDebian>`_
+
+乍看起來每個發行版在說的貌似都差不多，都是些廣告用語，就像單從詞義理解的話美國民主黨和共和黨聽起來也是差不多的意思，
+但是當你細看這些原則的細節，就能看出每個發行版在上述關鍵問題上所做的抉擇。
+
+具體理念如何影響抉擇，抉擇如何塑造社區，社區又如何提供發行版的……
+
+就從以我比較熟悉的 Arch Linux 舉例說說
+-----------------------------------------------------------------------------------------------------
+
+比如說 Arch Linux 崇尚簡潔，這可不是一句空頭支票， Arch Linux 崇尚不多做無謂的事情。

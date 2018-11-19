@@ -48,14 +48,20 @@ EXTRA_PATH_METADATA = {
     'static/keybase.txt': {'path': 'keybase.txt'},
 }
 
-PAGE_URL = "{slug}.html"
-PAGE_SAVE_AS = "{slug}.html"
+PAGE_URL = "{id}.html"
+PAGE_SAVE_AS = "{id}.html"
+ARTICLE_URL = '{id}.html'
+ARTICLE_SAVE_AS = '{id}.html'
+ARTICLE_LANG_URL = '{lang}/{id}.html'
+ARTICLE_LANG_SAVE_AS = '{lang}/{id}.html'
 
 
 PLUGIN_PATHS = ['plugins']
 THEME = "theme"
 
 SLUGIFY_SOURCE='basename'
+# FILENAME_METADATA = r'(?P<slug>[^.]*)\.(?P<lang>[^.]*)'
+
 I18N_SUBSITES = {
     'jp': dict(
         LOCALE='ja_JP.utf8',
