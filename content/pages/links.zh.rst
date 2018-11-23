@@ -104,30 +104,30 @@
 .. friend:: void001
 	:nick: `VOID 001 <https://voidisprogramer.com/>`_
 	:gravatar: zhangjianqiu13@gmail.com
-	
-	頭像是夏娜，/dev/horo 絕讚開發中。	
+
+	頭像是夏娜，/dev/horo 絕讚開發中。
 
 .. friend:: poi
-	:nick: `PoiScript <https://poi.works/>`_
+	:nick: `PoiScript <https://blog.poi.cat/>`_
 	:gravatar: poiscript@gmail.com
-	
-	萌萌噠 Poi ，博客引擎是自己寫的 `Solomon <https://github.com/PoiScript/Solomon>`_ :del:`和我的博客是情侶色`。:del:`不過不用 Arch` 用 openSUSE。 
 
-.. friend:: amamiya
-	:nick: `雨宫千鹤 宮水三葉 <https://bismarck.moe/>`_
-	:logo: https://avatars3.githubusercontent.com/u/9009218
-	
-	:ruby:`暱稱|老婆` 有點多，最近是宮水三葉，醫學菊苣， :del:`白帽子` 。相當 :del:`黏人` 可愛。
+	萌萌噠 Poi ，博客引擎是自己寫的 `Solomon <https://github.com/PoiScript/Solomon>`_ :del:`和我的博客是情侶色`。:del:`不過不用 Arch` 用 openSUSE。
+
+.. .. friend:: amamiya
+.. 	:nick: `雨宫千鹤 宮水三葉 <https://bismarck.moe/>`_
+.. 	:logo: https://avatars3.githubusercontent.com/u/9009218
+
+.. 	:ruby:`暱稱|老婆` 有點多，最近是宮水三葉，醫學菊苣， :del:`白帽子` 。相當 :del:`黏人` 可愛。
 
 .. friend:: nanpuyue
 	:nick: `南浦月 <https://blog.nanpuyue.com/links.html/>`_
 	:logo: https://avatars2.githubusercontent.com/u/1524609
-	
+
 	南老師，在線直播，聲音甜美。アスナ粉，自稱裝機民工的 linux 桌面環境開發者。修了 powerline 的 `fontpatcher <https://github.com/nanpuyue/fontpatcher>`_ 。
 
 .. friend:: xuanwo
-	:nick: `Xuanwo <https://xuanwo.org/>`_
+	:nick: `Xuanwo <https://xuanwo.io/>`_
 	:logo: https://avatars1.githubusercontent.com/u/5351546
-	
+
 	漩渦的 Hugo 博客很乾淨也很技術，厲害的後端工程師！
 
