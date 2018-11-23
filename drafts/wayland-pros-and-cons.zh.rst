@@ -2,6 +2,7 @@
 =====================================
 
 :id: wayland-pros-and-cons
+:translation_id: wayland-pros-and-cons
 :lang: zh
 :date: 2015-03-21 22:45
 :tags: linux, wayland, xorg

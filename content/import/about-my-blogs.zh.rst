@@ -2,6 +2,7 @@
 #############
 :date: 2011-09-27 02:35
 :id: about-my-blogs
+:translation_id: about-my-blogs
 :lang: zh
 :issueid: 13
 

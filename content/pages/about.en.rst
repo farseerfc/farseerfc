@@ -2,6 +2,7 @@ About
 =======================================
 
 :id: about
+:translation_id: about
 :lang: en
 :date: 2012-05-30 19:21:34
 :tags: about

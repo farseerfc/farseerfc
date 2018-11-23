@@ -2,6 +2,7 @@ Pelicanを試してみた
 =========================
 
 :id: try-pelican
+:translation_id: try-pelican
 :lang: jp
 :date: 2012-02-24 17:33
 :tags: python, pelican

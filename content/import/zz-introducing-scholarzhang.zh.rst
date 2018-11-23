@@ -2,6 +2,7 @@
 ######################
 :date: 2010-03-17 09:40
 :id: zz-introducing-scholarzhang
+:translation_id: zz-introducing-scholarzhang
 :lang: zh
 :tags: zz
 :issueid: 32

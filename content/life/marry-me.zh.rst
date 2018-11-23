@@ -2,6 +2,7 @@
 =======================================================================
 
 :id: marry-me
+:translation_id: marry-me
 :lang: zh
 :date: 2013-02-20 20:42
 :tags: will, you, marry, me

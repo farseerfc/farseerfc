@@ -2,6 +2,7 @@ Program Development in Java Preface
 ###################################
 :date: 2007-09-16 13:26
 :id: program-development-in-java-preface
+:translation_id: program-development-in-java-preface
 :lang: zh
 :tags: Java
 :issueid: 29

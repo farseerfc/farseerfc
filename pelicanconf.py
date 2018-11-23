@@ -50,6 +50,8 @@ EXTRA_PATH_METADATA = {
 
 PAGE_URL = "{id}.html"
 PAGE_SAVE_AS = "{id}.html"
+PAGE_LANG_URL = '{lang}/{id}.html'
+PAGE_LANG_SAVE_AS = '{lang}/{id}.html'
 ARTICLE_URL = '{id}.html'
 ARTICLE_SAVE_AS = '{id}.html'
 ARTICLE_LANG_URL = '{lang}/{id}.html'

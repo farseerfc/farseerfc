@@ -3,6 +3,7 @@
 
 :date: 2016-08-08 16:15
 :id: why-linus-torvalds-undermine-gplv3
+:translation_id: why-linus-torvalds-undermine-gplv3
 :lang: zh
 :tags: Linux, zhihu, GPLv3, licenses, Linus Torvalds, GPL, FSF, EFF
 :issueid: 63

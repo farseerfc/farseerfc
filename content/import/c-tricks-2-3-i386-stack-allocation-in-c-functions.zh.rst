@@ -2,6 +2,7 @@ C++ Tricks 2.3 I386平臺C函數內部的棧分配
 ############################################################################
 :date: 2007-08-28 14:28
 :id: c-tricks-2-3-i386-stack-allocation-in-c-functions
+:translation_id: c-tricks-2-3-i386-stack-allocation-in-c-functions
 :lang: zh
 :tags: C++
 :series: CPP_Tricks

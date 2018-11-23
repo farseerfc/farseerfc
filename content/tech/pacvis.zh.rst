@@ -2,6 +2,7 @@ PacVis: 可視化 pacman 本地數據庫
 =======================================
 
 :id: pacvis
+:translation_id: pacvis
 :lang: zh
 :date: 2016-07-31 03:52
 :tags: python, pacvis, pacman, arch, linux, pacgraph

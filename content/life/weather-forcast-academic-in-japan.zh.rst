@@ -2,6 +2,7 @@
 ================================================================
 
 :id: weather-forcast-academic-in-japan
+:translation_id: weather-forcast-academic-in-japan
 :lang: zh
 :date: 2015-02-18 21:00
 :tags: japan, academic

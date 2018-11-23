@@ -2,6 +2,7 @@
 ################################################
 :date: 2007-09-20 14:38
 :id: 9-thoughts-about-oop-from-wrongly-insert-memory-stick
+:translation_id: 9-thoughts-about-oop-from-wrongly-insert-memory-stick
 :lang: zh
 :tags: oop
 :issueid: 11

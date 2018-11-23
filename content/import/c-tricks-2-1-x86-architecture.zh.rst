@@ -2,6 +2,7 @@ C++ Tricks 2.1 X86概述
 ######################
 :date: 2007-08-27 16:33
 :id: c-tricks-2-1-x86-architecture
+:translation_id: c-tricks-2-1-x86-architecture
 :lang: zh
 :tags: C++
 :series: CPP_Tricks

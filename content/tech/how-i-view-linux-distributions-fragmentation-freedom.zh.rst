@@ -2,6 +2,7 @@
 ===========================================
 
 :id: how-i-view-linux-distributions-fragmentation-freedom
+:translation_id: how-i-view-linux-distributions-fragmentation-freedom
 :lang: zh
 :date: 2016-08-26 22:45
 :tags: linux, distributions, freedom

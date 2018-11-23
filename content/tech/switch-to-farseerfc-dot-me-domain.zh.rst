@@ -2,6 +2,7 @@
 =======================================
 
 :id: switch-to-farseerfc-dot-me-domain
+:translation_id: switch-to-farseerfc-dot-me-domain
 :lang: zh
 :date: 2015-01-26 23:32
 :tags: pelican, domain, cloudflare, github

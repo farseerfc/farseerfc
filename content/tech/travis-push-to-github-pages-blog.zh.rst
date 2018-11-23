@@ -2,6 +2,7 @@
 ====================================================
 
 :id: travis-push-to-github-pages-blog
+:translation_id: travis-push-to-github-pages-blog
 :lang: zh
 :date: 2015-02-20 11:10
 :tags: pelican, github, pages, travis, travis-ci, ubuntu

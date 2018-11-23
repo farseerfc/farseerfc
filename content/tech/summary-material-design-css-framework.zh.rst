@@ -2,6 +2,7 @@
 =======================================
 
 :id: summarize-material-design-css-framework
+:translation_id: summarize-material-design-css-framework
 :lang: zh
 :date: 2015-01-16 03:27
 :tags: css, material, paper

@@ -2,6 +2,7 @@ C++ Tricks
 ####################
 :date: 2007-08-28 14:28
 :id: c-tricks
+:translation_id: c-tricks
 :lang: zh
 :tags: C++
 :series: CPP_Tricks

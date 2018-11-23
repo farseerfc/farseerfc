@@ -2,6 +2,7 @@
 =======================================
 
 :id: links
+:translation_id: links
 :lang: zh
 :date: 2015-02-10 00:50:34
 :tags: links
@@ -81,7 +82,7 @@
 	:nick: `ヨイツの賢狼ホロ <https://blog.yoitsu.moe/>`_
 	:gravatar: horo@yoitsu.moe
 
-	來自約伊茲的萌狼，博客 :del:`是用 MediaWiki 搭的|也換到 Pelican 啦`，是個萌物。
+	來自約伊茲的萌狼，博客 :del:`是用 MediaWiki 搭的|也換到 Pelican 啦` ，是個萌物。
 
 .. friend:: frantic1048
 	:nick: `Frantic1048 Chino Kafuu <https://frantic1048.com/>`_
@@ -99,7 +100,7 @@
 	:nick: `CS Slayer 老K  <https://www.csslayer.info/wordpress/>`_ 另一個博客是 `恋符「Master Spark」 <https://marisa-kirisa.me/>`_
 	:gravatar: wengxt@gmail.com
 
-	Fcitx 開發者 ， KDE 開發者， Chakra 開發者， `ikde 社區 <https://www.ikde.org/>`_ 維護者。強悍的開源貢獻實力無人能出其右。有個剛出生的小女兒叫 Alice :del:`（下一個叫 Marisa ）`，新博客是魔理沙主題的。
+	Fcitx 開發者 ， KDE 開發者， Chakra 開發者， `ikde 社區 <https://www.ikde.org/>`_ 維護者。強悍的開源貢獻實力無人能出其右。有個剛出生的小女兒叫 Alice :del:`（下一個叫 Marisa ）` ，新博客是魔理沙主題的。
 
 .. friend:: void001
 	:nick: `VOID 001 <https://voidisprogramer.com/>`_
@@ -111,13 +112,7 @@
 	:nick: `PoiScript <https://blog.poi.cat/>`_
 	:gravatar: poiscript@gmail.com
 
-	萌萌噠 Poi ，博客引擎是自己寫的 `Solomon <https://github.com/PoiScript/Solomon>`_ :del:`和我的博客是情侶色`。:del:`不過不用 Arch` 用 openSUSE。
-
-.. .. friend:: amamiya
-.. 	:nick: `雨宫千鹤 宮水三葉 <https://bismarck.moe/>`_
-.. 	:logo: https://avatars3.githubusercontent.com/u/9009218
-
-.. 	:ruby:`暱稱|老婆` 有點多，最近是宮水三葉，醫學菊苣， :del:`白帽子` 。相當 :del:`黏人` 可愛。
+	萌萌噠 Poi ，博客引擎是自己寫的 `Solomon <https://github.com/PoiScript/Solomon>`_ :del:`和我的博客是情侶色` 。:del:`不過不用 Arch` 用 openSUSE。
 
 .. friend:: nanpuyue
 	:nick: `南浦月 <https://blog.nanpuyue.com/links.html/>`_
@@ -129,13 +124,13 @@
 	:nick: `Xuanwo <https://xuanwo.io/>`_
 	:logo: https://avatars1.githubusercontent.com/u/5351546
 
-	漩渦的 Hugo 博客很乾淨也很技術，厲害的後端工程師！:del:`老婆是路人`。
+	漩渦的 Hugo 博客很乾淨也很技術，厲害的後端工程師！:del:`老婆是路人` 。
 
 .. friend:: axionl
 	:nick: `艾雨寒 | 艾穎初 初等記憶體 <https://axionl.me/>`_
 	:logo: https://avatars1.githubusercontent.com/u/8396456
 
-	:ruby:`文藝的工科生|技術過硬的文科生`，萌妹體質，溫柔體貼會做飯，和很多來自 AOSC 的成員一樣對 Arch Linux CN 社區貢獻卓著。 :ruby:`告訴|餵給` 我 :ruby:`很多人和事|成噸的狗糧`， `令人羨慕 <#amane>`_。
+	:ruby:`文藝的工科生|技術過硬的文科生`，萌妹體質，溫柔體貼會做飯，和很多來自 AOSC 的成員一樣對 Arch Linux CN 社區貢獻卓著。 :ruby:`告訴|餵給` 我 :ruby:`很多人和事|成噸的狗糧` ， `令人羨慕 <#amane>`_ 。
 
 .. friend:: amane
 	:nick: :ruby:`桜庭|さくらば`:ruby:`雨音|あまね` | :ruby:`鳶一|とびいち`:ruby:`雨音|あまね` `余忆留声机 <https://amane.live/>`_
@@ -154,3 +149,15 @@
 	:logo: https://avatars0.githubusercontent.com/u/8444615
 
 	電磁炮廚，Hexo 的博客也很漂亮，Arch Linux CN 社區中珍貴的 Gnome 用戶。喜歡 C 語言甚至在 B站 直播教學。CS:GO 玩家。
+
+.. friend:: origincode
+	:nick: `OriginCode <https://origincode.github.io/>`_
+	:logo: https://avatars0.githubusercontent.com/u/17294071
+
+	:del:`小學` 初中生，使用電腦的時間嚴重受限，想起我當年的水平完全自愧不如，前途無量。
+
+.. friend:: noirgif
+	:nick: `NoirGif <https://origincode.github.io/>`_
+	:logo: https://avatars3.githubusercontent.com/u/23432548
+
+	深藏不露的 USTC 菊苣，似乎玩了很多 :del:`gal` game，博客更新很勤奮並且雙語。萌。

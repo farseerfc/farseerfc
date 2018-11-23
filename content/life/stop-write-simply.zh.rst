@@ -2,6 +2,7 @@
 =====================================
 
 :id: stop-write-simply
+:translation_id: stop-write-simply
 :lang: zh
 :date: 2015-03-11 22:00
 :tags: blog, writing

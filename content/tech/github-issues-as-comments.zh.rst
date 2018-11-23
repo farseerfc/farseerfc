@@ -2,6 +2,7 @@
 ====================================================
 
 :id: github-issues-as-comments
+:translation_id: github-issues-as-comments
 :lang: zh
 :date: 2016-08-07 16:28
 :tags: pelican, github, pages, issues

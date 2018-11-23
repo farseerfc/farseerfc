@@ -2,6 +2,7 @@
 ==========================================
 
 :id: sine-cpu
+:translation_id: sine-cpu
 :lang: zh
 :date: 2008-06-02 23:27
 :tags: java, microsoft

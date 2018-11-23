@@ -2,6 +2,7 @@
 =======================================
 
 :id: from-unbuffered-stdin-to-history-of-linux-tty
+:translation_id: from-unbuffered-stdin-to-history-of-linux-tty
 :lang: zh
 :date: 2014-12-12 17:06
 :tags: c, linux, stdio, tty, unix, ugh, ncurses, termcap, terminfo

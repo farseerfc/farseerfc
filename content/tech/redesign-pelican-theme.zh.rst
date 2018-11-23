@@ -2,6 +2,7 @@
 =======================================
 
 :id: redesign-pelican-theme
+:translation_id: redesign-pelican-theme
 :lang: zh
 :date: 2015-01-25 22:45
 :tags: python, pelican, bootstrap, material, subsite

@@ -2,6 +2,7 @@ MSR 2012 @ ICSE
 =======================================================================
 
 :id: msr2012
+:translation_id: msr2012
 :lang: jp
 :date: 2012-06-02 10:42
 :tags: msr, icse, mining, software, repository

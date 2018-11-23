@@ -2,6 +2,7 @@
 ########################
 :date: 2006-08-07 21:36
 :id: filling-believings-calling-conscience
+:translation_id: filling-believings-calling-conscience
 :lang: zh
 :issueid: 27
 

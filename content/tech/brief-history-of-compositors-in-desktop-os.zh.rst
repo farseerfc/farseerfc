@@ -2,6 +2,7 @@
 =====================================
 
 :id: brief-history-of-compositors-in-desktop-os
+:translation_id: brief-history-of-compositors-in-desktop-os
 :lang: zh
 :date: 2015-03-19 13:45
 :tags: desktop, compositor, macosx, windows, window, manager

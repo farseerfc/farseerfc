@@ -2,6 +2,7 @@
 ===============================
 
 :id: some-thought-on-creationism
+:translation_id: some-thought-on-creationism
 :lang: zh
 :date: 2008-05-12 11:16
 :tags: creationism

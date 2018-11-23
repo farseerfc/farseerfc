@@ -2,6 +2,7 @@
 =========================================================================================
 
 :id: if-we-do-this-work
+:translation_id: if-we-do-this-work
 :lang: en
 :date: 2011-03-14 20:34
 :tags: microsoft, linux, acpi

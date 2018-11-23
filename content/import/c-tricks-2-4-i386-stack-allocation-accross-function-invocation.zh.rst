@@ -2,6 +2,7 @@ C++ Tricks 2.4 I386平臺C函數調用邊界的棧分配
 ########################################################################################
 :date: 2007-08-28 14:28
 :id: c-tricks-2-4-i386-stack-allocation-accross-function-invocation
+:translation_id: c-tricks-2-4-i386-stack-allocation-accross-function-invocation
 :lang: zh
 :tags: C++
 :series: CPP_Tricks
