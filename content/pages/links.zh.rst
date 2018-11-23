@@ -129,5 +129,28 @@
 	:nick: `Xuanwo <https://xuanwo.io/>`_
 	:logo: https://avatars1.githubusercontent.com/u/5351546
 
-	漩渦的 Hugo 博客很乾淨也很技術，厲害的後端工程師！
+	漩渦的 Hugo 博客很乾淨也很技術，厲害的後端工程師！:del:`老婆是路人`。
 
+.. friend:: axionl
+	:nick: `艾雨寒 | 艾穎初 初等記憶體 <https://axionl.me/>`_
+	:logo: https://avatars1.githubusercontent.com/u/8396456
+
+	:ruby:`文藝的工科生|技術過硬的文科生`，萌妹體質，溫柔體貼會做飯，和很多來自 AOSC 的成員一樣對 Arch Linux CN 社區貢獻卓著。 :ruby:`告訴|餵給` 我 :ruby:`很多人和事|成噸的狗糧`， `令人羨慕 <#amane>`_。
+
+.. friend:: amane
+	:nick: :ruby:`桜庭|さくらば`:ruby:`雨音|あまね` | :ruby:`鳶一|とびいち`:ruby:`雨音|あまね` `余忆留声机 <https://amane.live/>`_
+	:logo: https://avatars3.githubusercontent.com/u/14824064
+
+	中文說得比日文溜的日本土著，靈夢廚，日共黨員毛派，軍武知識豐富。被 `雨寒 <#axionl>`_ 拉入社區前是單兵遊勇的 Arch 用戶，霊夢式 :ruby:`シェル使い|shell編程師` 。:del:`還有很多不符年齡迷之屬性不過這裏寫不下了`， `有歸宿 <#axionl>`_ 。
+
+.. friend:: a-wing
+	:nick: `新一 metal A-wing <https://a-wing.top/>`_
+	:logo: https://avatars3.githubusercontent.com/u/18189138
+
+	:del:`前端` :del:`後端` 全棧工程師！ :del:`又是` 一個夏娜廚，親手打造了 lilac 的打包狀態頁 `KISS2UI <https://build.archlinuxcn.org/packages/>`_ 。
+
+.. friend:: alynx
+	:nick: `AlynxZhou <https://sh.alynx.xyz/>`_
+	:logo: https://avatars0.githubusercontent.com/u/8444615
+
+	電磁炮廚，Hexo 的博客也很漂亮，Arch Linux CN 社區中珍貴的 Gnome 用戶。喜歡 C 語言甚至在 B站 直播教學。CS:GO 玩家。
