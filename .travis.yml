@@ -11,7 +11,7 @@ cache:
 
 before_install:
     - sudo apt-get update
-    - sudo apt-get install ditaa parallel graphviz fonts-noto-cjk plantuml
+    - sudo apt-get install ditaa parallel graphviz fonts-noto-cjk
     - ditaa -h || true
 
 install:
