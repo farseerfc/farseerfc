@@ -167,3 +167,9 @@
 	:logo: https://avatars3.githubusercontent.com/u/23371099
 
 	強調自己是新人卻很快就融入了社區的恵狐醬，新搭的博客要多寫內容 :del:`才不至於像我這兒這麼荒廢` 呀。說起來社區裏有百合狐可以結伴呢。
+
+.. friend:: quanbrew
+	:nick: `quanbrew 釀泉　いまさら イマココ 不應該鴨  <https://ioover.net/>`_
+	:logo: https://avatars3.githubusercontent.com/u/34709816
+
+	說話萌萌噠總覺得是個萌妹子，自稱是一位 :ruby:`奧術師|Arcanist` ， :ruby:`精神|神經` Arch 用戶， rust 使い。
