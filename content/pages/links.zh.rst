@@ -157,7 +157,7 @@
 	:del:`小學` 初中生，使用電腦的時間嚴重受限，想起我當年的水平完全自愧不如，前途無量。
 
 .. friend:: noirgif
-	:nick: `NoirGif <https://origincode.github.io/>`_
+	:nick: `NoirGif <https://nir.moe/>`_
 	:logo: https://avatars3.githubusercontent.com/u/23432548
 
 	深藏不露的 USTC 菊苣，似乎玩了很多 :del:`gal` game，博客更新很勤奮並且雙語。萌。
