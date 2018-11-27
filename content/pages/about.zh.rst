@@ -23,11 +23,17 @@
 
 1989年6月生
 
-目前就讀於
+目前任職於
+
+        大阪大學大學院 國際公共政策研究科
+
+        (http://www.osipp.osaka-u.ac.jp/)
+
+博士就讀於
 
         大阪大學大學院 情報科學研究科 計算機科學專攻
 
-        博士3年級 (http://sdl.ist.osaka-u.ac.jp/)
+        (http://sdl.ist.osaka-u.ac.jp/)
 
 本科畢業於
 
@@ -40,9 +46,7 @@
 
 生活中你可以通過這些方式找到我：
 
-手機（softbank）: 080-3853-2770
-
-手機郵箱: jc-yang@softbank.ne.jp
+手機: +81-80-3853-2770
 
 
 網絡上你可以通過這些方式找到我：
@@ -51,17 +55,11 @@ Skype: farseerfc
 
 GMail: farseerfc@gmail.com
 
-twitter: http://twitter.com/farseerfc
-
 Github: https://github.com/farseerfc
-
-weibo(微博): http://weibo.com/farseerfc
 
 facebook: http://www.facebook.com/farseerfc
 
 telegram: http://telegram.me/farseerfc
-
-tox: https://toxme.se/u/farseerfc
 
 pgp: 4B1D E545 A801 D454 9BFD  3FEF 90CB 3D62 C13D 4796
 
