@@ -178,10 +178,7 @@ Linux 發行版用戶的樣子，網上也流傳着各種版本的「我眼中�
 :Arch Linux: `簡潔(Simplicity)、現代(Modernity)、實用(Pragmatism)、用戶中心(User centrality)、可定製(Versatility) <https://wiki.archlinux.org/index.php/Arch_Linux>`_
 :Gentoo: `社區驅動(Community)、高效(Efficiency)、靈活(Flexibility)、可伸縮(Scalability)、安全(Security) <https://wiki.gentoo.org/wiki/Benefits_of_Gentoo>`_
 :Fedora: `自由(Freedom)、友愛(Friends)、功能(Features)、領先（First） <https://fedoraproject.org/wiki/Foundations>`_
-:Debian: `理念與社區(Philosophy and Community)、實用與可用性(Utility and usability)、實現品質(Quality of implementation)、
-功能與軟件選擇(Feature set and Selection of Software)、內核與用戶空間(Kernels and User Land)、維護與管理(Maintenance and administration)、
-可移植性與硬件支持(Portability and Hardware Support)、源碼構建(Source Builds)、安全性和可靠性(Security and Reliability)、
-可擴展性與性能(Scalability and Performance) <https://wiki.debian.org/WhyDebian>`_
+:Debian: `理念與社區(Philosophy and Community)、實用與可用性(Utility and usability)、實現品質(Quality of implementation)、功能與軟件選擇(Feature set and Selection of Software)、內核與用戶空間(Kernels and User Land)、維護與管理(Maintenance and administration)、可移植性與硬件支持(Portability and Hardware Support)、源碼構建(Source Builds)、安全性和可靠性(Security and Reliability)、可擴展性與性能(Scalability and Performance) <https://wiki.debian.org/WhyDebian>`_
 
 乍看起來每個發行版在說的貌似都差不多，都是些廣告用語，就像單從詞義理解的話美國民主黨和共和黨聽起來也是差不多的意思，
 但是當你細看這些原則的細節，就能看出每個發行版在上述關鍵問題上所做的抉擇。
