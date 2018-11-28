@@ -70,13 +70,76 @@ archwiki 上相應的 `Wiki頁面 <https://wiki.archlinux.org/index.php/PKGBUILD
 
 好，廢話碼了一屏，尚未見半句乾貨，就跟我一起從最基礎的部分開始吧。
 
-EASY: 入門
+EASY: 獲取、審閱、使用
 ------------------------------
+
+講解 PKGBUILD 之前，想先大概看看 PKGBUILD 長什麼樣子。 AUR 上有大量 PKGBUILD
+可以下載， Arch Linux 官方源中打包的官方包也有提供公開渠道下載打包時採用的 PKGBUILD
+，這些都可以拿來作爲參考。
+
+
+獲取現有的 PKGBUILD
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+於是第一步，如何獲取 AUR 或者官方源中包的 PKGBUID 呢？或許 Arch Linux 老用戶們已經很熟悉
+`AUR helper <https://wiki.archlinux.org/index.php/AUR_helpers>`_ 和
+`Arch Build System <https://wiki.archlinux.org/index.php/Arch_Build_System>`_
+那一套了，每個人可能都有兩三個自己趁手的常用工具。不過其實，大概從3年前
+`AUR web v4 <https://github.com/lfos/aurweb/releases/tag/v4.0.0>`_
+發佈開始，已經不需要專用工具，直接用 :code:`git` 就可以很方便地下載到
+官方源和 AUR 中的 PKGBUILD 。
+
+對於 Arch Linux 官方源中的軟件包，根據它是來自 [core]/[extra] 還是來自 [community]
+我們可以用以下方式獲取對應的 PKGBUILD ：
+
+.. code-block:: bash
+
+    # 獲取 core/extra 中包名爲 glibc 的包，寫入同名文件夾
+    git clone https://git.archlinux.org/svntogit/packages.git/ -b packages/glibc --single-branch glibc
+    # 獲取 community 中包名爲 pdfpc 的包，寫入同名文件夾
+    git clone https://git.archlinux.org/svntogit/community.git/ -b packages/pdfpc --single-branch pdfpc
+
+對於官方源中的包，以上方式 clone 到的目錄結構是這樣：
+
+.. code-block:: text
+
+    pdfpc
+    ├── repos
+    │   └── community-x86_64
+    │       └── PKGBUILD
+    └── trunk
+        └── PKGBUILD
+
+其中 trunk 文件夾用於時機打包， repos 文件夾則用於跟蹤這個包發佈在哪些具體倉庫中。
+由於區分倉庫狀態和架構，以前還在支持 i686 的時候，打出的包可能位於
+:code:`community-testing-i686` 或者 :code:`community-staging-x86_64`
+這樣的文件夾中。這些細節不需要關心，我們只需要 :code:`trunk` 中的文件就可以打包了。
+
+對於 AUR 中的軟件包，可以直接用以下方式獲取 PKGBUILD ：
+
+.. code-block:: bash
+
+    # 獲取 AUR 中包名爲 pdfpc-git 的包，寫入同名文件夾
+    git clone aur@aur.archlinux.org:pdfpc-git.git
+
+不同於官方源， AUR 中包沒有深層的目錄結構，直接在文件夾中放有 PKGBUILD ：
+
+.. code-block:: text
+
+    pdfpc-git
+    └── PKGBUILD
+
+爲了方便鍵入， 在我的 `bash/zsh 配置中 <https://github.com/farseerfc/dotfiles/blob/201bd4532ea8c7a1d3ace35183858c1554ffb365/zsh/.bashrc#L72-L105>`_
+提供了幾個函數 :code:`Ge` :code:`Gc` :code:`Ga` 分別用於獲取 [core]/[extra]，
+[community] 或是 AUR 中的 PKGBUILD ，需要的可以自己取用，對於 zsh 用戶還有這些命令的
+`自動補全包名 <https://github.com/farseerfc/dotfiles/blob/201bd4532ea8c7a1d3ace35183858c1554ffb365/zsh/.zshrc#L36-L38>`_ 。
 
 PKGBUILD 的構成要素
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-太抽象的說明不易理解，先看一段相對簡單的 PKGBUILD 吧：
+拿到了 PKGBUILD ，就先用文本編輯器打開它看一眼吧，以
+`pdfpc <https://www.archlinux.org/packages/community/x86_64/pdfpc/>`_ 的
+PKGBUILD 爲例：
 
 .. code-block:: bash
 
@@ -108,11 +171,9 @@ PKGBUILD 的構成要素
     }
 
 
-以上是我對 `pdfpc <https://www.archlinux.org/packages/community/x86_64/pdfpc/>`_
-這個軟件打包的 PKGBUILD 稍作簡化，拿來作爲最開始的例子。 PKGBUILD
-文件的格式本質上是 bash 腳本，語法遵從 bash 語言，只不過有些預先確定好的內容需要撰寫。
+PKGBUILD 文件的格式本質上是 bash 腳本，語法遵從 bash 腳本語言，只不過有些預先確定好的內容需要撰寫。
 粗看上面的 PKGBUILD 大體可以分爲兩半，前一半 3~15 行定義了很多變量和數組，後一半 17~26
-行定義了一些函數。這也即是說， PKGBUILD 包含兩大塊內容：
+行定義了一些函數。也即是說， PKGBUILD 包含兩大塊內容：
 
 #. 該包是什麼，也即包的元數據(metadata）
 #. 當如何打包，也即打包的過程
