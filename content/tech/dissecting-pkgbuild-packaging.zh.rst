@@ -33,7 +33,7 @@ Arch Linux 的小圓點 |bp| 位於斜對角線左側， AUR 的小圓點 |bp| �
 官方軟件源提供了一個更新及時並且足夠穩定的基礎，在此之上利用 AUR 補充可用軟件包，這對於
 Arch Linux 用戶來說也即是常態。
 
-.. |bp| replace:: :html:`<svg width="15px" height="15px" viewBox="0 0 2 2"><circle cx="1" cy="1" r="1" fill="#0088cc"/></svg>`
+.. |bp| replace:: :html:`<svg width="13px" height="13px" viewBox="0 0 2 2"><circle cx="1" cy="1" r="1" fill="#0088cc"/></svg>`
 
 AUR 不同於二進制軟件源的是，它只是一個提供 PKGBUILD 腳本的共享網站。
 對於二進制軟件源而言，可以直接在 :code:`/etc/pacman.conf` 中添加，然後就可安裝其中的軟件，

@@ -1,7 +1,7 @@
 #!/bin/bash -x
 cp rasterize.js output
 cd output
-python2 -m SimpleHTTPServer &
+python -m http.server &
 SERVPID=$!
 echo server pid $SERVPID
 sleep 1
