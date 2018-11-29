@@ -75,13 +75,13 @@ EASY: 獲取、審閱、使用
 
 講解 PKGBUILD 之前，想先大概看看 PKGBUILD 長什麼樣子。 AUR 上有大量 PKGBUILD
 可以下載， Arch Linux 官方源中打包的官方包也有提供公開渠道下載打包時採用的 PKGBUILD
-，這些都可以拿來作爲參考。
+，這些都可以拿來作爲參考。於是第一步，如何獲取 AUR 或者官方源中包的 PKGBUID 呢？
 
 
 獲取現有的 PKGBUILD
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-於是第一步，如何獲取 AUR 或者官方源中包的 PKGBUID 呢？或許 Arch Linux 老用戶們已經很熟悉
+或許 Arch Linux 老用戶們已經很熟悉
 `AUR helper <https://wiki.archlinux.org/index.php/AUR_helpers>`_ 和
 `Arch Build System <https://wiki.archlinux.org/index.php/Arch_Build_System>`_
 那一套了，每個人可能都有兩三個自己趁手的常用工具。不過其實，大概從3年前
