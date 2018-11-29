@@ -16,7 +16,7 @@
 即便是 Arch Linux 初學者，也鮮有完全靠官方源中的軟件包就能存活的，
 或多或少都得依賴一些第三方源或者 AUR 中的額外軟件包補充可用軟件庫。
 最近發現一個非常有意思的項目 `Repology <https://repology.org/>`_ ，
-橫向對比諸多自由開源軟件發行版們軟件庫中軟件包，其中還有一張總結性的圖示，
+總結了諸多自由開源軟件發行版們軟件庫中軟件包，其中還有一張總結性的圖示，
 橫總對比各個軟件源的包數量和新舊程度。
 
 .. panel-default::
@@ -40,7 +40,7 @@ AUR 不同於二進制軟件源的是，它只是一個提供 PKGBUILD 腳本的
 而對於 AUR 中的軟件包，需要自行下載 PKGBUILD 並將之編譯成二進制包。
 由於 AUR 上軟件包維護者衆多，於是打包質量也參差不齊，難免遇到一些包需要使用者手動修改
 PKGBUILD 纔可正常打包。於是對於 AUR 用戶而言， **理解並可修改** PKGBUILD
-以定製打包過程非常重要。即便使用 `AUR Helper <https://wiki.archlinux.org/index.php/AUR_helpers>`_
+以定製打包過程非常重要。即便使用 :archwiki:`AUR Helpers`
 幫助自動完成打包工作，對 PKGBUILD 的理解也不可或缺。
 
 是可謂： **包到用時方恨少，碼非寫過不知難**
@@ -65,26 +65,24 @@ PKGBUILD 打包系統的理解和體會。社區中有如 :fref:`felixonmars`
 在數月乃至數年之後可能不再適用。任何具體的打包細節都請參閱
 `PKGBUILD <https://www.archlinux.org/pacman/PKGBUILD.5.html>`_ 和
 `makepkg <https://www.archlinux.org/pacman/makepkg.8.html>`_ 的相關手冊頁，以及
-archwiki 上相應的 `Wiki頁面 <https://wiki.archlinux.org/index.php/PKGBUILD>`_ 。
+archwiki 上相應的 :archwiki:`PKGBUILD|Wiki頁面` 。
 本文的目的僅限於對上述官方文檔提供一條易於入門的脈絡，不能作爲技術性參考或補充。
 
 好，廢話碼了一屏，尚未見半句乾貨，就跟我一起從最基礎的部分開始吧。
 
-EASY: 獲取、審閱、使用
+EASY
 ------------------------------
 
 講解 PKGBUILD 之前，想先大概看看 PKGBUILD 長什麼樣子。 AUR 上有大量 PKGBUILD
 可以下載， Arch Linux 官方源中打包的官方包也有提供公開渠道下載打包時採用的 PKGBUILD
-，這些都可以拿來作爲參考。於是第一步，如何獲取 AUR 或者官方源中包的 PKGBUID 呢？
+，這些都可以拿來作爲參考。於是作爲第一步，如何獲取 AUR 或者官方源中包的 PKGBUID 呢？
 
 
 獲取現有的 PKGBUILD
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-或許 Arch Linux 老用戶們已經很熟悉
-`AUR helper <https://wiki.archlinux.org/index.php/AUR_helpers>`_ 和
-`Arch Build System <https://wiki.archlinux.org/index.php/Arch_Build_System>`_
-那一套了，每個人可能都有兩三個自己趁手的常用工具。不過其實，大概從3年前
+Arch Linux 老用戶們已經很熟悉 :archwiki:`AUR helpers` 和 :archwiki:`Arch Build System>`
+那一套了，每個人可能都有兩三個自己趁手的常用 AUR helper 自動化打包。不過其實，大概從3年前
 `AUR web v4 <https://github.com/lfos/aurweb/releases/tag/v4.0.0>`_
 發佈開始，已經不需要專用工具，直接用 :code:`git` 就可以很方便地下載到
 官方源和 AUR 中的 PKGBUILD 。
@@ -138,7 +136,7 @@ PKGBUILD 的構成要素
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 拿到了 PKGBUILD ，就先用文本編輯器打開它看一眼吧，以
-`pdfpc <https://www.archlinux.org/packages/community/x86_64/pdfpc/>`_ 的
+:pkg:`community/pdfpc` 的
 PKGBUILD 爲例：
 
 .. code-block:: bash
@@ -181,16 +179,15 @@ PKGBUILD 文件的格式本質上是 bash 腳本，語法遵從 bash 腳本語�
 其中包的元數據又可大體分爲三段：
 
 #. 對包的描述性數據。對應上面 3~9 行的內容。這裏寫這個包叫什麼名字，版本是什麼，協議用什麼……
-#. 這個包與其它包的關係。對應上面 11,12 行。這裏寫這個包依賴哪些包，提供哪些虛包……
+#. 這個包與其它包的關係。對應上面 11,12 行。這裏寫這個包依賴哪些包，提供哪些虛包，位於什麼包組……
 #. 包的源代碼位置。對應上面 14,15 行。這裏描述這個包從什麼地方下載，下載到的文件校驗，上游簽名……
 
 這些元數據以 bash 腳本中定義的 變量(variable) 和 數組(array) 的方式描述。應當定義哪些，
 每個數據的含義，在 `手冊頁 <https://www.archlinux.org/pacman/PKGBUILD.5.html>`_
-和 `Wiki頁 <https://wiki.archlinux.org/index.php/PKGBUILD>`_ 都有詳盡介紹，
-下文要具體說明的內容也會相應補充。
+和 :archwiki:`PKGBUILD|Wiki頁` 都有詳盡介紹，下文要具體說明的內容也會相應補充。
 
 隨後打包過程則是以確定名稱的 bash 函數(function) 的形式描述。在函數體內直接書寫腳本。
-一個包至少需要定義 :code:`package()` 函數，它用來寫「安裝」文件的步驟。
+一個包至少需要定義一個 :code:`package()` 函數，它用來寫「安裝」文件的步驟。
 如果是用編譯型語言編寫的軟件，那麼也應該有 :code:`build()` 函數，用來寫 配置(configure)
 和編譯的步驟。
 
@@ -211,8 +208,40 @@ PKGBUILD 一開始有一行註釋以 :code:`Maintainer:` 開頭，這裏描述�
   上寄宿的上游軟件通常會有 :code:`-git` 這樣的後綴。
 - 如果是對現有二進制做重新打包，應該在上游項目名後添加 :code:`-bin` 後綴。比如上游發佈了用於
   Debian 系統的二進制包，想要重新打包成可用於 Arch Linux 的包，則要加 :code:`-bin` 後綴。
+- 對於特定語言需要的庫，通常會有語言名作爲前綴。不過這個規則的特例是，如果這個庫同時也在
+  :code:`/usr/bin` 中提供可執行的命令，那麼包名可以沒有前綴，或者對包進行拆包，
+  把庫和可執行命令分列在不同的包裏。一個例子是 :pkg:`community/powerline`
+  包提供可執行程序，而它依賴的 :pkg:`community/python-powerline` 則提供 python 的庫。
+- 對於 Arch Linux 官方源中已經有的軟件包，如果想稍作修改之後將修改版共享在 AUR
+  ，那麼通常 AUR 上的包名會是在官方源中對應包的包名，加上簡短的單詞描述所做的修改。
+  比如 :pkg:`aur/telegram-desktop-systemqt-notoemoji` 就是對官方源中
+  :pkg:`community/telegram-desktop` 基礎上換用 NotoEmoji 的修改。
+  並且實際上官方源的 :pkg:`community/telegram-desktop` 曾經在 AUR 中叫
+  `telegram-desktop-systemqt <https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=telegram-desktop-systemqt>`_
+  ，因爲有來自 Debian 的 SystemQt 補丁。在被移入官方源之後去掉了 :code:`-systemqt` 後綴。
 
+.. panel-default::
+    :title: 一些有趣的包名字符統計
 
+    .. code-block:: console
+
+        $ # 三個官方源總體包數量
+        $ pacman -Slq core extra community | wc -l
+        10225
+        $ # 有小寫字母、數字、短橫、點之外的包名數量
+        $ pacman -Ssq | grep "[^-a-z0-9.]" -c
+        192
+        $ # 有小寫字母、數字、短橫、點、下劃線、加號之外的包名數量
+        $ pacman -Ssq | grep "[^-a-z0-9._+]" -c 
+        4
+        
+
+另外關於包名中可以使用的字符，從原理上來說只要是 bash 函數名中可以使用的字符，
+都可以在包名中使用。不過一般來說，包名的字符會符合 Arch Linux 官方源中現有的包名的命名風格。
+絕大多數包名是 **純小寫字母** 加上 **數字或者點(.)** ，單詞之間用短橫(-) 分隔。
+另外還有少數包名中出現大寫字母或者下劃線分隔，或者 C++ 相關的包名中出現加號(+)。
+
+對包命名的基本原則是好記好搜，如果知道上游項目的名字，應該能很方便地搜到包對應的名字。
 
 包版本號
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
