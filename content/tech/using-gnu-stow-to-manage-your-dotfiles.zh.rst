@@ -11,6 +11,8 @@
 譯註
 ----------------------------------------------------
 
+.. PELICAN_BEGIN_SUMMARY
+
 這篇是翻譯自 `Brandon Invergo 的博客的英文文章 Using GNU Stow to manage your dotfiles <http://brandon.invergo.net/news/2012-05-26-using-gnu-stow-to-manage-your-dotfiles.html>`_ 。
 Brandon Invergo 的博客採用 `CC-BY-SA 3.0 <https://creativecommons.org/licenses/by-sa/3.0/deed.en_US>`_
 授權，因此本文也同樣採用 `CC-BY-SA 3.0`_
@@ -22,6 +24,8 @@ Brandon Invergo 的博客採用 `CC-BY-SA 3.0 <https://creativecommons.org/licen
 後來逐漸主力系統也更新換代了一次，又同步到了自己的 vps 上去，目前管理多個 Arch Linux
 上都多少都有這套配置。甚至裝好 Arch Linux 添加好用戶最初做的事情就是安裝 stow git
 然後 clone 了我自己的 dotfiles repo 下來，然後按需取想要的配置，快捷方便有效。
+
+.. PELICAN_END_SUMMARY
 
 廢話不多說，下面是原文和翻譯。與之前的翻譯一樣，正文部分給出原文引用以便對照參考。
 
