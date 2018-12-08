@@ -81,7 +81,7 @@ EASY
 獲取現有的 PKGBUILD
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Arch Linux 老用戶們已經很熟悉 :archwiki:`AUR helpers` 和 :archwiki:`Arch Build System>`
+Arch Linux 老用戶們已經很熟悉 :archwiki:`AUR helpers` 和 :archwiki:`Arch Build System`
 那一套了，每個人可能都有兩三個自己趁手的常用 AUR helper 自動化打包。不過其實，大概從3年前
 `AUR web v4 <https://github.com/lfos/aurweb/releases/tag/v4.0.0>`_
 發佈開始，已經不需要專用工具，直接用 :code:`git` 就可以很方便地下載到
@@ -232,9 +232,9 @@ PKGBUILD 一開始有一行註釋以 :code:`Maintainer:` 開頭，這裏描述�
         $ pacman -Ssq | grep "[^-a-z0-9.]" -c
         192
         $ # 有小寫字母、數字、短橫、點、下劃線、加號之外的包名數量
-        $ pacman -Ssq | grep "[^-a-z0-9._+]" -c 
+        $ pacman -Ssq | grep "[^-a-z0-9._+]" -c
         4
-        
+
 
 另外關於包名中可以使用的字符，從原理上來說只要是 bash 函數名中可以使用的字符，
 都可以在包名中使用。不過一般來說，包名的字符會符合 Arch Linux 官方源中現有的包名的命名風格。

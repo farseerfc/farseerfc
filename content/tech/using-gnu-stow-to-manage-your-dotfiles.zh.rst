@@ -68,7 +68,7 @@ Git, Mercurial(hg), Bazaar(bzr)
 :code:`/usr/local/stow/` 目錄中執行 :code:`# stow ${PKGNAME}-${PKGVERSION}`
 ，然後它就會爲程序所有的文件創建符號鏈接放在 :code:`/usr/local`
 中合適的地方。然後當你想用 Stow 卸載這個程序的時候，就不必再考慮會留下什麼垃圾文件，
-或者上游提供的 Makefile 有遺漏什麼卸載步驟。這種安裝方式下也可以非常容易地切換一個程序的不同版本
+或者找不到安裝時用的 Makefile 了。這種安裝方式下也可以非常容易地切換一個程序的不同版本
 （比如我想嘗試不同配置選項下的 `dwm <https://dwm.suckless.org/>`_ 或者
 `st <https://st.suckless.org/>`_ 的時候）。
 
@@ -83,9 +83,9 @@ Git, Mercurial(hg), Bazaar(bzr)
     of a program quite easy (i.e. when I'm experimenting with different
     configurations of dwm or st).
 
-前段時間在我掃郵件列表的時候看到某個帖子中某人在說使用 Stow 管理安裝他的點文件。
+前段時間在我掃郵件列表的時候，看到某個帖子中某人在說使用 Stow 管理安裝他的點文件。
 當時我沒特別在意這個帖子，但是大概我大腦潛意識把它歸檔保存爲今後閱讀了。
-昨天我想起來想試試這種用法，試過後我不得不說，這比那些專門設計用來做這活的點文件管理器要方便太多了，
+昨天我想起來試試這種用法，試過後我不得不說，這比那些專門設計用來做這任務的點文件管理器要方便太多了，
 雖然表面上看起來這種用法沒那麼顯而易見。
 
     Some time ago I happened across a mailing list posting where someone
