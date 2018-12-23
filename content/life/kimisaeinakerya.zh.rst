@@ -1,4 +1,4 @@
-君さえいなけりゃよかった
+【聽譯】君さえいなけりゃよかった
 ===========================================
 
 :id: kimisaeinakerya
@@ -8,7 +8,6 @@
 :tags: translate, chouyaku, kimi, sae, inakerya
 :issueid: 66
 :series: chouyaku
-:status: draft
 
 .. youtube:: -KOeQapXsx8
 
