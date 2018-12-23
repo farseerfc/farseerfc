@@ -123,6 +123,8 @@ CACHE_CONTENT = True
 
 JINJA_ENVIRONMENT = {'extensions': ['jinja2.ext.i18n']}
 
+DOCUTILS_SETTINGS = {'table_style': 'borderless'}
+
 DOCUTIL_CSS = True
 TYPOGRIFY = False
 PYGMENTS_STYLE = 'monokai'
