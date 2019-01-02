@@ -8,7 +8,6 @@
 :tags: translate, chouyaku, yozakurani, kimiwo, kakushite
 :issueid: 70
 :series: chouyaku
-:status: draft
 
 .. youtube:: SDmr8c72wes
 
@@ -124,7 +123,7 @@
 
     アンニュイに溺れるばかりでは
 
-        一味沉溺在倦怠中的話
+        一味沉溺在萎靡中的話
 
     君の思う壺なんでしょう
 
