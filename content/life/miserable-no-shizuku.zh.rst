@@ -6,7 +6,7 @@
 :lang: zh
 :date: 2019-01-07 00:24
 :tags: translate, chouyaku, miserable, shizuku
-:issueid: 73
+:issueid: 74
 :series: chouyaku
 
 
