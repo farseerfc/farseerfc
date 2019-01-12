@@ -5,7 +5,7 @@
 :translation_id: ukiyomichi
 :lang: zh
 :date: 2018-12-30 06:04
-:tags: translate, chouyaku, ukiyomichi
+:tags: translate, chouyaku, ukiyomichi, saigetsu, 聽譯, 愛き夜道, 砕月
 :issueid: 68
 :series: chouyaku
 
