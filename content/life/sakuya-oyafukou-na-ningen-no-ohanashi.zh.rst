@@ -571,3 +571,19 @@ https://www.pixiv.net/novel/show.php?id=8550966
     しょっぱい :ruby:`紅茶|こうちゃ` はやはり :ruby:`美|お`  :ruby:`味|い` しくないわね　 :ruby:`咲夜|さくや`
 
         　
+
+----
+
+.. image:: {static}/images/sakuya_oyafukou_1.jpg
+    :alt: まだ :ruby:`幼|おさな` いあなたを「 :ruby:`咲夜|さくや` 」って :ruby:`名|な`  :ruby:`付|づ` けた
+
+----
+
+.. image:: {static}/images/sakuya_oyafukou_2.jpg
+    :alt: :ruby:`有明|ありあけ` の :ruby:`月|つき` 　 :ruby:`日|ひ`  :ruby:`差|ざ` しを :ruby:`漏|も` らさぬ :ruby:`瀟洒|しょうしゃ` な :ruby:`手|て`
+
+----
+
+.. image:: {static}/images/sakuya_oyafukou_3.jpg
+    :alt: 「 :ruby:`幸|しあわ` せでした」 :ruby:`貴女|あなた` がそう :ruby:`続|つづ` けるから
+
