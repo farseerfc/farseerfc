@@ -5,7 +5,7 @@
 :translation_id: warabeasobi
 :lang: zh
 :date: 2018-12-23 18:24
-:tags: translate, chouyaku, warabe, asobi
+:tags: translate, chouyaku, warabe, asobi, 聽譯, 童遊
 :issueid: 65
 :series: chouyaku
 

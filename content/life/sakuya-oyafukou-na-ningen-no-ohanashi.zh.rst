@@ -5,7 +5,7 @@
 :translation_id: sakuya-oyafukou-na-ningen-no-ohanashi
 :lang: zh
 :date: 2019-01-08 05:14
-:tags: translate, chouyaku, sakuya, oyafukou, ningen, ohanashi
+:tags: translate, chouyaku, sakuya, jyumyouron, oyafukou, ningen, ohanashi, 聽譯, 咲夜, 寿命論, 壽命論
 :issueid: 75
 :series: chouyaku
 

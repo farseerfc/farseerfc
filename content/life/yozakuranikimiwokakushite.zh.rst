@@ -5,7 +5,7 @@
 :translation_id: yozakuranikimiwokakushite
 :lang: zh
 :date: 2019-01-03 02:50
-:tags: translate, chouyaku, yozakurani, kimiwo, kakushite
+:tags: translate, chouyaku, yozakurani, kimiwo, kakushite, 聽譯, 夜桜に君を隠して
 :issueid: 70
 :series: chouyaku
 

@@ -5,7 +5,7 @@
 :translation_id: hoshiiroyozora
 :lang: zh
 :date: 2018-12-31 04:06
-:tags: translate, chouyaku, hoshiiroyozora
+:tags: translate, chouyaku, hoshiiroyozora, 聽譯, 星色夜空
 :issueid: 69
 :series: chouyaku
 
