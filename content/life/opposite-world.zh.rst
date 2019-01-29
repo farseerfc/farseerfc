@@ -17,7 +17,7 @@
 
     間違いを正す　その心は嗚呼
 
-        想糾正錯誤　的那顆心啊
+        想糾正錯誤的　那顆心啊
 
     朽ち果てた草や木に　水を注ぐ様　
 
@@ -119,7 +119,7 @@
 
     鏡を照らして　合わせてみても
 
-        照着鏡子比照一下
+        照着鏡子比對一下身影
 
     全てが同じ　とは言えないから
 
@@ -157,9 +157,11 @@
 ----
 
 .. panel-default::
-    :title: `Opposite World (管絃樂團版) <https://www.youtube.com/watch?v=vZ-beF2fwJo>`_
+    :title: 亡き王女の為のセプテット `原曲 <https://www.youtube.com/watch?v=3mKStUbmZ_w>`_ `管弦樂團版 <https://www.youtube.com/watch?v=rxnLJgS6Pnw>`_
 
-    .. youtube:: vZ-beF2fwJo
+    .. youtube:: 3mKStUbmZ_w
+
+    .. youtube:: rxnLJgS6Pnw
 
 Opposite World，原曲是十六夜咲夜最喜歡的大小姐蕾米利亞，在東方正作 TH06 《東方紅魔鄉》中的主題曲
 `《亡き王女の為のセプテット》 <https://thwiki.cc/%E7%8C%AE%E7%BB%99%E5%B7%B2%E9%80%9D%E5%85%AC%E4%B8%BB%E7%9A%84%E4%B8%83%E9%87%8D%E5%A5%8F>`_
@@ -210,6 +212,11 @@ Opposite World，原曲是十六夜咲夜最喜歡的大小姐蕾米利亞，在
         | 話說回來，也沒有誰去逝，而且公主是誰呢？
 
 
+.. panel-default::
+    :title: `Opposite World (管絃樂團版) <https://www.youtube.com/watch?v=vZ-beF2fwJo>`_
+
+    .. youtube:: vZ-beF2fwJo
+
 看上去大小姐的身世和這標題的來源都疑點重重。嘛，回表「幽閉サテライト」社團 senya 譜詞演唱的
 Opposite World 這首歌，和主人一樣，歌詞內容也比較隱晦，大體上感覺是在講紅霧異變。
 紅霧異變的時候蕾米利亞想讓紅霧覆蓋整個幻想鄉的天空，
@@ -218,7 +225,7 @@ Opposite World 這首歌，和主人一樣，歌詞內容也比較隱晦，大�
 因此整首歌詞就在講述大小姐蕾米利亞爲了同類，糾正錯誤的「太陽」，凡事親歷親爲。
 以整個世界爲敵，也即歌詞的標題 Opposite World 。
 
-如果把陽光比作商業軟件環境，把吸血鬼一族紅魔館的人比作開源社區的貢獻者們，
+如果把陽光比作商業軟件環境，把斯卡蕾特一族紅魔館的人比作開源社區的貢獻者們，
 說到如大小姐一般事無鉅細親歷親爲，只爲給自己留下一個足以棲身的淨土，這樣的人你能想到誰呢？
 
 
