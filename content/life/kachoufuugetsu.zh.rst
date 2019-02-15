@@ -174,7 +174,7 @@
 
 《花鳥風月》，算是比較著名的東方改編曲了，因爲作爲《幻想万華鏡》的片頭片尾曲，
 配上了動畫的片段，算是對整個東方正作故事中描繪事物的總結。
-就像我第一篇翻譯的歌詞 `《童遊》 <{filename}/warabeasobi.zh.rst>`_
+就像我第一篇翻譯的歌詞 `《童遊》 <{filename}/life/warabeasobi.zh.rst>`_
 因爲是對神主ZUN自己的主題曲《童祭》的重新譜詞而有了總起的性質，
 這篇《花鳥風月》也因爲用在《幻想万華鏡》而有了總結的性質。
 
@@ -342,4 +342,4 @@
 .. figure:: {static}/images/72616493_p0.png
     :alt: 巡って廻って
 
-    `巡って廻って (Pixiv 72616493) <https://www.pixiv.net/member_illust.php?mode=medium&illust_id=72616493>`_
+    :pixiv:`72616493|巡って廻って`

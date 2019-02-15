@@ -574,16 +574,13 @@ https://www.pixiv.net/novel/show.php?id=8550966
 
 ----
 
-.. image:: {static}/images/sakuya_oyafukou_1.jpg
-    :alt: まだ :ruby:`幼|おさな` いあなたを「 :ruby:`咲夜|さくや` 」って :ruby:`名|な`  :ruby:`付|づ` けた
+.. raw:: html
 
-----
-
-.. image:: {static}/images/sakuya_oyafukou_2.jpg
-    :alt: :ruby:`有明|ありあけ` の :ruby:`月|つき` 　 :ruby:`日|ひ`  :ruby:`差|ざ` しを :ruby:`漏|も` らさぬ :ruby:`瀟洒|しょうしゃ` な :ruby:`手|て`
-
-----
-
-.. image:: {static}/images/sakuya_oyafukou_3.jpg
-    :alt: 「 :ruby:`幸|しあわ` せでした」 :ruby:`貴女|あなた` がそう :ruby:`続|つづ` けるから
+    <table><tr><td>
+    <img src='/images/sakuya_oyafukou_1.jpg'/>
+    </td><td>
+    <img src='/images/sakuya_oyafukou_2.jpg'/>
+    </td><td>
+    <img src='/images/sakuya_oyafukou_3.jpg'/>
+    </td></tr></table>
 
