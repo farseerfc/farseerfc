@@ -81,10 +81,12 @@
 這個腳本做了這樣幾件事。
 
 #. 調用 :code:`usbip list --local` 列出本地所有 usb 設備。
-#. 針對每個設備：
-    #. 取出它的 busid
-    #. 判斷是不是樹莓派的 USB 以太網卡，不是的話繼續
-    #. 通過 :code:`usbip bind --busid=` 命令把這個 usb 設備導出到網上
+#. 針對每個設備
+
+   (#) 取出它的 busid
+   (#) 判斷是不是樹莓派的 USB 以太網卡，不是的話繼續
+   (#) 通過 :code:`usbip bind --busid=` 命令把這個 usb 設備導出到網上
+
 #. 最後把所有輸出記錄到 /var/log/usbipall.log 日誌裏面
 
 樹莓派這邊設置就完成了。從此之後插入的 usb 設備就會統統導出出去。
