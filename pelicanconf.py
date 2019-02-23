@@ -169,12 +169,12 @@ DIRECT_TEMPLATES = (('search', 'index', 'categories', 'authors', 'archives',
 AVATAR = 'images/avatar.jpg'
 ABOUT_PAGE = "about.html"
 ABOUT_ME = """<h3 style="text-align:center">
+<a href="https://sak.uy/"                  target="_blank">
+<i class="fa fa-music" style="text-align:center"></i></a>
 <a href="https://twitter.com/farseerfc"                  target="_blank">
 <i class="fa fa-twitter" style="text-align:center"></i></a>
 <a href="https://github.com/farseerfc"                   target="_blank">
 <i class="fa fa-github" style="text-align:center"></i></a>
-<a href="http://weibo.com/farseerfc"                     target="_blank">
-<i class="fa fa-weibo" style="text-align:center"></i></a>
 <a href="http://www.facebook.com/farseerfc"              target="_blank">
 <i class="fa fa-facebook" style="text-align:center"></i></a>
 <a href="https://plus.google.com/u/0/+JiachenYang/posts" target="_blank">

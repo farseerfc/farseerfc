@@ -7,7 +7,6 @@
 :date: 2018-12-23 23:04
 :tags: translate, chouyaku, kimi, sae, inakerya, 聽譯
 :issueid: 66
-:series: chouyaku
 
 .. youtube:: -KOeQapXsx8
 
