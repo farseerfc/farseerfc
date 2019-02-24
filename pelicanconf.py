@@ -146,6 +146,7 @@ PYGMENTS_STYLE = 'monokai'
 GITHUB_USER = 'farseerfc'
 GITHUB_SHOW_USER_LINK = True
 GITHUB_REPO = 'farseerfc/farseerfc.github.io'
+GITHUB_SIDEBAR = True
 OTHER_BLOG = 'https://sak.uy/'
 OTHER_BLOG_TITLE = 'Sakuya的音樂盒'
 DISPLAY_BREADCRUMBS = True
