@@ -22,7 +22,7 @@
 ----------------------------------------------
 
 這是個 python 寫的小程序（嚴格說是庫），可以把一段日文轉換成標準的 HTML 形式的
-:code:`<ruby>` 標籤的振假名( :ruby:`振|ふ` り :ruby:`仮名|かめい` )。
+:code:`<ruby>` 標籤的振假名( :ruby:`振|ふ` り :ruby:`仮名|かな` )。
 它本身只是個方便的格式化庫，實際工作是用 python-mecab 這個 binding 去查詢 mecab
 這個著名的日語語料分析庫。要用它還得配合一些開源的 mecab 詞典，這些在 :code:`[archlinuxcn]`
 都有打好的包了，直接安裝：
@@ -49,10 +49,10 @@
 ----------------------------------------------
 
 然後我的博客用 reStructuredText 語法寫，不能直接用 HTML 標籤（雖然我加了 :code:`:html:`
-這個 :ruby:`行內角色|inline role` 但是大量用也不方便）。這個博客一開始用 `Pelican
-重寫主題的時候 <{filename}/tech/redesign-pelican-theme.zh.rst>`_
+這個 :ruby:`行內角色|inline role` 但是大量用也不方便）。這個博客一開始用
+`Pelican 重寫主題的時候 <{filename}/tech/redesign-pelican-theme.zh.rst#bootstrapify-twitter-bootstrap-rst-directives>`_
 我就實現了個自己的 :code:`:ruby:` :ruby:`行內角色|inline role` 用來標發音，於是一段
-sed 就能把 python-furigana 的輸出轉換成我用的語法：
+sed 就能把 python-furigana 的輸出轉換成我用的 rst 語法：
 
 .. code-block:: console
 
