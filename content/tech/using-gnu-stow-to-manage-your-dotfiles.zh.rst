@@ -1,7 +1,7 @@
 【譯】使用 GNU stow 管理你的點文件
 ===========================================
 
-:id: using-gnu-stow-to-manage-your-dotfiles
+:slug: using-gnu-stow-to-manage-your-dotfiles
 :translation_id: using-gnu-stow-to-manage-your-dotfiles
 :lang: zh
 :date: 2018-12-08 03:35

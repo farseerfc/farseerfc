@@ -1,7 +1,7 @@
 關於
 =======================================
 
-:id: about
+:slug: about
 :translation_id: about
 :lang: zh
 :date: 2012-05-30 19:21:34

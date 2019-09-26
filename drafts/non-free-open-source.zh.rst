@@ -1,7 +1,7 @@
 論不自由的開源軟件
 =====================================
 
-:id: non-free-open-source
+:slug: non-free-open-source
 :translation_id: non-free-open-source
 :lang: zh
 :date: 2015-02-15 22:45

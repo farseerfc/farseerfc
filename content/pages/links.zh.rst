@@ -1,7 +1,7 @@
 友情鏈接
 =======================================
 
-:id: links
+:slug: links
 :translation_id: links
 :lang: zh
 :date: 2015-02-10 00:50:34

@@ -1,7 +1,7 @@
 我眼中的 Wayland 的是與非
 =====================================
 
-:id: wayland-pros-and-cons
+:slug: wayland-pros-and-cons
 :translation_id: wayland-pros-and-cons
 :lang: zh
 :date: 2015-03-21 22:45

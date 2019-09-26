@@ -1,7 +1,7 @@
 用 Travis-CI 生成 Github Pages 博客
 ====================================================
 
-:id: travis-push-to-github-pages-blog
+:slug: travis-push-to-github-pages-blog
 :translation_id: travis-push-to-github-pages-blog
 :lang: zh
 :date: 2015-02-20 11:10

@@ -1,7 +1,7 @@
 桌面系統的混成器簡史
 =====================================
 
-:id: brief-history-of-compositors-in-desktop-os
+:slug: brief-history-of-compositors-in-desktop-os
 :translation_id: brief-history-of-compositors-in-desktop-os
 :lang: zh
 :date: 2015-03-19 13:45

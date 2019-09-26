@@ -1,7 +1,7 @@
 EVA-Komm,susser Tod
 ===================
 
-:id: EVA-Komm-susser-Tod
+:slug: EVA-Komm-susser-Tod
 :translation_id: EVA-Komm-susser-Tod
 :lang: en
 :date: 2008-04-10 03:28

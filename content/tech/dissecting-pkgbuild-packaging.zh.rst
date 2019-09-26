@@ -1,7 +1,7 @@
 由淺入深說 PKGBUILD 打包
 ===========================================
 
-:id: dissecting-pkgbuild-packaging
+:slug: dissecting-pkgbuild-packaging
 :translation_id: dissecting-pkgbuild-packaging
 :lang: zh
 :date: 2018-11-19 17:15

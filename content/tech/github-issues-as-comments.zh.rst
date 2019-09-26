@@ -1,7 +1,7 @@
 啓用 GitHub Issue 作爲博客留言系統
 ====================================================
 
-:id: github-issues-as-comments
+:slug: github-issues-as-comments
 :translation_id: github-issues-as-comments
 :lang: zh
 :date: 2016-08-07 16:28

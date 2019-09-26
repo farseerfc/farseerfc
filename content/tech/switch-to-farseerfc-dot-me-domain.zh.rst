@@ -1,7 +1,7 @@
 換到 farseerfc.me 域名
 =======================================
 
-:id: switch-to-farseerfc-dot-me-domain
+:slug: switch-to-farseerfc-dot-me-domain
 :translation_id: switch-to-farseerfc-dot-me-domain
 :lang: zh
 :date: 2015-01-26 23:32

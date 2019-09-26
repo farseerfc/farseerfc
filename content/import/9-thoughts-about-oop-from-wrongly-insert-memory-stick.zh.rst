@@ -1,7 +1,7 @@
 由記憶棒誤差故障引發的關於面向對象設計的九點思考
 ################################################
 :date: 2007-09-20 14:38
-:id: 9-thoughts-about-oop-from-wrongly-insert-memory-stick
+:slug: 9-thoughts-about-oop-from-wrongly-insert-memory-stick
 :translation_id: 9-thoughts-about-oop-from-wrongly-insert-memory-stick
 :lang: zh
 :tags: oop

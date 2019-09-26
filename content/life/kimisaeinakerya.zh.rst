@@ -1,7 +1,7 @@
 【聽譯】君さえいなけりゃよかった
 ===========================================
 
-:id: kimisaeinakerya
+:slug: kimisaeinakerya
 :translation_id: kimisaeinakerya
 :lang: zh
 :date: 2018-12-23 23:04

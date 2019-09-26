@@ -1,7 +1,7 @@
 寫程序讓CPU佔用率保持正弦函數
 ==========================================
 
-:id: sine-cpu
+:slug: sine-cpu
 :translation_id: sine-cpu
 :lang: zh
 :date: 2008-06-02 23:27

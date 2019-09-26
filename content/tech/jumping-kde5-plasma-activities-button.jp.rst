@@ -1,7 +1,7 @@
 KDE5 Plasma の踊る活動ボタン
 ==========================================================
 
-:id: jumping-kde5-plasma-activities-button
+:slug: jumping-kde5-plasma-activities-button
 :translation_id: jumping-kde5-plasma-activities-button
 :lang: jp
 :date: 2014-12-09 01:54

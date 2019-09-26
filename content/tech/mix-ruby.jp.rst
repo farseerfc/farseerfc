@@ -1,7 +1,7 @@
 PyRuby
 ======
 
-:id: mix-ruby
+:slug: mix-ruby
 :translation_id: mix-ruby
 :lang: jp
 :date: 2012-03-02 23:09

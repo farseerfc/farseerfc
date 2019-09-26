@@ -1,7 +1,7 @@
 聊聊 Xorg 多輸出
 ============================
 
-:id: xorg-multi-head
+:slug: xorg-multi-head
 :translation_id: xorg-multi-head
 :lang: zh
 :date: 2015-01-30 22:45

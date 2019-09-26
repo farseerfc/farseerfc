@@ -1,7 +1,7 @@
 從非緩衝輸入流到 Linux 控制檯的歷史
 =======================================
 
-:id: from-unbuffered-stdin-to-history-of-linux-tty
+:slug: from-unbuffered-stdin-to-history-of-linux-tty
 :translation_id: from-unbuffered-stdin-to-history-of-linux-tty
 :lang: zh
 :date: 2014-12-12 17:06

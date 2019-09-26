@@ -2,7 +2,7 @@ C语言中“.”与“->”有什么区别？
 ==================================
 
 :date: 2016-08-08 00:02
-:id: dot-and-arrow-in-c
+:slug: dot-and-arrow-in-c
 :translation_id: dot-and-arrow-in-c
 :lang: zh
 :tags: C, zhihu

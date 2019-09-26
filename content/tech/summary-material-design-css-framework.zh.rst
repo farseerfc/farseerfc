@@ -1,7 +1,7 @@
 總結一下 Material Design 的 CSS 框架
 =======================================
 
-:id: summarize-material-design-css-framework
+:slug: summarize-material-design-css-framework
 :translation_id: summarize-material-design-css-framework
 :lang: zh
 :date: 2015-01-16 03:27

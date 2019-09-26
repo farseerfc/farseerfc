@@ -1,7 +1,7 @@
 PacVis: visualize pacman local database
 ===============================================
 
-:id: pacvis
+:slug: pacvis
 :translation_id: pacvis
 :lang: en
 :date: 2016-07-31 03:52

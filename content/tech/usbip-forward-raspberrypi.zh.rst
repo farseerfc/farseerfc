@@ -1,7 +1,7 @@
 用 usbip 轉發 raspberry pi 的 USB 鍵盤鼠標給 Arch Linux 的 PC
 ====================================================================
 
-:id: usbip-forward-raspberrypi
+:slug: usbip-forward-raspberrypi
 :translation_id: usbip-forward-raspberrypi
 :lang: zh
 :date: 2019-02-07 02:14

@@ -1,7 +1,7 @@
 東方歌詞翻譯遷移至 sak.uy
 ================================================================
 
-:id: move-lyrics-to-sakuy
+:slug: move-lyrics-to-sakuy
 :translation_id: move-lyrics-to-sakuy
 :lang: zh
 :date: 2019-02-24 08:37

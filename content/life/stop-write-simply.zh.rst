@@ -1,7 +1,7 @@
 避免在博文中寫「簡單地」
 =====================================
 
-:id: stop-write-simply
+:slug: stop-write-simply
 :translation_id: stop-write-simply
 :lang: zh
 :date: 2015-03-11 22:00
