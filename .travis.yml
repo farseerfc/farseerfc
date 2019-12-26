@@ -14,14 +14,8 @@ before_install:
     - ditaa -h || true
 
 install:
-    - sudo pip3 install 'pelican'
-    - sudo pip3 install jinja2 py3babel babel beautifulsoup4 markdown
-    # - wget "http://downloads.sourceforge.net/project/plantuml/plantuml.jar?r=&ts=1424308684&use_mirror=jaist" -O plantuml.jar
-    # - sudo mkdir -p /opt/plantuml
-    # - sudo cp plantuml.jar /opt/plantuml
-    # - echo "#! /bin/sh" > plantuml
-    # - echo 'exec java -jar /opt/plantuml/plantuml.jar "$@"' >> plantuml
-    # - sudo install -m 755 -D plantuml /usr/bin/plantuml
+    - sudo pip install 'pelican'
+    - sudo pip install jinja2 py3babel babel beautifulsoup4 markdown
     - plantuml -version
     - git clone --depth 1 https://github.com/farseerfc/opencc-bin opencc-bin
     - cd opencc-bin
