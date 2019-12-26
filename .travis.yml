@@ -14,8 +14,8 @@ before_install:
     - ditaa -h || true
 
 install:
-    - sudo pip install 'pelican'
-    - sudo pip install jinja2 py3babel babel beautifulsoup4 markdown
+    - pip install 'pelican'
+    - pip install jinja2 py3babel babel beautifulsoup4 markdown
     - plantuml -version
     - git clone --depth 1 https://github.com/farseerfc/opencc-bin opencc-bin
     - cd opencc-bin
