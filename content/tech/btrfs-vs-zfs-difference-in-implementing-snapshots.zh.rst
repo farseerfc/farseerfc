@@ -39,6 +39,10 @@ Btrfs 的子卷（subvolume）和快照（snapshot）
 `btrfs wiki 的 SysadminGuide 頁 <https://btrfs.wiki.kernel.org/index.php/SysadminGuide#Subvolumes>`_
 和 Arch wiki 上 :archwiki:`Btrfs#Subvolumes` 頁都有不錯的參考價值。
 
+
+子卷（subvolume）和快照（snapshot）的術語
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 在 btrfs 中，存在於存儲媒介中的只有「子卷」的概念，「快照」只是個創建「子卷」的方式，
 換句話說在 btrfs 的術語裏，子卷（subvolume）是個名詞，而快照（snapshot）是個動詞。
 如果脫離了 btrfs 術語的上下文，或者不精確地隨口說說的時候，也經常有人把 btrfs
@@ -77,8 +81,10 @@ Btrfs 的子卷（subvolume）和快照（snapshot）
 
 說了這麼多，其實關鍵的只是 btrfs 在傳統 Unix 文件系統的「目錄/文件/inode」
 這些東西之外只增加了一個「子卷」的新概念，而子卷間可以共享元數據或者數據，
-用快照命令創建出的子卷就是共享一部分元數據。於是這個子卷在文件系統中具體是如何記錄的呢？
-舉個例子解釋可能比較好理解：
+用快照命令創建出的子卷就是共享一部分元數據。
+
+於是子卷在存儲介質中是如何記錄的呢？
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 比如在 `SysadminGuide 這頁的 Flat 佈局 <https://btrfs.wiki.kernel.org/index.php/SysadminGuide#Flat>`_
 有個子卷佈局的例子。
@@ -232,6 +238,9 @@ FS_TREE 中， object_id 同時也是它所描述對象的 inode 號，所以 bt
 是 "var" 目錄，256 有4個子目錄，其中 "root" "home" "postgres" 這三個指向了 ROOT_TREE
 中的對應子卷，而 "var" 指向了 inode 257 。然後 257 有一個子目錄叫 "www" 它指向了
 ROOT_TREE 中 object_id 爲 258 的子卷。
+
+那麼快照又是如何記錄的呢？
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 以上是子卷、目錄、 inode 在 btrfs 中的記錄方式，你可能想知道，如何記錄一個快照呢？
 特別是，如果對一個包含子卷的子卷創建了快照，會得到什麼結果呢？如果我們在上面的佈局基礎上執行：
