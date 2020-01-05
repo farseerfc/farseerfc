@@ -16,13 +16,17 @@ Btrfs 和 ZFS 都是開源的寫時拷貝（Copy on Write, CoW）文件系統，
 只是 Linux/GPL 陣營對 ZFS 的拙劣抄襲」，或許（在存儲領域人盡皆知而領域外）鮮有人知在 ZFS
 之前就有 `NetApp <https://en.wikipedia.org/wiki/NetApp>`_ 的商業產品
 `WAFL(Write Anywhere File Layout) <https://en.wikipedia.org/wiki/Write_Anywhere_File_Layout>`_
-實現了 CoW 語義的文件系統，並且集成了快照和卷管理之類的功能。我一開始也帶着「 Btrfs 和 ZFS
+實現了 CoW 語義的文件系統，並且集成了快照和卷管理之類的功能。描述 btrfs 原型設計的
+`論文 <https://btrfs.wiki.kernel.org/images-btrfs/6/68/Btree_TOS.pdf>`_
+和 `發表幻燈片 <https://btrfs.wiki.kernel.org/images-btrfs/6/63/LinuxFS_Workshop.pdf>`_
+也明顯提到 WAFL 比提到 ZFS 更多一些。
+我一開始也帶着「 Btrfs 和 ZFS
 都提供了類似的功能，因此兩者必然有類似的設計」這樣的先入觀念，嘗試去使用這兩個文件系統，
 卻經常撞上兩者細節上的差異，導致使用時需要不盡相同的工作流，
 或者看似相似的用法有不太一樣的性能表現，又或者一邊有的功能（比如 ZFS 的 inband dedup ，
 Btrfs 的 reflink ）在另一邊沒有的情況。
 
-爲了更好地理解這些差異，我四處查詢這兩個文件系統的實現細節，於是有了這篇筆記，
+爲了更好地理解這些差異，我四處蒐羅這兩個文件系統的實現細節，於是有了這篇筆記，
 記錄一下我查到的種種發現和自己的理解。:del:`（或許會寫成一個系列？還是先別亂挖坑不填。）`
 只是自己的筆記，所有參閱的資料文檔都是二手資料，沒有深挖過源碼，還參雜了自己的理解，
 於是難免有和事實相違的地方，如有寫錯，還請留言糾正。
@@ -192,16 +196,18 @@ Btrfs 的子卷（subvolume）和快照（snapshot）
 
 上圖中已經隱去了很多和本文無關的具體細節，所有這些細節都可以通過
 `btrfs inspect-internal 的 dump-super 和 dump-tree <https://btrfs.wiki.kernel.org/index.php/Manpage/btrfs-inspect-internal>`_
-查看到。btrfs 中的每棵樹都可以看作是一個數據庫表，可以包含很多表項，根據 KEY 排序，而 KEY
-是 (object_id, item_type, item_offset) 這樣的三元組。每個 object 在樹中用一個或多個
-item 描述，同 object_id 的 item 共同描述一個對象（object）。B樹中的 key 不必連續，從而
-object_id 也不必連續，只是按大小排序。有一些預留的 object_id 不能用作別的用途，
-他們的編號範圍是 -255ULL 到 255ULL，也就是表中前 255 和最後 255 個編號預留。
+查看到。btrfs 中的每棵樹都可以看作是一個數據庫中的表，可以包含很多表項，根據 KEY 排序，而 KEY
+是 (object_id, item_type, item_extra) 這樣的三元組。每個對象（object）在樹中用一個或多個
+表項（item）描述，同 object_id 的表項共同描述一個對象（object）。B樹中的 key
+只用來比較大小不必連續，從而 object_id 也不必連續，只是按大小排序。有一些預留的 object_id
+不能用作別的用途，他們的編號範圍是 -255ULL 到 255ULL，也就是表中前 255 和最後 255 個編號預留。
 
-ROOT_TREE 中包含了到別的所有 tree 的定義，像 2 號 extent_tree ，3 號 chunk_tree ，
-4 號 dev_tree ，10 號 free_space_tree ，這些 tree 都是描述文件系統結構非常重要的 tree
-。然後在 5 號對象有一個 fs_tree 它描述了整個 btrfs pool 的頂級子卷，也就是圖中叫
-toplevel 的那個子卷。除了頂級子卷之外，別的所有子卷的 object_id
+ROOT_TREE 中記錄了到所有別的B樹的指針，在一些文檔中叫做 tree of tree roots 。「所有別的B樹」
+舉例來說比如 2 號 extent_tree ，3 號 chunk_tree ， 4 號 dev_tree ，10 號 free_space_tree
+，這些B樹都是描述 btrfs 文件系統結構非常重要的組成部分，但是在本文關係不大，
+今後有機會再討論它們。在 ROOT_TREE 的 5 號對象有一個 fs_tree ，它描述了整個 btrfs pool
+的頂級子卷，也就是圖中叫 toplevel 的那個子卷（有些文檔用定冠詞稱 the FS_TREE
+的時候就是在說這個 5 號樹，而不是別的子卷的 FS_TREE ）。除了頂級子卷之外，別的所有子卷的 object_id
 在 256ULL 到 -256ULL 的範圍之間，對子卷而言 ROOT_TREE 中的這些 object_id 也同時是它們的
 子卷 id ，在內核掛載文件系統的時候可以用 subvolid 找到它們，別的一些對子卷的操作也可以直接用
 subvolid 表示一個子卷。 ROOT_TREE 的 6 號對象描述的不是一棵樹，而是一個名叫 default
@@ -212,10 +218,15 @@ subvolid 表示一個子卷。 ROOT_TREE 的 6 號對象描述的不是一棵樹
 每一個子卷都有一棵自己的 FS_TREE （有的文檔中叫 file tree），一個 FS_TREE 相當於傳統 Unix
 文件系統中的一整個 inode table ，只不過它除了包含 inode 信息之外還包含所有文件夾內容。在
 FS_TREE 中， object_id 同時也是它所描述對象的 inode 號，所以 btrfs
-的子卷有互相獨立的 inode 編號，不同子卷中的文件或目錄可以擁有相同的 inode 。 FS_TREE
+的 **子卷有互相獨立的 inode 編號** ，不同子卷中的文件或目錄可以擁有相同的 inode 。 FS_TREE
 中一個目錄用一個 inode_item 和多個 dir_item 描述， inode_item 是目錄自己的 inode
-，那些 dir_item 是目錄的內容。 dir_item 可以指向別的 inode_item ，描述普通文件和子目錄，
-也可以指向 root_item ，描述這個目錄指向一個子卷。
+，那些 dir_item 是目錄的內容。 dir_item 可以指向別的 inode_item 來描述普通文件和子目錄，
+也可以指向 root_item 來描述這個目錄指向一個子卷。有人或許疑惑，子卷就沒有自己的 inode
+麼？其實如果看 `數據結構定義 <https://btrfs.wiki.kernel.org/index.php/Data_Structures#btrfs_root_item>`_
+的話 :code:`struct btrfs_root_item` 結構在最開頭的地方包含了一個
+:code:`struct btrfs_inode_item` 所以 root_item 也同時作爲子卷的 inode
+，不過用戶通常看不到這個子卷的 inode ，因爲子卷在被（手動或自動地）掛載到目錄上之後，
+用戶會看到的是子卷的根目錄的 inode 。
 
 比如上圖 FS_TREE toplevel 中，有兩個對象，第一個 256 是（子卷的）根目錄，第二個 257
 是 "var" 目錄，256 有4個子目錄，其中 "root" "home" "postgres" 這三個指向了 ROOT_TREE
@@ -223,7 +234,7 @@ FS_TREE 中， object_id 同時也是它所描述對象的 inode 號，所以 bt
 ROOT_TREE 中 object_id 爲 258 的子卷。
 
 以上是子卷、目錄、 inode 在 btrfs 中的記錄方式，你可能想知道，如何記錄一個快照呢？
-如果我們在上面的佈局基礎上執行：
+特別是，如果對一個包含子卷的子卷創建了快照，會得到什麼結果呢？如果我們在上面的佈局基礎上執行：
 
 .. code:: bash
 
@@ -285,11 +296,11 @@ ROOT_TREE 中 object_id 爲 258 的子卷。
             <toplevels1_dir_www> 257: dir_item: \"www\" \-\> ROOT_ITEM 258
             "]
 
-        toplevels1:toplevels1_dir_root -> roottree:root_sub_root  [style=dashed, arrowhead=empty];
-        toplevels1:toplevels1_dir_home -> roottree:root_sub_home  [style=dashed, arrowhead=empty];
-        toplevels1:toplevels1_dir_var:e -> toplevels1:toplevels1_inode_var:e  [style=dashed, arrowhead=empty];
-        toplevels1:toplevels1_dir_postgres -> roottree:root_sub_postgres  [style=dashed, arrowhead=empty];
-        toplevels1:toplevels1_dir_www -> roottree:root_sub_www  [style=dashed, arrowhead=empty];
+        // toplevels1:toplevels1_dir_root -> roottree:root_sub_root  [style=dashed, arrowhead=empty];
+        // toplevels1:toplevels1_dir_home -> roottree:root_sub_home  [style=dashed, arrowhead=empty];
+        // toplevels1:toplevels1_dir_var:e -> toplevels1:toplevels1_inode_var:e  [style=dashed, arrowhead=empty];
+        // toplevels1:toplevels1_dir_postgres -> roottree:root_sub_postgres  [style=dashed, arrowhead=empty];
+        // toplevels1:toplevels1_dir_www -> roottree:root_sub_www  [style=dashed, arrowhead=empty];
 
         roottree:root_fs -> toplevel:label [style=bold, weight=1];
         roottree:root_sub_s1 -> toplevels1:label [style=bold, weight=1];
@@ -326,17 +337,49 @@ ROOT_TREE 中 object_id 爲 258 的子卷。
 在 ROOT_TREE 中增加了 260 號子卷，其內容複製自 toplevel 子卷，然後 FS_TREE toplevel
 的 256 號 inode 也就是根目錄中增加一個 dir_item 名叫 "toplevel@s1" 它指向 ROOT_ITEM
 的 260 號子卷。這裏看似是完整複製了整個 FS_TREE 的內容，這是因爲 CoW b-tree
-，當只有一個葉子時就複製整個葉子。如果子卷內容再多一些，除了葉子之外還有中間節點，
-那麼只有被修改的葉子和其上的中間節點需要複製。
+當只有一個葉子節點時就複製整個葉子節點。如果子卷內容再多一些，除了葉子之外還有中間節點，
+那麼只有被修改的葉子和其上的中間節點需要複製。從而創建快照的開銷基本上是
+O( level of FS_TREE )，而B樹的高度一般都能維持在很低的程度，所以快照創建速度近乎是常數開銷。
 
-從子卷和快照的這種實現方式，可以看出： **雖然子卷可以嵌套子卷，但是對含有嵌套子卷的子卷做快照難以快速實現**
-。因此在目前實現的 btrfs 語義中，當子卷 S1 嵌套有別的子卷 S2 的時候，對 S1 做
+從子卷和快照的這種實現方式，可以看出： **雖然子卷可以嵌套子卷，但是對含有嵌套子卷的子卷做快照的語義有些特別**
+。上圖中我沒有畫 toplevel@s1 下的各個子卷到對應 ROOT_ITEM 之間的虛線箭頭，
+是因爲這時候如果你嘗試直接跳過 toplevel 掛載 toplevel@s1 到掛載點，
+會發現那些子卷沒有被自動掛載，更奇怪的是那些子卷的目錄項也不是個普通目錄，
+嘗試往它們中放東西會得到無權訪問的錯誤，對它們能做的唯一事情是手動將別的子卷掛載在上面。
+推測原因在於這些子目錄並不是真的目錄，沒有對應的目錄的 inode ，試圖查看它們的 inode
+號會得到 2 號，而這是個保留號不應該出現在 btrfs 的 inode 號中。
+每個子卷創建時會記錄包含它的上級子卷，用 :code:`btrfs subvolume list` 可以看到每個子卷的
+top level subvolid ，猜測當掛載 A 而 A 中嵌套的 B 子卷記錄的上級子卷不是 A 的時候，
+會出現上述奇怪行爲。嵌套子卷的快照還有一些別的奇怪行爲，大家可以自己探索探索。
 
+.. panel-default::
+    :title: 建議用平坦的子卷佈局
 
-ZFS 的數據集（dataset）、快照（snapshot）、克隆（clone）、書籤（bookmark）和檢查點（checkpoint）
+    因爲上述嵌套子卷在做快照時的特殊行爲，
+    我個人建議是 **保持平坦的子卷佈局** ，也就是說：
+
+    1. 只讓頂層子卷包含其它子卷，除了頂層子卷之外的子卷只做手工掛載，不放嵌套子卷
+    2. 只在頂層子卷對其它子卷做快照，不快照頂層子卷
+    3. 雖然可以在頂層子卷放子卷之外的東西（文件或目錄），不過因爲想避免對頂層子卷做快照，
+       所以避免在頂層子卷放普通文件。
+
+btrfs 的子卷可以設置「可寫」或者「只讀」，在創建一個快照的時候也可以通過 :code:`-r`
+參數創建出一個只讀快照。通常只讀快照可能比可寫的快照更有用，因爲 :code:`btrfs send`
+命令只接受只讀快照作爲參考點。子卷可以有兩種方式切換它是否只讀的屬性，可以通過
+:code:`btrfs property set <subvol> ro` 直接修改是否只讀，也可以對只讀子卷用
+:code:`btrfs subvolume snapshot` 創建出可寫子卷，或者反過來對可寫子卷創建出只讀子卷。
+
+只讀快照也有些特殊的限制，在 `SysadminGuide#Special_Cases <https://btrfs.wiki.kernel.org/index.php/SysadminGuide#Special_Cases>`_
+就提到一例，你不能把只讀快照用 mv 移出包含它的目錄，雖然你能用 mv 給它改名或者移動包含它的目錄
+到別的地方。 btrfs wiki 上給出這個限制的原因是子卷中記錄了它的上級，
+所以要移動它到別的上級需要修改這個子卷，從而只讀子卷沒法移動到別的上級（
+不過我還沒搞清楚子卷在哪兒記錄了它的上級，記錄的是上級目錄還是上級子卷）。不過這個限制可以通過
+對只讀子卷在目標位置創建一個新的只讀快照，然後刪掉原位置的只讀快照來解決。
+
+ZFS 的數據集（dataset）、快照（snapshot）、克隆（clone）及其它
 --------------------------------------------------------------------------------------------------------------------------------------
 
-Btrfs 給傳統文件系統只增加了子卷的概念，相比之下 ZFS 中類似子卷的概念有好幾個，分別叫：
+Btrfs 給傳統文件系統只增加了子卷的概念，相比之下 ZFS 中類似子卷的概念有好幾個，據我所知有這些：
 
 - 數據集（dataset）
 - 快照（snapshot）
@@ -378,4 +421,10 @@ Btrfs 給傳統文件系統只增加了子卷的概念，相比之下 ZFS 中類
 早期設計中大概也是把子卷稱爲 filesystem 做過類似的類比的。
 
 與 btrfs 的子卷不同的是， ZFS 的數據集之間是完全隔離的，（除了後文會講的 dedup
-方式之外）不可以共享任何數據或者元數據。
+方式之外）不可以共享任何數據或者元數據。一個數據集還包含了隸屬於其中的快照（snapshot）、
+克隆（clone）和書籤（bookmark）。
+
+快照（snapshot）
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+一個 ZFS 的快照有點像一個 btrfs 的只讀快照，是標記數據集在某一歷史時刻上的只讀狀態。
