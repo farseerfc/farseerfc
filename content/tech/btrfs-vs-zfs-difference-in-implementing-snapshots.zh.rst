@@ -429,10 +429,12 @@ Btrfs 給傳統文件系統只增加了子卷的概念，相比之下 ZFS 中類
              +-------------------------------------------+
 
 上圖中，假設我們有一個 pool ，其中有 3 個文件系統叫 fs1\~fs3 和一個 zvol 叫 zv1
-，然後文件系統 fs1 有兩個快照 s1 和 s2 ，和兩個書籤 b1 和 b2。
+，然後文件系統 fs1 有兩個快照 s1 和 s2 ，和兩個書籤 b1 和 b2。pool 整體有兩個檢查點 cp1 和
+cp2 。這個簡圖將作爲例子在後面介紹這些概念。
 
-ZFS 中和快照相關的一些術語和概念
+ZFS 設計中和快照相關的一些術語和概念
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 
 數據集（dataset）
 ++++++++++++++++++++++++++++++++++++
@@ -473,6 +475,8 @@ zvol 的概念和本文關係不大，這裏簡要介紹一下。 zvol 是在 ZF
 克隆（clone）和書籤（bookmark）。在 btrfs 中一個子卷和對其創建的快照之間雖然有父子關係，
 但是在 ROOT_TREE 的記錄中屬於平級的關係。
 
+上面簡圖中 pool 裏面包含 3 個文件系統，分別是 fs1~3 。
+
 快照（snapshot）
 ++++++++++++++++++++++++++++++++++++
 
@@ -493,7 +497,10 @@ ZFS 中快照是排列在一個時間線上的，因爲都是只讀快照，它�
 參數刪除中間的快照並回滾。
 
 除了回滾操作，還可以直接只讀訪問到快照中的文件。 ZFS 的文件系統中有個隱藏文件夾叫 ".zfs"
-，所以如果只想回滾一部分文件，可以從 ".zfs/snapshot/SNAPSHOT-NAME" 中把需要的文件複製出來。
+，所以如果只想回滾一部分文件，可以從 ".zfs/snapshots/SNAPSHOT-NAME" 中把需要的文件複製出來。
+
+比如上面簡圖中 fs1 就有 :code:`pool/fs1@s1` 和 :code:`pool/fs1@s2` 這兩個快照，
+那麼可以在 fs1 掛載點下 :code:`.zfs/snapshots/s1` 的路徑直接訪問到 s1 中的內容。
 
 克隆（clone）
 ++++++++++++++++++++++++++++++++++++
@@ -506,6 +513,8 @@ ZFS 的克隆有點像 btrfs 的可寫快照。因爲 ZFS 的快照是只讀的�
 一個數據集可以有多個克隆，這些克隆都獨立於數據集當前的寫入點。使用 :code:`zfs promote`
 命令可以把一個克隆「升級」成爲數據集的當前寫入點，從而數據集原本的寫入點會調轉依賴關係，
 成爲這個新寫入點的一個克隆，被升級的克隆原本依賴的快照和之前的快照會成爲新數據集寫入點的快照。
+
+比如上面簡圖中 fs1 有 c1 的克隆，它依賴於 s2 這個快照，從而 c1 存在的時候就不能刪除掉 s2 。
 
 書籤（bookmark）
 ++++++++++++++++++++++++++++++++++++
@@ -542,7 +551,7 @@ ZFS 的概念與 btrfs 概念的對比
 先說書籤和檢查點，因爲這是兩個 btrfs 目前完全沒有的功能。
 
 書籤功能完全圍繞 ZFS send 的工作原理，而 ZFS send 位於 ZFS 設計中的
-DSL(dataset and snapshot layer) 層面，甚至不關心它 send
+DSL 層面，甚至不關心它 send
 的快照的數據是來自文件系統還是 zvol 。在發送端它只是從目標快照遞歸取數據塊，判斷 TXG
 是否老於參照點的快照，然後把新的數據塊全部發往 send stream ；在接收端也只是完整地接收數據塊，
 不加以處理，。與之不同的是 btrfs 的 send 的工作原理是工作在文件系統的只讀子卷層面，
@@ -580,7 +589,134 @@ reflink 引用），從而 btrfs 沒法（或者很難）實現書籤功能。
 
 不過 btrfs 子卷的設計也使它在系統管理上有了更大的靈活性。比如在 btrfs
 中刪除一個子卷不會受制於別的子卷是否存在，而在 zfs 中要刪除一個快照必須先保證先摧毀掉依賴它的克隆。
-再比如 btrfs 的可選子卷沒有優劣之分，而 zfs 中一個文件系統和其克隆之間有明顯的差異，所以需要
-promote 命令調整差異。
+再比如 btrfs 的可寫子卷沒有主次之分，而 zfs 中一個文件系統和其克隆之間有明顯的區別，所以需要
+promote 命令調整差異。還有比如 ZFS 的文件系統只能回滾到最近一次的快照，
+要回滾到更久之前的快照需要刪掉中間的快照，並且回滾之後原本的文件系統數據和快照數據就被丟棄了；
+而 btrfs 中因爲回滾操作相當於調整子卷的掛載，所以不需要刪掉快照，
+並且回滾之後原本的子卷和快照還可以繼續保留。
 
 加上 btrfs 有 reflink ，這給了 btrfs 在使用中更大的靈活性，可以有一些 zfs 很難做到的用法。
+比如想從快照中打撈出一些虛擬機鏡像的歷史副本，而不想回滾整個快照的時候，在
+btrfs 中可以直接 :code:`cp --reflink=always` 將鏡像從快照中複製出來，此時的複製將和快照共享數據塊；
+而在 zfs 中只能用普通 cp 複製，會浪費很多存儲空間。
+
+
+ZFS 中是如何存儲這些數據集的呢
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+要講到存儲細節，首先需要提一下 ZFS 的分層設計。不像 btrfs 基於現代 Linux
+內核，有許多現有文件系統已經實現好的基礎設施可以利用，並且大體上只用到一種核心數據結構（CoW的B樹）；
+ZFS 則脫胎於 Solaris 的野心勃勃，設計時就分成很多不同的子系統，逐步提升抽象層次，
+並且每個子系統都發明了許多特定需求下的數據結構來描述存儲的信息。
+
+ZFS 在設計之初背負了重構 Solaris 諸多內核子系統的重任，從而不同於 Linux 的文件系統
+只負責文件系統的功能而把其餘功能（比如內存髒頁管理，IO調度）交給內核更底層的子系統， ZFS
+的整體設計更層次化並更獨立，很多部分可能和 Linux 內核已有的子系統有功能重疊。
+而本文想講的只是 ZFS 中與快照相關的一些部分，於是先從 ZFS 的整體設計上說一下和快照相關的概念位於
+ZFS 設計中的什麼位置。
+
+ZFS設計中的子系統層級
+++++++++++++++++++++++++++++++++++++
+
+
+
+首先 ZFS 整體架構如下圖，其中圓圈是 ZFS 給內核層的外部接口，方框是 ZFS 內部子系統：
+
+
+.. dot::
+
+    digraph ZFS_Layer_Architecture {
+        {rank="same";node [shape=plaintext];
+            "Filesystem API";
+            "Block device API";
+            "ZFS Management API";
+        };
+
+        {rank="same";
+            "VFS";
+            "/dev/zvol/...";
+            "/dev/zfs ioctl";
+        };
+        "Filesystem API" -> "VFS";
+        "Block device API" -> "/dev/zvol/...";
+        "ZFS Management API" -> "/dev/zfs ioctl";
+
+        {rank="same";node [shape=box];
+            "ZPL";
+            "ZVOL";
+        };
+
+        "VFS" -> "ZPL";
+        "/dev/zvol/..." -> "ZVOL";
+
+        subgraph clusterTOL{ 
+            label = "TOL";color="black";
+            {rank="same";node [shape=box];
+                "ZAP";
+                "ZIL";
+                "DSL";
+            };
+
+            "ZPL" -> "ZAP";
+            "ZPL" -> "ZIL";
+            "DSL" -> "ZAP";
+            "/dev/zfs ioctl" -> "DSL";
+
+            {rank="same";node [shape=box];
+                "DMU";
+            };
+
+            "ZAP" -> "DMU";
+            "ZPL" -> "DMU";
+            "ZVOL" -> "DMU";
+            "DSL" -> "DMU";
+        }
+
+        {rank="same";node [shape=box];
+            "ARC";
+        };
+
+        "DMU" -> "ARC";
+
+        subgraph clusterSPA {
+            label = "SPA";color="black";
+            {rank="same";node [shape=box];
+                "ZIO";
+                "L2ARC";
+            };
+
+            {rank="same";node [shape=box];
+                "VDEV/RAIDZ";
+            };
+        };
+
+
+        "ZIL" -> "ZIO";
+        "ARC" -> "L2ARC";
+        "L2ARC" -> "ZIO";
+
+        "L2ARC" -> "VDEV/RAIDZ";
+        "ZIO" -> "VDEV/RAIDZ";
+
+    }
+
+一兩句話介紹各個子系統的縮寫：
+
+:ZPL: ZFS Posix Layer ，提供符合 POSIX 文件系統的語義，也就是包括文件、目錄這些抽象以及
+      inode 屬性、權限那些，對一個普通 FS 而言用戶直接接觸的部分。
+:ZVOL: ZFS VOLume ，有點像 loopback block device ，暴露一個塊設備的接口，其上可以創建別的
+      FS 。對 ZFS 而言實現 ZVOL 的意義在於它是比文件更簡單的接口所以一開始先實現的它，而且 
+      `早期 Solaris 沒有 sparse 文件的時候可以用它模擬很大的塊設備，測試 Solaris UFS 對 TB 級存儲的支持情況 <https://youtu.be/xMH5rCL8S2k?t=298>`_。
+:TOL: Transactional Object Layer，在數據塊的基礎上提供一個事務性的對象語義層。
+      每個對象用多個數據塊存儲，每個數據塊大概是 4K~128K 這樣的數量級。
+:ZAP: ZFS Attribute Processor ，在「對象」基礎上提供緊湊的 name/value 映射，從而文件夾內容、文件屬性之類的都是基於 ZAP 。
+:ZIL: ZFS Intent Log ，記錄兩次完整事務語義提交之間的 log ，用來加速實現 fsync 之類的保證。
+:DSL: Dataset & Snapshot Layer ，數據集和快照層，這是本文的重點。
+:DMU: Data Management Unit ，在塊的基礎上提供「對象」的抽象。每個「對象」可以是一個文件，或者是別的 ZFS 內部需要記錄的東西。
+:ARC: Adaptive Replacement Cache，作用相當於 pagecache 。
+:SPA: Storage Pool Allocator ，從內核的多個塊設備中抽象出存儲池。
+:ZIO: ZFS I/O，作用相當於 IO scheduler 。
+:VDEV: Virtual DEVice ，作用相當於 Linux Device Mapper ，提供 Stripe/Mirror/RAIDZ
+      之類的多設備存儲池管理和抽象。
+
+和本文內容密切相關的是 ZPL 、 DSL 、 DMU 這些部分。
