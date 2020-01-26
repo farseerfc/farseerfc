@@ -6,7 +6,7 @@ Btrfs vs ZFS 實現 snapshot 的差異
 :lang: zh
 :date: 2020-01-01 13:45
 :tags: btrfs, zfs, cow, snapshot, clone, subvolume, dedup, reflink
-:series: FS notes
+:series: FS筆記
 :status: draft
 
 .. contents::
@@ -551,7 +551,7 @@ ZFS 的概念與 btrfs 概念的對比
 先說書籤和檢查點，因爲這是兩個 btrfs 目前完全沒有的功能。
 
 書籤功能完全圍繞 ZFS send 的工作原理，而 ZFS send 位於 ZFS 設計中的
-DSL 層面，甚至不關心它 send
+DSL_ 層面，甚至不關心它 send
 的快照的數據是來自文件系統還是 zvol 。在發送端它只是從目標快照遞歸取數據塊，判斷 TXG
 是否老於參照點的快照，然後把新的數據塊全部發往 send stream ；在接收端也只是完整地接收數據塊，
 不加以處理，。與之不同的是 btrfs 的 send 的工作原理是工作在文件系統的只讀子卷層面，
@@ -702,8 +702,8 @@ ZFS設計中的子系統層級
 
 一兩句話介紹各個子系統的縮寫：
 
-:ZPL: ZFS Posix Layer ，提供符合 POSIX 文件系統的語義，也就是包括文件、目錄這些抽象以及
-      inode 屬性、權限那些，對一個普通 FS 而言用戶直接接觸的部分。
+:|ZPL|: ZFS Posix Layer ，提供符合 POSIX 文件系統的語義，也就是包括文件、目錄這些抽象以及
+        inode 屬性、權限那些，對一個普通 FS 而言用戶直接接觸的部分。
 :ZVOL: ZFS VOLume ，有點像 loopback block device ，暴露一個塊設備的接口，其上可以創建別的
       FS 。對 ZFS 而言實現 ZVOL 的意義在於它是比文件更簡單的接口所以一開始先實現的它，而且 
       `早期 Solaris 沒有 sparse 文件的時候可以用它模擬很大的塊設備，測試 Solaris UFS 對 TB 級存儲的支持情況 <https://youtu.be/xMH5rCL8S2k?t=298>`_。
@@ -719,4 +719,11 @@ ZFS設計中的子系統層級
 :VDEV: Virtual DEVice ，作用相當於 Linux Device Mapper ，提供 Stripe/Mirror/RAIDZ
       之類的多設備存儲池管理和抽象。
 
-和本文內容密切相關的是 ZPL 、 DSL 、 DMU 這些部分。
+
+和本文內容密切相關的是 ZPL 、 DSL、 DMU 這些部分。
+
+ZFS 的存儲格式概況
+++++++++++++++++++++++++++++++++++++
+
+Sun 曾經寫過一篇 `ZFS 的 On disk format <http://www.giis.co.in/Zfs_ondiskformat.pdf>`_
+對理解 ZFS 如何存儲在磁盤
