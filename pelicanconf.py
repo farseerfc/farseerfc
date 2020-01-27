@@ -170,7 +170,7 @@ DIRECT_TEMPLATES = (('search', 'index', 'categories', 'authors', 'archives',
 # TWITTER_WIDGET_ID = "538997172142759936"
 
 AVATAR = 'images/avatar.jpg'
-ABOUT_PAGE = "about.html"
+ABOUT_PAGE = "pages/about.html"
 ABOUT_ME = """<h3 style="text-align:center">
 <a href="https://sak.uy/"                  target="_blank">
 <i class="fa fa-music" style="text-align:center"></i></a>
