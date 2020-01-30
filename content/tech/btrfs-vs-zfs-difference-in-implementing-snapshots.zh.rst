@@ -235,8 +235,12 @@ subvolid 表示一個子卷。 ROOT_TREE 的 6 號對象描述的不是一棵樹
 每一個子卷都有一棵自己的 FS_TREE （有的文檔中叫 file tree），一個 FS_TREE 相當於傳統 Unix
 文件系統中的一整個 inode table ，只不過它除了包含 inode 信息之外還包含所有文件夾內容。在
 FS_TREE 中， object_id 同時也是它所描述對象的 inode 號，所以 btrfs
-的 **子卷有互相獨立的 inode 編號** ，不同子卷中的文件或目錄可以擁有相同的 inode 。 FS_TREE
-中一個目錄用一個 inode_item 和多個 dir_item 描述， inode_item 是目錄自己的 inode
+的 **子卷有互相獨立的 inode 編號** ，不同子卷中的文件或目錄可以擁有相同的 inode 。
+或許有人不太清楚子卷間 inode 編號獨立意味着什麼，簡單地說，這意味着你不能跨子卷創建
+hard link ，不能跨子卷 mv 移動文件而不產生複製操作。不過因爲 reflink 和 inode 無關，
+可以跨子卷創建 reflink ，也可以用 reflink + rm 的方式快速移動文件。
+
+FS_TREE 中一個目錄用一個 inode_item 和多個 dir_item 描述， inode_item 是目錄自己的 inode
 ，那些 dir_item 是目錄的內容。 dir_item 可以指向別的 inode_item 來描述普通文件和子目錄，
 也可以指向 root_item 來描述這個目錄指向一個子卷。有人或許疑惑，子卷就沒有自己的 inode
 麼？其實如果看 `數據結構定義 <https://btrfs.wiki.kernel.org/index.php/Data_Structures#btrfs_root_item>`_
