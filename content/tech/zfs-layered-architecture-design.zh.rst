@@ -4,7 +4,7 @@ ZFS 分層架構設計
 :slug: zfs-layered-architecture-design
 :translation_id: zfs-layered-architecture-design
 :lang: zh
-:date: 2020-01-26 13:45
+:date: 2020-01-30 13:45
 :tags: zfs, layered, architecture
 :series: FS筆記
 :status: draft
@@ -93,7 +93,7 @@ Matt 負責 ZFS 設計中最至關重要的 DMU 引擎，在塊設備基礎上�
         "/dev/zvol/..." -> "ZVOL";
         "NFS/CIFS" -> "ZPL";
 
-        subgraph clusterTOL{ 
+        subgraph clusterTOL{
             label = "TOL";color="black";href="#tol";
             {rank="same";node [shape=box, color=blue];
                 "ZAP" [href="#zap"];
@@ -151,7 +151,7 @@ Matt 負責 ZFS 設計中最至關重要的 DMU 引擎，在塊設備基礎上�
 SPA
 ------------------
 
-Storage Pool Allocator 
+Storage Pool Allocator
 
 從內核提供的多個塊設備中抽象出存儲池的子系統。 SPA 進一步分爲 ZIO 和 VDEV 兩大部分。
 
@@ -193,7 +193,7 @@ transaction group 提交事務組。 ZIO 也負責將讀寫請求按同步還是
 1. 用壓縮算法，壓縮/解壓數據塊。
 2. 查詢 dedup table ，對數據塊去重。
 3. 如果底層分配器不能分配完整的 128KiB （或別的大小），那麼嘗試分配多個小塊，多個用 512B
-   的指針間接塊連起多個小塊的 
+   的指針間接塊連起多個小塊的
    `gang block <https://utcc.utoronto.ca/~cks/space/blog/solaris/ZFSGangBlocks>`_
    拼成一個大塊。
 
@@ -243,7 +243,7 @@ Transactional Object Layer
 DMU
 -----------------
 
-Data Management Unit 
+Data Management Unit
 
 在塊的基礎上提供「對象」的抽象。每個「對象」可以是一個文件，或者是別的 ZFS 內部需要記錄的東西。
 
@@ -269,10 +269,10 @@ ext4/xfs/btrfs/ntfs/hfs+ 這些使用 extent 記錄連續的物理地址分配�
 ZAP
 ----------------
 
-ZFS Attribute Processor 
+ZFS Attribute Processor
 
 在 DMU 提供的「對象」抽象基礎上提供緊湊的 name/value 映射存儲，
-從而文件夾內容列表、文件擴展屬性之類的都是基於 ZAP 來存。 ZAP 在內部分爲兩種存儲表達： 
+從而文件夾內容列表、文件擴展屬性之類的都是基於 ZAP 來存。 ZAP 在內部分爲兩種存儲表達：
 microZAP 和 fatZAP 。
 
 一個 microZAP 佔用一整塊數據塊，能存 name 長度小於 50 字符並且 value 是 uint64_t 的表項，
@@ -287,7 +287,9 @@ ZAP 來存，然後文件夾內容列表有另一種數據結構 ZDS ，後來�
 DSL
 -----------------
 
-Dataset and Snapshot Layer ，數據集和快照層。
+Dataset and Snapshot Layer
+
+數據集和快照層。
 
 ZIL
 ----------------
@@ -304,8 +306,8 @@ ZVOL
 ZFS VOLume
 
 有點像 loopback block device ，暴露一個塊設備的接口，其上可以創建別的
-FS 。對 ZFS 而言實現 ZVOL 的意義在於它是比文件更簡單的接口所以一開始先實現的它，而且 
-`早期 Solaris 沒有 sparse 文件的時候可以用它模擬很大的塊設備，測試 Solaris UFS 對 TB 級存儲的支持情況 <https://youtu.be/xMH5rCL8S2k?t=298>`_。
+FS 。對 ZFS 而言實現 ZVOL 的意義在於它是比文件更簡單的接口所以一開始先實現的它，而且
+`早期 Solaris 沒有 thin provisioning storage pool 的時候可以用它模擬很大的塊設備，測試 Solaris UFS 對 TB 級存儲的支持情況 <https://youtu.be/xMH5rCL8S2k?t=298>`_。
 
 
 ZPL
