@@ -527,7 +527,7 @@ S2 之間的差異，在發送端實際上只需要 S1 中記錄的時間戳（T
 因此在發送端，可以把快照 S1 轉變成書籤，只留下時間戳元數據而不保留任何目錄結構或者文件內容。
 書籤只能作爲增量 send 時的參考點，並且在接收端需要有對應的快照，這種方式可以在發送端節省很多存儲。
 
-通常的使用場景是，比如你有一個筆記本電腦，上面有 ZFS 存儲的數據，然後使用一個服務器上 ZFS 
+通常的使用場景是，比如你有一個筆記本電腦，上面有 ZFS 存儲的數據，然後使用一個服務器上 ZFS
 作爲接收端，定期對筆記本上的 ZFS 做快照然後 send 給服務器。在沒有書籤功能的時候，
 筆記本上至少得保留一個和服務器上相同的快照，作爲 send 的增量參考點，
 而這個快照的內容已經在服務器上，所以筆記本中存有相同的快照只是在浪費存儲空間。
@@ -615,112 +615,7 @@ ZFS 在設計之初背負了重構 Solaris 諸多內核子系統的重任，從�
 而本文想講的只是 ZFS 中與快照相關的一些部分，於是先從 ZFS 的整體設計上說一下和快照相關的概念位於
 ZFS 設計中的什麼位置。
 
-ZFS設計中的子系統層級
-++++++++++++++++++++++++++++++++++++
-
-
-
-首先 ZFS 整體架構如下圖，其中圓圈是 ZFS 給內核層的外部接口，方框是 ZFS 內部子系統：
-
-
-.. dot::
-
-    digraph ZFS_Layer_Architecture {
-        {rank="same";node [shape=plaintext];
-            "Filesystem API";
-            "Block device API";
-            "ZFS Management API";
-        };
-
-        {rank="same";
-            "VFS";
-            "/dev/zvol/...";
-            "/dev/zfs ioctl";
-        };
-        "Filesystem API" -> "VFS";
-        "Block device API" -> "/dev/zvol/...";
-        "ZFS Management API" -> "/dev/zfs ioctl";
-
-        {rank="same";node [shape=box];
-            "ZPL";
-            "ZVOL";
-        };
-
-        "VFS" -> "ZPL";
-        "/dev/zvol/..." -> "ZVOL";
-
-        subgraph clusterTOL{ 
-            label = "TOL";color="black";
-            {rank="same";node [shape=box];
-                "ZAP";
-                "ZIL";
-                "DSL";
-            };
-
-            "ZPL" -> "ZAP";
-            "ZPL" -> "ZIL";
-            "DSL" -> "ZAP";
-            "/dev/zfs ioctl" -> "DSL";
-
-            {rank="same";node [shape=box];
-                "DMU";
-            };
-
-            "ZAP" -> "DMU";
-            "ZPL" -> "DMU";
-            "ZVOL" -> "DMU";
-            "DSL" -> "DMU";
-        }
-
-        {rank="same";node [shape=box];
-            "ARC";
-        };
-
-        "DMU" -> "ARC";
-
-        subgraph clusterSPA {
-            label = "SPA";color="black";
-            {rank="same";node [shape=box];
-                "ZIO";
-                "L2ARC";
-            };
-
-            {rank="same";node [shape=box];
-                "VDEV/RAIDZ";
-            };
-        };
-
-
-        "ZIL" -> "ZIO";
-        "ARC" -> "L2ARC";
-        "L2ARC" -> "ZIO";
-
-        "L2ARC" -> "VDEV/RAIDZ";
-        "ZIO" -> "VDEV/RAIDZ";
-
-    }
-
-一兩句話介紹各個子系統的縮寫：
-
-:|ZPL|: ZFS Posix Layer ，提供符合 POSIX 文件系統的語義，也就是包括文件、目錄這些抽象以及
-        inode 屬性、權限那些，對一個普通 FS 而言用戶直接接觸的部分。
-:ZVOL: ZFS VOLume ，有點像 loopback block device ，暴露一個塊設備的接口，其上可以創建別的
-      FS 。對 ZFS 而言實現 ZVOL 的意義在於它是比文件更簡單的接口所以一開始先實現的它，而且 
-      `早期 Solaris 沒有 sparse 文件的時候可以用它模擬很大的塊設備，測試 Solaris UFS 對 TB 級存儲的支持情況 <https://youtu.be/xMH5rCL8S2k?t=298>`_。
-:TOL: Transactional Object Layer，在數據塊的基礎上提供一個事務性的對象語義層。
-      每個對象用多個數據塊存儲，每個數據塊大概是 4K~128K 這樣的數量級。
-:ZAP: ZFS Attribute Processor ，在「對象」基礎上提供緊湊的 name/value 映射，從而文件夾內容、文件屬性之類的都是基於 ZAP 。
-:ZIL: ZFS Intent Log ，記錄兩次完整事務語義提交之間的 log ，用來加速實現 fsync 之類的保證。
-:DSL: Dataset & Snapshot Layer ，數據集和快照層，這是本文的重點。
-:DMU: Data Management Unit ，在塊的基礎上提供「對象」的抽象。每個「對象」可以是一個文件，或者是別的 ZFS 內部需要記錄的東西。
-:ARC: Adaptive Replacement Cache，作用相當於 pagecache 。
-:SPA: Storage Pool Allocator ，從內核的多個塊設備中抽象出存儲池。
-:ZIO: ZFS I/O，作用相當於 IO scheduler 。
-:VDEV: Virtual DEVice ，作用相當於 Linux Device Mapper ，提供 Stripe/Mirror/RAIDZ
-      之類的多設備存儲池管理和抽象。
-
-
-和本文內容密切相關的是 ZPL 、 DSL、 DMU 這些部分。
+和本文內容密切相關的是 ZPL 、 DSL、 DMU 這些 ZFS 子系統。
 
 ZFS 的存儲格式概況
 ++++++++++++++++++++++++++++++++++++
