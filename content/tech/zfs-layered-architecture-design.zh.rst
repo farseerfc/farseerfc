@@ -117,6 +117,7 @@ Matt 負責 ZFS 設計中最至關重要的 DMU 引擎，在塊設備基礎上�
             "ZVOL" -> "DMU";
             "DSL" -> "DMU";
             "NFS/CIFS" -> "DMU";
+
         }
 
         {rank="same";node [shape=box, color=blue];
@@ -222,6 +223,13 @@ IO 操作不至於讓緩存失效率猛增。
 `ZFS 性能調優 <http://open-zfs.org/wiki/Performance_tuning#Adaptive_Replacement_Cache>`_
 的重中之重。
 
+當然， ZFS 採用 ARC 不依賴於內核已有的 pagecache 機制除了 LFU 平衡之外，也有其有利的一面。
+系統中多次讀取因 snapshot 或者 dedup 而共享的數據塊的話，在 ZFS 的 ARC 機制下，同樣的
+block pointer 只會被緩存一次；而傳統的 pagecache 因爲基於 inode 判斷是否有共享，
+所以即使這些文件有共享頁面（比如 btrfs/xfs 的 reflink 形成的），也會多次讀入內存。 Linux
+的 btrfs 和 xfs 在 VFS 層面有共用的 reflink 機制之後，正在努力着手改善這種局面，而 ZFS
+因爲 ARC 所以從最初就避免了這種浪費。
+
 和很多傳言所說的不同， ARC 的內存壓力問題不僅在 Linux 內核會有，在 FreeBSD 和
 Solaris/Illumos 上也是同樣，這個在
 `ZFS First Mount by Mark Shellenbaum 的問答環節 16:37 左右有提到 <https://youtu.be/xMH5rCL8S2k?t=997>`_
@@ -312,17 +320,49 @@ DSL
 
 Dataset and Snapshot Layer
 
-數據集和快照層。
+數據集和快照層，負責創建和管理快照、克隆等數據集類型，跟蹤它們的寫入大小，最終刪除它們。
+由於 DMU 層面已經負責了對象的寫時複製語義，所以 DSL 層面不需要直接接觸寫文件之類來自 ZPL
+的請求，無論有沒有快照對 DMU 層面一樣採用寫時複製的方式修改文件數據。
+不過在刪除快照和克隆之類的時候，則需要 DSL 參與計算沒有和別的數據集共享的數據塊並且刪除它們。
+
+除了管理數據集， DSL 層面也提供了 zfs 中 send/receive 的能力。 ZFS 在 send 時從 DSL
+層找到快照引用到的所有數據塊，把它們直接發往管道，在 receive 端則直接接收數據塊並重組數據塊指針。
+因爲 DSL 提供的 send/receive 工作在 DMU 之上，所以在 DSL 看到的數據塊是 DMU
+的數據塊，下層 SPA 完成的數據壓縮、加密、去重等工作，對 DMU 層完全透明。所以在最初的
+send/receive 實現中，假如數據塊已經壓縮，需要在 send 端經過 SPA 解壓，再 receive
+端則重新壓縮。最近 ZFS 的 send/receive 逐漸打破 DMU 與 SPA
+的壁壘，支持了直接發送已壓縮或加密的數據塊的能力。
 
 ZIL
 ----------------
 
 ZFS Intent Log
 
-記錄兩次完整事務語義提交之間的 log ，用來加速實現 fsync 之類的保證。
+記錄兩次完整事務語義提交之間的日誌，用來加速實現 fsync 之類的文件事務語義。
 
+原本 CoW 的文件系統不需要日誌結構來保證文件系統結構的一致性，在 DMU
+保證了對象級別事務語義的前提下，每次完整的 transaction group commit
+都保證了文件系統一致性，掛載時也直接找到最後一個 transaction group 從它開始掛載即可。
+不過在 ZFS 中，做一次完整的 transaction group commit 是個比較耗時的操作，
+在寫入文件的數據塊之後，還需要更新整個 object set ，然後更新 meta-object set
+，最後更新 uberblock ，爲了滿足事務語義這些操作沒法並行完成，所以整個 pool
+提交一次需要等待好幾次磁盤寫操作返回，短則一兩秒，長則幾分鐘，
+如果事務中有要刪除快照等非常耗時的操作可能還要等更久，在此期間提交的事務沒法保證一致。
 
+對上層應用程序而言，通常使用 fsync 或者 fdatasync 之類的系統調用，確保文件內容本身的事務一致性。
+如果要讓每次 fsync/fdatasync 等待整個 transaction group commit
+完成，那會嚴重拖慢很多應用程序，而如果它們不等待直接返回，則在突發斷電時沒有保證一致性。
+從而 ZFS 有了 ZIL ，記錄兩次 transaction group 的 commit 之間發生的 fsync
+，突然斷電後下次 import zpool 時首先找到最近一次 transaction group ，在它基礎上重放
+ZIL 中記錄的寫請求和 fsync 請求，從而滿足 fsync API 要求的事務語義。
 
+顯然對 ZIL 的寫操作需要繞過 DMU 直接寫入數據塊，所以 ZIL 本身是以日誌系統的方式組織的，每次寫
+ZIL 都是在已經分配的 ZIL 塊的末尾添加數據，分配新的 ZIL 塊仍然需要經過 DMU
+的空間分配。
+
+傳統日誌型文件系統中對 data 開日誌需要寫兩次，一次寫入日誌，再一次覆蓋文件系統內容；在
+ZIL 實現中則不需要寫兩次， DMU 讓 SPA 寫入數據之後 ZIL 可以直接記錄新數據塊的
+block pointer ，所以使用 ZIL 不會導致傳統日誌型文件系統中雙倍寫入放大的問題。
 
 
 ZVOL
@@ -331,13 +371,25 @@ ZVOL
 ZFS VOLume
 
 有點像 loopback block device ，暴露一個塊設備的接口，其上可以創建別的
-FS 。對 ZFS 而言實現 ZVOL 的意義在於它是比文件更簡單的接口所以一開始先實現的它，而且
-`早期 Solaris 沒有 thin provisioning storage pool 的時候可以用它模擬很大的塊設備，測試 Solaris UFS 對 TB 級存儲的支持情況 <https://youtu.be/xMH5rCL8S2k?t=298>`_。
+FS 。對 ZFS 而言實現 ZVOL 的意義在於它是比文件更簡單的接口，所以在實現完整 ZPL
+之前，一開始就先實現了 ZVOL ，而且
+`早期 Solaris 沒有 thin provisioning storage pool 的時候可以用 ZVOL 模擬很大的塊設備，當時 Solaris 的 UFS 團隊用它來測試 UFS 對 TB 級存儲的支持情況 <https://youtu.be/xMH5rCL8S2k?t=298>`_
+。
+
+因爲 ZVOL 基於 DMU 上層，所以 DMU 所有的文件系統功能，比如 snapshot / dedup / compression
+都可以用在 ZVOL 上，從而讓 ZVOL 上層的傳統文件系統也具有類似的功能。並且 ZVOL 也具有了 ARC
+緩存的能力，和 dedup 結合之下，非常適合於在一個宿主機 ZFS
+上提供對虛擬機文件系統鏡像的存儲，可以節省不少存儲空間和內存佔用開銷。
 
 
 ZPL
 ----------------
 
-ZFS Posix Layer ，提供符合 POSIX 文件系統的語義，也就是包括文件、目錄這些抽象以及
-inode 屬性、權限那些，對一個普通 FS 而言用戶直接接觸的部分。
+ZFS Posix Layer
 
+提供符合 POSIX 文件系統的語義，也就是包括文件、目錄這些抽象以及
+inode 屬性、權限那些，對一個普通 FS 而言用戶直接接觸的部分。
+ZPL 可以說是 ZFS 最複雜的子系統，也是 ZFS 作爲一個文件系統而言最關鍵的部分。
+
+ZPL 的實現中直接使用了 ZAP 和 DMU 提供的抽象，比如每個 ZPL 文件用一個 DMU 對象表達，每個
+ZPL 目錄用一個 ZAP 對象表達。
