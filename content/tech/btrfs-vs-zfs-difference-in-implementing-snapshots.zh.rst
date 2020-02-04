@@ -455,11 +455,10 @@ ZFS 中把文件系統、快照、克隆、zvol 等概念統稱爲數據集（da
 這些參數可以被子級數據集基礎，從而通過層級關係可以方便地微調 ZFS 參數。在 btrfs
 中目前還沒有類似的屬性繼承的功能。
 
-zvol 的概念和本文關係不大，這裏簡要介紹一下。 zvol 是在 ZFS 存儲池中虛擬出的一個塊設備，
-可以在 zvol 上創建別的類型的文件系統，比如 ext4 或者 xfs 這種。很多對 ZFS 文件系統能做的操作，
-比如快照或者 send 也都能對 zvol 做，從而用 zvol 能把 ZFS 當作一個傳統的卷管理器，繞開 ZFS
-的 ZPL（ZFS Posix filesystem Layer） 層。在 Btrfs 中可以用 loopback
-塊設備某種程度上模擬 zvol 的功能。
+zvol 的概念和本文關係不大，可以參考我上一篇 `ZFS 子系統筆記中 ZVOL 的說明 <{filename}./zfs-layered-architecture-design.zh.rst#ZVOL>`_
+。用 zvol 能把 ZFS 當作一個傳統的卷管理器，繞開 ZFS
+的 `ZPL（ZFS Posix filesystem Layer） <{filename}./zfs-layered-architecture-design.zh.rst#ZPL>`_
+層。在 Btrfs 中可以用 loopback 塊設備某種程度上模擬 zvol 的功能。
 
 文件系統（filesystem）
 ++++++++++++++++++++++++++++++++++++
@@ -554,9 +553,10 @@ ZFS 的概念與 btrfs 概念的對比
 
 先說書籤和檢查點，因爲這是兩個 btrfs 目前完全沒有的功能。
 
-書籤功能完全圍繞 ZFS send 的工作原理，而 ZFS send 位於 ZFS 設計中的
-DSL_ 層面，甚至不關心它 send
-的快照的數據是來自文件系統還是 zvol 。在發送端它只是從目標快照遞歸取數據塊，判斷 TXG
+書籤功能完全圍繞 ZFS send 的工作原理，而 ZFS send 位於
+`ZFS 設計中的 DSL <{filename}./zfs-layered-architecture-design.zh.rst#DSL>`_
+層面，甚至不關心它 send 的快照的數據是來自文件系統還是 zvol
+。在發送端它只是從目標快照遞歸取數據塊，判斷 TXG
 是否老於參照點的快照，然後把新的數據塊全部發往 send stream ；在接收端也只是完整地接收數據塊，
 不加以處理，。與之不同的是 btrfs 的 send 的工作原理是工作在文件系統的只讀子卷層面，
 發送端在內核代碼中根據目標快照的 b 樹和參照點快照的 generation 生成一個 diff
