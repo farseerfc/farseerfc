@@ -163,7 +163,7 @@ ZFS 設計中這最初的分工也體現在了 ZFS 現在子系統分層的架�
         {rank="same";node [shape=cylinder];
             "physical storage devices";
         };
-        "VDEV" -> "physical storage devicZFS Posix filesystem Layer）es";
+        "VDEV" -> "physical storage devices";
 
     }
 
@@ -194,8 +194,9 @@ VDEV
 
 Virtual DEVice
 
-作用相當於 Linux 內核的 Device Mapper 層或者 FreeBSD GEOM 層，提供 Stripe/Mirror/RAIDZ
-之類的多設備存儲池管理和抽象。 ZFS 中的 vdev 形成一個樹狀結構，在樹的底層是從內核提供的物理設備，
+VDEV 在 ZFS 中的作用相當於 Linux 內核的 Device Mapper 層或者 FreeBSD GEOM 層，提供
+Stripe/Mirror/RAIDZ 之類的多設備存儲池管理和抽象。 ZFS 中的 vdev
+形成一個樹狀結構，在樹的底層是從內核提供的物理設備，
 其上是虛擬的塊設備。每個虛擬塊設備對上對下都是塊設備接口，除了底層的物理設備之外，位於中間層的
 vdev 需要負責地址映射、容量轉換等計算過程。
 
