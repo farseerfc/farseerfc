@@ -242,6 +242,11 @@ transaction group 提交事務組。 ZIO 也負責將讀寫請求按同步還是
 MetaSlab
 -----------------
 
+.. panel-default::
+    :title: MetaSlab Allocation Performance by Paul Dagnelie
+
+    .. youtube:: LZpaTGNvalE
+
 MetaSlab 是 ZFS 的塊分配器。 VDEV 把存儲設備抽象成存儲池之後， MetaSlab
 負責實際從存儲設備上分配數據塊，跟蹤記錄可用空間和已用空間。
 
@@ -257,7 +262,10 @@ MetaSlab 的結構很接近於 FreeBSD UFS 的 cylinder group ，或者 ext2/3/4
 增加設備的話使用接近的 MetaSlab 大小。每個 MetaSlab 是連續的一整塊空間，在 MetaSlab
 內對數據塊空間做分配和釋放。磁盤中存儲的 MetaSlab 的分配情況是按需載入內存的的，系統
 import zpool 時不需要載入所有 MetaSlab 到內存，而只需加載一小部分。當前載入內存的 MetaSlab
-剩餘空間告急時，會載入別的 MetaSlab 嘗試分配，而從某個 MetaSlab 釋放空間不需要載入 MetaSlab 。
+剩餘空間告急時，會載入別的 MetaSlab 嘗試分配，而從某個 MetaSlab 釋放空間不需要載入 MetaSlab
+。
+
+OpenZFS Summit 也有一個對 MetaSlab 分配器性能的介紹，可以看到很多分配器內的細節。
 
 ARC
 -----------------
