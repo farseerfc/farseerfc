@@ -608,21 +608,51 @@ btrfs 中可以直接 :code:`cp --reflink=always` 將鏡像從快照中複製出
 ZFS 中是如何存儲這些數據集的呢
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-要講到存儲細節，首先需要提一下 ZFS 的分層設計。不像 btrfs 基於現代 Linux
-內核，有許多現有文件系統已經實現好的基礎設施可以利用，並且大體上只用到一種核心數據結構（CoW的B樹）；
-ZFS 則脫胎於 Solaris 的野心勃勃，設計時就分成很多不同的子系統，逐步提升抽象層次，
-並且每個子系統都發明了許多特定需求下的數據結構來描述存儲的信息。
+要講到存儲細節，首先需要 瞭解一下 `ZFS 的分層設計 <{filename}./zfs-layered-architecture-design.zh.rst>`_
+。不像 btrfs 基於現代 Linux 內核，有許多現有文件系統已經實現好的基礎設施可以利用，
+並且大體上只用到一種核心數據結構（CoW的B樹）； ZFS 則脫胎於 Solaris 的野心勃勃，
+設計時就分成很多不同的子系統，逐步提升抽象層次，
+並且每個子系統都發明了許多特定需求下的數據結構來描述存儲的信息。 在這裏和本文內容密切相關的是
+ZPL_ 、 DSL_ 、 DMU_ 這些 ZFS 子系統。
 
-ZFS 在設計之初背負了重構 Solaris 諸多內核子系統的重任，從而不同於 Linux 的文件系統
-只負責文件系統的功能而把其餘功能（比如內存髒頁管理，IO調度）交給內核更底層的子系統， ZFS
-的整體設計更層次化並更獨立，很多部分可能和 Linux 內核已有的子系統有功能重疊。
-而本文想講的只是 ZFS 中與快照相關的一些部分，於是先從 ZFS 的整體設計上說一下和快照相關的概念位於
-ZFS 設計中的什麼位置。
+.. _ZPL: {filename}./zfs-layered-architecture-design.zh.rst#zpl
+.. _DSL: {filename}./zfs-layered-architecture-design.zh.rst#DSL
+.. _DMU: {filename}./zfs-layered-architecture-design.zh.rst#dmu
 
-和本文內容密切相關的是 ZPL 、 DSL、 DMU 這些 ZFS 子系統。
+Sun 曾經寫過一篇 ZFS 的 `On disk format <http://www.giis.co.in/Zfs_ondiskformat.pdf>`_
+對理解 ZFS 如何存儲在磁盤上很有幫助，雖然這篇文檔是針對 Sun 還在的時候 Solaris 的 ZFS
+，現在 ZFS 的內部已經變化挺大，不過對於理解本文想講的快照的實現方式還具有參考意義。這裏藉助這篇
+ZFS On Disk Format 中的一些圖示來解釋 ZFS 在磁盤上的存儲方式。
 
-ZFS 的存儲格式概況
-++++++++++++++++++++++++++++++++++++
+.. panel-default::
+  :title: `ZFS 中用的 128 字節塊指針 <{static}/images/zfs-block-pointer.svg>`_
 
-Sun 曾經寫過一篇 `ZFS 的 On disk format <http://www.giis.co.in/Zfs_ondiskformat.pdf>`_
-對理解 ZFS 如何存儲在磁盤
+  .. image:: {static}/images/zfs-block-pointer.svg
+      :alt: zfs-block-pointer.svg
+
+
+要理解 ZFS 的磁盤結構首先想介紹一下 ZFS 中的塊指針（block pointer），結構如右圖所示。 
+ZFS 的塊指針用在 ZFS 的許多數據結構之中，當需要從一個地方指向任意另一個地址的時候都會
+插入這樣的一個塊指針結構。大多數文件系統中也有類似的指針結構，比如 btrfs
+中有個8字節大小的邏輯地址（logical address），一般也就是個 4字節 到 16字節
+大小的整數寫着扇區號、塊號或者字節偏移，在 ZFS 中的塊指針則是一個巨大的128字節（不是
+128bit !）的結構體。
+
+128字節塊指針的開頭是3個數據虛擬地址（DVA, Data Virtual Address），每個 DVA 是 128bit
+，其中記錄這塊數據在什麼設備（vdev）的什麼偏移（offset）上佔用多大（asize)，有 3個
+DVA 槽是用來存儲最多3個不同位置的副本。然後塊指針還記錄了這個塊用什麼校驗算法（ cksum
+）和什麼壓縮算法（comp），壓縮前後的大小（PSIZE/LSIZE），以及256bit的校驗和（checksum）。
+
+當需要間接塊（indirect block）時，塊指針中記錄了間接塊的層數（lvl），和下層塊指針的數量（fill）。
+一個間接塊就是一個數據塊中包含一個塊指針的數組，當引用的對象很大需要很多塊時，間接塊構成一棵樹狀結構。
+
+塊指針中還有和本文關係很大的一個值 birth txg ，記錄這個塊指針誕生時的整個 pool 的 TXG id
+。一次 TXG 提交中寫入的數據塊都會有相同的 birth txg ，這個相當於 btrfs 中 generation 的概念。
+實際上現在的 ZFS 塊指針似乎記錄了兩個 birth txg ，分別在圖中的9行和a行的位置，
+`一個 physical 一個 logical ，用於 dedup 和 device removal <https://utcc.utoronto.ca/~cks/space/blog/solaris/ZFSBlockPointers>`_。
+
+.. panel-default::
+  :title: `ZFS Meta Object Set <{static}/images/zfs-metaobjectset.svg>`_
+
+  .. image:: {static}/images/zfs-metaobjectset.svg
+      :alt: zfs-metaobjectset.svg
