@@ -11,6 +11,12 @@ Btrfs vs ZFS 實現 snapshot 的差異
 
 .. contents::
 
+..
+
+    | zfs 這個東西倒是名不符實。叫 z storage stack 明顯更符合。 叫 fs 但不做 fs 自然確實會和 btrfs 有很大出入。
+    | 我反而以前還好奇為什麼 btrfs 不弄 zvol ， 直到我意識到這東西真是一個 fs ，名符奇實。
+    | —— 某不愿透露姓名的 Ext2FSD 開發者
+
 Btrfs 和 ZFS 都是開源的寫時拷貝（Copy on Write, CoW）文件系統，都提供了相似的子卷管理和
 快照(snapshot）的功能。網上有不少文章都評價 ZFS 實現 CoW FS 的創新之處，進而想說「 Btrfs
 只是 Linux/GPL 陣營對 ZFS 的拙劣抄襲」。或許（在存儲領域人盡皆知而在領域外）鮮有人知，在
@@ -624,6 +630,9 @@ Sun 曾經寫過一篇 ZFS 的 `On disk format <http://www.giis.co.in/Zfs_ondisk
 ，現在 ZFS 的內部已經變化挺大，不過對於理解本文想講的快照的實現方式還具有參考意義。這裏藉助這篇
 ZFS On Disk Format 中的一些圖示來解釋 ZFS 在磁盤上的存儲方式。
 
+ZFS 的塊指針（block pointer）
+++++++++++++++++++++++++++++++++++++
+
 .. panel-default::
   :title: `ZFS 中用的 128 字節塊指針 <{static}/images/zfs-block-pointer.svg>`_
 
@@ -631,8 +640,8 @@ ZFS On Disk Format 中的一些圖示來解釋 ZFS 在磁盤上的存儲方式�
       :alt: zfs-block-pointer.svg
 
 
-要理解 ZFS 的磁盤結構首先想介紹一下 ZFS 中的塊指針（block pointer），結構如右圖所示。 
-ZFS 的塊指針用在 ZFS 的許多數據結構之中，當需要從一個地方指向任意另一個地址的時候都會
+要理解 ZFS 的磁盤結構首先想介紹一下 ZFS 中的塊指針（block pointer, :code:`blkptr_t`
+），結構如右圖所示。 ZFS 的塊指針用在 ZFS 的許多數據結構之中，當需要從一個地方指向任意另一個地址的時候都會
 插入這樣的一個塊指針結構。大多數文件系統中也有類似的指針結構，比如 btrfs
 中有個8字節大小的邏輯地址（logical address），一般也就是個 4字節 到 16字節
 大小的整數寫着扇區號、塊號或者字節偏移，在 ZFS 中的塊指針則是一個巨大的128字節（不是
@@ -649,10 +658,220 @@ DVA 槽是用來存儲最多3個不同位置的副本。然後塊指針還記錄
 塊指針中還有和本文關係很大的一個值 birth txg ，記錄這個塊指針誕生時的整個 pool 的 TXG id
 。一次 TXG 提交中寫入的數據塊都會有相同的 birth txg ，這個相當於 btrfs 中 generation 的概念。
 實際上現在的 ZFS 塊指針似乎記錄了兩個 birth txg ，分別在圖中的9行和a行的位置，
-`一個 physical 一個 logical ，用於 dedup 和 device removal <https://utcc.utoronto.ca/~cks/space/blog/solaris/ZFSBlockPointers>`_。
+`一個 physical 一個 logical ，用於 dedup 和 device removal <https://utcc.utoronto.ca/~cks/space/blog/solaris/ZFSBlockPointers>`_
+。值得注意的是塊指針裏只有 birth txg ，沒有引用計數或者別的機制做引用，這對後面要講的東西很關鍵。
+
+ZPL 的元對象集（MOS, Meta Object Set）
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+理解塊指針和 ZFS 的子系統層級之後，就可以來看看 ZFS 存儲在磁盤上的具體結構了。
+因爲涉及的數據結構種類比較多，所以先來畫一張邏輯上的簡圖，其中箭頭只是某種引用關係不代表塊指針，
+方框也不是結構體細節：
+
+.. dot::
+
+    digraph zfs_layout_simple {
+        node [shape=record];rankdir=LR;ranksep=1;
+        uberblock [label="<uberblock_label> UBERBLOCK |
+                        ... |
+                        <ub_rootbp> mos_blkptr
+                    "];
+
+        mos [label="<mos_label> Meta Object Set |
+                <mos_root_dataset> root dataset |
+                <mos_config> config |
+                ...
+            "];
+        
+        uberblock:ub_rootbp -> mos:mos_label;
+
+        root_dataset [label="<rd_label> ROOT dataset|
+            <rd_ds1> dataset1 directory |
+            <rd_ds1> dataset2 directory |
+            ...
+        "];
+
+        mos:mos_root_dataset -> root_dataset:rd_label;
+
+        ds1_directory [label="<ds1_label> DSL Directory|
+            <ds1_property> ds1 property ZAP object |
+            <ds1_child> ds1 child ZAP object |
+            <ds1_dataset> ds1 dataset (active) |
+            <ds1_s1> ds1 snapshot1 |
+            <ds1_s1> ds1 snapshot2 |
+            ...
+        "];
+
+        root_dataset:rd_ds1 -> ds1_directory:ds1_label;
+
+        ds1_dataset [label="<ds1_ds_label> ds1 DMU Object Set|
+            ...
+        "];
+
+        ds1_directory:ds1_dataset -> ds1_dataset:ds1_ds_label;
+
+        ds1_snapshot1 [label="<ds1_s1_label> ds1 snapshot1 DMU Object Set|
+            ...
+        "];
+
+        ds1_directory:ds1_s1 -> ds1_snapshot1:ds1_s1_label;
+
+    }
+
+如上簡圖所示，首先 ZFS pool 級別有個 uberblock ，具體每個 vdev 如何存儲和找到這個 uberblock
+今後有空再聊，這裏認爲整個 zpool 有唯一的一個 uberblock 。從 uberblock 有個指針指向
+Meta Object Set ，它是個 DMU 的對象集，它包含整個 pool 的一些配置信息，和根數據集（root dataset）。
+根數據集再包含整個 pool 中保存的所有頂層數據集，每個數據集有一個 DSL Directory 結構。
+然後從每個數據集的 DSL Directory 可以找到一系列子數據集和一系列快照等結構。最後每個數據集有個 active
+的 DMU 對象集，這是整個文件系統的當前寫入點，每個快照也指向一個各自的 DMU 對象集。
+
+
+DSL 層的每個數據集的邏輯結構也可以用下面的圖表達（來自 ZFS On Disk Format ）：
+
+.. figure:: {static}/images/zfs-dsl-infrastructure.svg
+    :alt: zfs-dsl-infrastructure.svg
+
+    ZFS On Disk Format 中 4.1 節的 DSL infrastructure
+
 
 .. panel-default::
-  :title: `ZFS Meta Object Set <{static}/images/zfs-metaobjectset.svg>`_
+    :title: `ZFS On Disk Format 中 4.2 節的 Meta Object Set <{static}/images/zfs-metaobjectset.svg>`_
 
-  .. image:: {static}/images/zfs-metaobjectset.svg
-      :alt: zfs-metaobjectset.svg
+    .. image:: {static}/images/zfs-metaobjectset.svg
+        :alt: zfs-metaobjectset.svg
+
+需要記得 ZFS 中沒有類似 btrfs 的 CoW b-tree 這樣的統一數據結構，所以上面的這些設施是用各種不同的數據結構表達的。
+尤其每個 Directory 的結構可以包含一個 ZAP 的鍵值對存儲，和一個 DMU 對象。
+可以理解爲， DSL 用 DMU 對象集（Objectset）表示一個整數（uinit64_t 的 dnode）到 DMU 對象的映射，
+然後用 ZAP 對象表示一個名字到整數的映射，然後又有很多額外的存儲於 DMU 對象中的 DSL 結構體。
+如果我們畫出不同的指針和不同的結構體，那麼會得到一個稍顯複雜的圖，見右邊「ZFS
+On Disk Format 中 4.2 節的 Meta Object Set」，圖中還只畫到了 root_dataset 爲止。
+
+看到這裏，大概可以理解在 ZFS 中創建一個 ZFS 快照的操作其實很簡單：找到數據集的 DSL Directory
+中當前 active 的 DMU 對象集指針，創建一個表示 snapshot 的 DSL dataset 結構，指向那個
+DMU 對象集，然後快照就建好了。因爲今後對 active 的寫入會寫時複製對應的 DMU 對象集，所以
+snapshot 指向的 DMU 對象集不會變化。
+
+
+咦，創建快照這麼簡單麼？那麼刪除快照呢？
+--------------------------------------------------------------------------------
+
+按上面的存儲格式細節來看， btrfs 和 zfs 中創建快照似乎都挺簡單的，利用寫時拷貝，創建快照本身沒什麼複雜操作。
+
+如果你也聽到過別人介紹 CoW 文件系統時這麼講，是不是會覺得似乎哪兒少了點什麼。創建快照是挺簡單的，
+**直到你開始考慮如何刪除快照** ……
+
+或者不侷限在刪除單個快照上， CoW 文件系統因爲寫時拷貝，每修改一個文件內容或者修改一個文件系統結構，
+都是分配新數據塊，然後考慮是否要刪除這個數據替換的老數據塊，此時如何決定老數據塊能不能刪呢？
+刪除快照的時候也是同樣，快照是和別的文件系統有共享一部分數據和元數據的，
+所以顯然不能把快照引用到的數據塊都直接刪掉，要考察快照引用的數據塊是否還在別的地方被引用着，
+只能刪除那些沒有被引用的數據。
+
+深究「如何刪快照」這個問題，就能看出 WAFL 、 btrfs 、 ZFS 甚至別的 log-structured
+文件系統間的關鍵區別，從而也能看到另一個問題的答案：
+**爲什麼 btrfs 只需要子卷的抽象，而 zfs 搞出了這麼多抽象概念？**
+帶着這兩個疑問，我們來研究一下這些文件系統的塊刪除算法。
+
+日誌結構文件系統中用的垃圾回收（Garbage Collection）算法
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+講 btrfs 和 zfs 用到的刪除算法之前，先講一下日誌結構（log-structured）文件系統中的 GC 算法。
+對熟悉編程的人來說，講到空間釋放算法，大概首先會想到 GC ，因爲這裏要解決的問題乍看起來很像
+編程語言的內存管理中 GC 想要解決的問題：有很多指針相互指向很多數據結構，找其中沒有被引用的垃圾然後釋放掉。
+
+首先要澄清一下 `日誌結構文件系統（log-structured file system） <https://en.wikipedia.org/wiki/Log-structured_file_system>`_
+的定義，因爲有很多文件系統用日誌，而用了日誌的不一定是日誌結構文件系統。
+在維基百科上有個頁面介紹 `日誌結構文件系統 <https://en.wikipedia.org/wiki/Log-structured_file_system>`_
+，還有個 `列表列出了一些日誌結構文件系統 <https://en.wikipedia.org/wiki/List_of_log-structured_file_systems>`_
+。通常說，整個文件系統的存儲結構都組織成一個大日誌的樣子，就說這個文件系統是日誌結構的，
+這包括很多早期學術研究的文件系統，以及目前 `NetBSD 的 LFS <https://en.wikipedia.org/wiki/Log-structured_File_System_(BSD)>`_
+、Linux 的 `NILFS <https://en.wikipedia.org/wiki/NILFS>`_
+，用在光盤介質上的 `UDF <https://en.wikipedia.org/wiki/Universal_Disk_Format>`_
+，還有一些專門爲閃存優化的 `JFFS <https://en.wikipedia.org/wiki/JFFS>`_ 、
+`YAFFS <https://en.wikipedia.org/wiki/YAFFS>`_ 以及
+`F2FS <https://en.wikipedia.org/wiki/F2FS>`_
+。日誌結構文件系統不包括那些用額外日誌保證文件系統一致性，但文件系統結構不在日誌中的 ext4 、 xfs
+、 ntfs 、 hfs+ 。
+
+簡單來說，日誌結構文件系統就是把存儲設備當作一個大日誌，每次寫入數據時都添加在日誌末尾，
+然後用寫時複製重新寫入元數據，最後提交整個文件系統結構。從這個特徵上來說，寫時拷貝文件系統（CoW
+FS）像 btrfs/zfs 這些在一些人眼中也符合日誌結構文件系統的特徵，
+所以也有人說寫時拷貝文件系統算是日誌結構文件系統的一個子類。不過日誌結構文件系統的另一大特徵是利用
+GC 回收空間，這裏是本文要講的區別，所以在我看來不用 GC 的 btrfs 和 zfs 不算是日誌結構文件系統。
+
+舉個例子，比如下圖是一個日誌結構文件系統的磁盤佔用，其中綠色是數據，藍色是元數據（比如目錄結構和
+inode），紅色是文件系統級關鍵數據（比如最後的日誌提交點），一開始可能是這樣，有9個數據塊，
+2個元數據塊，1個系統塊：
+
+.. ditaa::
+
+    /--------+--------+--------+--------+--------\
+    |cGRE 1  |cGRE 5  |cGRE 9  |        |        |
+    +--------+--------+--------+--------+--------+
+    |cGRE 2  |cGRE 6  |cBLU 10 |        |        |
+    +--------+--------+--------+--------+--------+
+    |cGRE 3  |cGRE 7  |cBLU 11 |        |        |
+    +--------+--------+--------+--------+--------+
+    |cGRE 4  |cGRE 8  |cRED 12 |        |        |
+    \--------+--------+--------+--------+--------/
+
+現在要覆蓋 2 和 3 的內容，新寫入 n2 和 n3 ，然後修改 10 裏面的 inode 變成 n10
+引用這些新數據，然後寫入一個新提交 n12 ，用黃色表示不再被引用的垃圾，提交完大概是這樣：
+
+.. ditaa::
+
+    /--------+--------+--------+--------+--------\
+    |cGRE 1  |cGRE 5  |cGRE 9  |cGRE n2 |        |
+    +--------+--------+--------+--------+--------+
+    |cYEL o2 |cGRE 6  |cYEL o10|cGRE n3 |        |
+    +--------+--------+--------+--------+--------+
+    |cYEL o3 |cGRE 7  |cBLU 11 |cBLU n10|        |
+    +--------+--------+--------+--------+--------+
+    |cGRE 4  |cGRE 8  |cYEL o12|cRED n12|        |
+    \--------+--------+--------+--------+--------/
+
+日誌結構文件系統需要 GC 比較容易理解，寫日誌嘛，總得有一個「添加到末尾」的寫入點，比如上面圖中的
+n12 。空盤上連續往後寫而不 GC 總會遇到空間末尾，這時候就要覆蓋寫空間開頭，就很難判斷「末尾」在什麼地方了。
+這時候 GC 的話，也不能只回收那些不再需要的空間（圖中的 o2 和 o3 和 o10
+），因爲這樣的話剩餘空間會很零碎。
+
+和內存管理時的 GC 不同的一點在於，文件系統的 GC 肯定不能停下整個世界跑 GC
+，也不能把可用空間對半分然後 Mark-and-Sweep ，這些在內存中還尚可的簡單策略直接放到文件系統中絕對是性能災難。
+
+通常文件系統的 GC 是，先把整個盤分成幾個段（segment）或者區域(zone)，術語不同不過表達的概念類似，
+然後 GC 時挑一個老段，掃描文件系統找出目標段中還被引用的數據塊，搬運到日誌末尾，然後整個釋放一段。
+搬運數據塊時，也要調整文件系統別的地方對被搬運的數據塊的引用。
+
+物理磁盤上有扇區的概念，通常是512字節到4KiB大小，在文件系統中一般把連續幾個物理塊作爲一個數據塊，
+大概 4KiB 到 1MiB 的數量級，然後日誌結構文件系統中一個段通常是連續的很多塊，數量級來看大約是
+4MiB 到 64MiB 這樣的數量級。在數據塊之上， ufs/ext4/btrfs/zfs 通常還有 block group 的概念，
+大概是 128MiB 到 1GiB 的大小。可見日誌結構文件系統的段，是位於數據塊和其它文件系統 block group
+中間的一個大小。
+
+繼續上面的例子，假設上面文件系統的圖示中每一列是一個段，想要回收最開頭那個段，那麼需要搬運還在用的
+1 和 4 到空閒空間，順帶修改引用它們的 n10 ，最後提交：
+
+.. ditaa::
+
+    /--------+--------+--------+--------+--------\
+    |     1  |cGRE 5  |cGRE 9  |cGRE n2 |cGRE 1  |
+    +--------+--------+--------+--------+--------+
+    |     o2 |cGRE 6  |cYEL o10|cGRE n3 |cGRE 4  |
+    +--------+--------+--------+--------+--------+
+    |     o3 |cGRE 7  |cBLU 11 |cYEL o10|cBLU n10|
+    +--------+--------+--------+--------+--------+
+    |     4  |cGRE 8  |cYEL o12|cYEL o12|cRED n12|
+    \--------+--------+--------+--------+--------/
+
+要掃描並釋放一整段，需要掃描整個文件系統中別的地方來確定有沒有引用到目標段中的地址，
+可見釋放一個段是一個 :math:`O(N)` 的操作，其中 N 是段的數量，按文件系統的大小增長，
+於是刪除快照之類可能要連續釋放很多段的操作在日誌文件系統中是個 :math:`O(N^2)` 甚至更昂贵的操作。
+在文件系統相對比較小而系統內存相對比較大的時候，比如手機上或者PC讀寫SD卡，大部分元數據塊（
+其中包含塊指針）都能放入內存緩存起來的話，這個掃描操作的開銷還是可以接受的。
+但是對大型存儲系統顯然掃描並釋放空間就不合適了。
+
+段的抽象用在閃存類存儲設備上的一點優勢在於，閃存通常也有擦除塊的概念，比寫入塊的大小要小，
+日誌結構的文件系統中一個段可以直接對應到閃存的一個擦除塊上。所以閃存設備諸如U盤或者 SSD
+通常在底層固件中用日誌結構文件系統模擬一個塊設備，來做寫入平衡。
+
+基於整段的 GC 還有一個顯著缺陷在，需要複製搬運仍然被引用到的塊
