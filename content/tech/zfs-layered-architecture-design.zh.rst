@@ -60,6 +60,8 @@ Sun/Oracle 成爲了 Oracle ZFS 分支的維護者。
 .. panel-default::
     :title: ZFS past & future by Mark Maybee
 
+    .. youtube:: c1ek1tFjhH8
+
 
 在開發早期，作爲分工， Jeff 負責 ZFS 設計中最底層的 SPA ，提供多個存儲設備組成的存儲池抽象；
 Matt 負責 ZFS 設計中最至關重要的 DMU 引擎，在塊設備基礎上提供具有事務語義的對象存儲；
@@ -67,7 +69,6 @@ Matt 負責 ZFS 設計中最至關重要的 DMU 引擎，在塊設備基礎上�
 ZFS 設計中這最初的分工也體現在了 ZFS 現在子系統分層的架構上，繼續影響（增強或者限制） ZFS
 今後發展的方向。
 
-    .. youtube:: c1ek1tFjhH8
 
 子系統整體架構
 ---------------------------------------------------------------
