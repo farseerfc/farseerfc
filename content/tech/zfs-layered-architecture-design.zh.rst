@@ -11,11 +11,6 @@ ZFS 分層架構設計
 
 .. contents::
 
-..
-
-    | zfs 這個東西倒是名不符實。叫 z storage stack 明顯更符合。 叫 fs 但不做 fs 自然確實會和 btrfs 有很大出入。
-    | 我反而以前還好奇為什麼 btrfs 不弄 zvol ， 直到我意識到這東西真是一個 fs ，名符奇實。
-    | —— 某不愿透露姓名的 Ext2FSD 開發者
 
 .. label-warning::
 
