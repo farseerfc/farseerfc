@@ -518,9 +518,9 @@ ZPL 目錄用一個 ZAP 對象表達，然後 DMU 對象集對應到 ZPL 下的�
 格式是固定偏移位置存取屬性的 SA ，因此透過預先註冊好的描述舊版 znode 格式的固定映射表，
 SA 依然能用同樣的代碼路徑存取舊版的 znode 。而後來
 `靈活的新設計下的 SA 更有意思 <https://utcc.utoronto.ca/~cks/space/blog/solaris/ZFSSystemAttributes>`_
-，ZFS 認識到，大部分 dnode 的屬性都可以用有限的幾種屬性集來表达，
+，ZFS 認識到，大部分 znode 的屬性都可以用有限的幾種屬性集來表达，
 比如普通文件有一組類似的屬性（權限、所有者之類的）， zvol 有另一組（明顯 zvol 不需要很多 ZPL
-文件的屬性）， ZFS 可以「註冊」幾種固定的屬性佈局，然後讓每個 znode 引用其中一種佈局，
+文件的屬性），整個 ZFS dataset 可以「註冊」幾種屬性佈局，然後讓每個 znode 引用其中一種佈局，
 這樣 znode 保存的屬性仍然是可以任意變化的，又不需要在每個 znode 中都記錄所有屬性的名字。
 SA 的出現提升了 ZPL 的可擴展性。 ZPL 爲了應付不同的操作系統之間文件系統 API 的差異，可以使用
 SA 在 znode 之中加入針對不同操作系統和應用場景的屬性。例如，在支持 NFSv4 ACL 的操作系統上，ZFS
