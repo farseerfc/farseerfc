@@ -14,7 +14,7 @@ ZFS 分層架構設計
 
 .. label-warning::
 
-    **2020年2月7日更新過**
+    **2020年2月9日更新過**
 
 ZFS 在設計之初源自於 Sun 內部多次重寫 UFS 的嘗試，背負了重構 Solaris
 諸多內核子系統的重任，從而不同於 Linux 的文件系統只負責文件系統的功能而把其餘功能（比如內存髒頁管理，
@@ -418,20 +418,8 @@ microZAP 和 fatZAP 。
 ZAP 來存，也就是說每個文件都有個 ZAP ，其中有叫做 size 呀 owner
 之類的鍵值對，就像是個 JSON 對象那樣，這讓 ZPL 一開始很容易設計原型並且擴展。然後文件夾內容列表有另一種數據結構
 ZDS（ZFS Directory Service），後來常見的文件屬性在 ZPL 有了專用的緊湊數據結構，而 ZDS 則漸漸融入了 ZAP 。
+:del:`|這些變化詳見下面 ZPL 。`
 
-.. label-warning::
-
-    **2020年2月7日添加**
-
-拋棄早期用 ZAP 的設計之後， ZPL 中 dnode 保存文件屬性的機制成爲了一個小的子系統，叫
-`ZFS System Attributes <https://github.com/illumos/illumos-gate/blob/master/usr/src/uts/common/fs/zfs/sa.c>`_
-。 SA 的設計也有新舊兩代，舊的設計是有
-`固定的一組屬性到表項位置的映射 <https://github.com/illumos/illumos-gate/blob/4d7988d6050abba5c1ff60e7fd196e95c22e20f4/usr/src/uts/common/fs/zfs/sa.c#L181-L198>`_
-，後來 `靈活的新設計下的 SA 更有意思 <https://utcc.utoronto.ca/~cks/space/blog/solaris/ZFSSystemAttributes>`_ 。
-ZFS 認識到，大部分 dnode 的屬性都可以用有限的幾種屬性集來表达，
-比如普通文件有一組類似的屬性（權限、所有者之類的）， zvol 有另一組（明顯 zvol 不需要很多 ZPL
-文件的屬性），整個 ZFS pool 可以「註冊」幾種固定的屬性佈局，然後讓每個 dnode 引用其中一種佈局，
-這樣 dnode 保存的屬性仍然是可以任意變化的，又不需要在每個 dnode 中都記錄所有屬性的名字。
 
 DSL
 -----------------
@@ -518,6 +506,25 @@ ZPL 目錄用一個 ZAP 對象表達，然後 DMU 對象集對應到 ZPL 下的�
 也就是說 ZPL 負責把操作系統 VFS 抽象層的那些文件系統操作接口，翻譯映射到基於 DMU 和 ZAP
 的抽象上。傳統 Unix 中的管道、套接字、軟鏈接之類的沒有什麼數據內容的東西則在 ZPL 直接用 dnode
 實現出來。 ZPL 也需要進一步實現文件權限、所有者、訪問日期、擴展屬性之類雜七雜八的文件系統功能。
+
+.. label-warning::
+
+    **2020年2月9日添加**
+
+繼續上述 ZAP 格式變化的討論，在 ZPL 拋棄早期用 ZAP 的設計之後， ZPL 中 znode （ZPL 擴展的 dnode）
+保存文件屬性的機制成爲了一個小的子系統，叫
+`ZFS System Attributes <https://github.com/illumos/illumos-gate/blob/master/usr/src/uts/common/fs/zfs/sa.c>`_
+。 SA 的設計照顧了舊版 ZPL znode 格式兼容問題，有新舊兩代格式。舊版 znode
+格式是固定偏移位置存取屬性的 SA ，因此透過預先註冊好的描述舊版 znode 格式的固定映射表，
+SA 依然能用同樣的代碼路徑存取舊版的 znode 。而後來
+`靈活的新設計下的 SA 更有意思 <https://utcc.utoronto.ca/~cks/space/blog/solaris/ZFSSystemAttributes>`_
+，ZFS 認識到，大部分 dnode 的屬性都可以用有限的幾種屬性集來表达，
+比如普通文件有一組類似的屬性（權限、所有者之類的）， zvol 有另一組（明顯 zvol 不需要很多 ZPL
+文件的屬性）， ZFS 可以「註冊」幾種固定的屬性佈局，然後讓每個 znode 引用其中一種佈局，
+這樣 znode 保存的屬性仍然是可以任意變化的，又不需要在每個 znode 中都記錄所有屬性的名字。
+SA 的出現提升了 ZPL 的可擴展性。 ZPL 爲了應付不同的操作系統之間文件系統 API 的差異，可以使用
+SA 在 znode 之中加入針對不同操作系統和應用場景的屬性。例如，在支持 NFSv4 ACL 的操作系統上，ZFS
+既可以用現有方式把 DACL ACEs 放在獨立於文件對象的單獨對象中，也可以把 DACL ACEs 放在 SA 內。
 
 `在 ZFS First Mount by Mark Shellenbaum <https://youtu.be/xMH5rCL8S2k?t=456>`_
 中介紹了很多在最初實現 ZPL 過程中的坎坷， ZPL 的困難之處在於需要兼容現有應用程序對傳統文件系統
