@@ -9,7 +9,11 @@ Btrfs vs ZFS 實現 snapshot 的差異
 :series: FS筆記
 :status: draft
 
-.. contents::
+.. sectnum::
+    :depth: 2
+
+.. contents:: 目錄
+    :depth: 3
 
 ..
 
@@ -979,7 +983,7 @@ OpenZFS 的項目領導者，同時也是最初設計 ZFS 中 DMU 子系統的�
 
 1. ZFS 快照是只讀的。創建快照之後無法修改其內容。
 2. ZFS 的快照是嚴格按時間順序排列的，這裏的時間指 TXG id ，即記錄文件系統提交所屬事務組的嚴格遞增序號。
-3. ZFS 不存在 reflink 之類的機制，���是某個時間點中刪除掉的數據塊，不可能在比它更後面的快照中「復活」。
+3. ZFS 不存在 reflink 之類的機制，從而在某個時間點刪除掉的數據塊，不可能在比它更後面的快照中「復活」。
 
 第三點關於 reflink 造成的數據復活現象可能需要解釋一下，比如在（支持 reflink 的） btrfs 中有如下操作：
 
@@ -1000,7 +1004,7 @@ OpenZFS 的項目領導者，同時也是最初設計 ZFS 中 DMU 子系統的�
     ---->*----->*----->*---->*  fs1  
 
 其中只有 s2 不存在 somefile ，而 s1 、 s3 和當前的 fs 都有，並且都引用到了同一個數據塊。
-於是從時間線來看， somefile 的數據塊在 s2 中「死」了，又在 s3 中「復活」了。
+於是從時間線來���， somefile 的數據塊在 s2 中「死���了，又在 s3 中「復活」了。
 
 而 ZFS (目前還）不支持 reflink ，所以沒法像這樣讓數據塊復活。一旦某個數據塊在某個快照中「死」了，
 就意味着它在隨後的所有快照中都不再被引用到了。
@@ -1331,3 +1335,7 @@ EXTENT_TREE 中這塊數據塊的描述：
 要得知邏輯上的引用計數，需要反過來從數據塊往回遍歷到樹根。
 也就是說單有引用計數還不夠，需要記錄具體反向的從數據塊往引用源頭指的引用，這種結構在 btrfs
 中叫做「反向引用（back reference，簡稱 backref）」。
+
+反向引用（backref）是 btrfs 中非常關鍵的機制，在 
+`btrfs kernel wiki 專門有一篇頁面講 <https://btrfs.wiki.kernel.org/index.php/Resolving_Extent_Backrefs>`_
+它的原理和實現方式。
