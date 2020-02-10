@@ -171,12 +171,12 @@ Btrfs 的子卷和快照
                   "]
         superblock:sn_root -> roottree:label [style=bold, weight=10];
 
-        toplevel [label="<label> FS_TREE \"toplevel\" |
+        toplevel [label="<label> FS_TREE \"toplevel\" ||
                    <toplevel_inode_item> 256: inode_item DIR |
                    <toplevel_dir_root> 256: dir_item: \"root\" \-\> ROOT_ITEM 256 |
                    <toplevel_dir_home> 256: dir_item: \"home\" \-\> ROOT_ITEM 257 |
                    <toplevel_dir_var> 256: dir_item: \"var\" \-\> INODE_ITEM 257 |
-                   <toplevel_dir_postgres> 256: dir_item: \"postgres\" \-\> ROOT_ITEM 259 |
+                   <toplevel_dir_postgres> 256: dir_item: \"postgres\" \-\> ROOT_ITEM 259 ||
                    <toplevel_inode_var> 257: inode_item DIR|
                    <toplevel_dir_www> 257: dir_item: \"www\" \-\> ROOT_ITEM 258
                   "]
@@ -205,11 +205,6 @@ Btrfs 的子卷和快照
         postgres [label="<label> FS_TREE \"postgres\" |
                      <inode_item> 256: inode_item DIR
                     "]
-
-        // toplevel:label -> home:label [style=invis];
-        // toplevel:label -> root:label [style=invis];
-        // toplevel:label -> www:label [style=invis];
-        // toplevel:label -> postgres:label [style=invis];
 
         roottree:root_sub_root -> root:label [style=bold, weight=10];
         roottree:root_sub_home -> home:label [style=bold, weight=10];
@@ -299,13 +294,13 @@ ROOT_TREE 中 object_id 爲 258 的子卷。
                   "]
         superblock:sn_root -> roottree:label [style=bold, weight=10];
 
-        toplevel [label="<label> FS_TREE \"toplevel\" |
+        toplevel [label="<label> FS_TREE \"toplevel\" ||
                    <toplevel_inode_item> 256: inode_item DIR |
                    <toplevel_dir_root> 256: dir_item: \"root\" \-\> ROOT_ITEM 256 |
                    <toplevel_dir_home> 256: dir_item: \"home\" \-\> ROOT_ITEM 257 |
                    <toplevel_dir_var> 256: dir_item: \"var\" \-\> INODE_ITEM 257 |
                    <toplevel_dir_postgres> 256: dir_item: \"postgres\" \-\> ROOT_ITEM 259 |
-                   <toplevel_dir_toplevels1> 256: dir_item: \"toplevel@s1\" \-\> ROOT_ITEM 260 |
+                   <toplevel_dir_toplevels1> 256: dir_item: \"toplevel@s1\" \-\> ROOT_ITEM 260 ||
                    <toplevel_inode_var> 257: inode_item DIR|
                    <toplevel_dir_www> 257: dir_item: \"www\" \-\> ROOT_ITEM 258
                   "]
@@ -317,21 +312,15 @@ ROOT_TREE 中 object_id 爲 258 的子卷。
         toplevel:toplevel_dir_toplevels1 -> roottree:root_sub_s1  [style=dashed, arrowhead=empty];
         toplevel:toplevel_dir_www -> roottree:root_sub_www  [style=dashed, arrowhead=empty];
 
-        toplevels1 [label="<label> FS_TREE \"toplevel@s1\" |
+        toplevels1 [label="<label> FS_TREE \"toplevel@s1\" ||
             <toplevels1_inode_item> 256: inode_item DIR |
             <toplevels1_dir_root> 256: dir_item: \"root\" \-\> ROOT_ITEM 256 |
             <toplevels1_dir_home> 256: dir_item: \"home\" \-\> ROOT_ITEM 257 |
             <toplevels1_dir_var> 256: dir_item: \"var\" \-\> INODE_ITEM 257 |
-            <toplevels1_dir_postgres> 256: dir_item: \"postgres\" \-\> ROOT_ITEM 259 |
+            <toplevels1_dir_postgres> 256: dir_item: \"postgres\" \-\> ROOT_ITEM 259 ||
             <toplevels1_inode_var> 257: inode_item DIR|
             <toplevels1_dir_www> 257: dir_item: \"www\" \-\> ROOT_ITEM 258
             "]
-
-        // toplevels1:toplevels1_dir_root -> roottree:root_sub_root  [style=dashed, arrowhead=empty];
-        // toplevels1:toplevels1_dir_home -> roottree:root_sub_home  [style=dashed, arrowhead=empty];
-        // toplevels1:toplevels1_dir_var:e -> toplevels1:toplevels1_inode_var:e  [style=dashed, arrowhead=empty];
-        // toplevels1:toplevels1_dir_postgres -> roottree:root_sub_postgres  [style=dashed, arrowhead=empty];
-        // toplevels1:toplevels1_dir_www -> roottree:root_sub_www  [style=dashed, arrowhead=empty];
 
         roottree:root_fs -> toplevel:label [style=bold, weight=1];
         roottree:root_sub_s1 -> toplevels1:label [style=bold, weight=1];
@@ -352,11 +341,6 @@ ROOT_TREE 中 object_id 爲 258 的子卷。
         postgres [label="<label> FS_TREE \"postgres\" |
                      <inode_item> 256: inode_item DIR
                     "]
-
-        // toplevel:label -> home:label [style=invis];
-        // toplevel:label -> root:label [style=invis];
-        // toplevel:label -> www:label [style=invis];
-        // toplevel:label -> postgres:label [style=invis];
 
         roottree:root_sub_root -> root:label [style=bold, weight=10];
         roottree:root_sub_home -> home:label [style=bold, weight=10];
@@ -1124,9 +1108,9 @@ ZFS 的快照具有的上述三點條件，使得 ZFS 的快照刪除算法可�
 🐆豹子算法：死亡列表的子列表
 ++++++++++++++++++++++++++++++++++++
 
-🐆豹子算法是 ZFS 後來實現的算法。在🐰兔子算法中就可以看到，每次刪除快照操作死亡列表的時候，
-都需要掃描死亡列表中的塊指針，根據指針中記錄的 birth txg 做判斷。
-於是🐆豹子算法的思路是，在記錄死亡列表時，就把其中的塊指針按 birth txg 分成子列表。
+🐆豹子算法是 ZFS 後來在 2009 年左右實現的算法。在🐰兔子算法中就可以看到，每次刪除快照操作死亡列表的時候，
+都需要掃描死亡列表中的塊指針，根據指針中記錄的 birth txg 做判斷是否能直接釋放或是需要保留到另一個快照的死亡列表。
+於是🐆豹子算法的思路是，在死亡列表中記錄塊指針時，就把其中的塊指針按 birth txg 分成子列表（sublist）。
 
 比如上面🐰兔子算法中那4個死亡列表，可以這樣拆成子列表：
 
@@ -1157,7 +1141,193 @@ ZFS 的快照具有的上述三點條件，使得 ZFS 的快照刪除算法可�
      |                    *--* born (s3,fs1]  |
      \----------------------------------------/
 
-也就是說，把每個數據集原本的一個死亡列表，再根據數據塊的出生時間拆成多個子列表。
 
-這樣拆成子列表之後，每次從死亡列表中釋放數據塊都能根據出生時間找到對應的子列表，然後連續釋放整個子列表。
-每次合併死亡列表時，也能直接用單鏈表穿起需要合併的子列表，不需要複製塊指針。
+這樣拆成子列表之後，每次從死亡列表中釋放數據塊都能根據出生時間找到對應的子列表，
+然後連續釋放整個子列表。每次合併死亡列表時，也能直接用單鏈表穿起需要合併的子列表，不需要複製塊指針。
+
+死亡列表並不在跟蹤快照的獨佔大小，而是在跟蹤快照所需負責刪除的數據塊大小，
+從這個數值可以推算出快照的獨佔大小之類的信息。
+有了按出生時間排列的死亡列表子列表之後，事實上給任何一個出生時間到死亡時間的範圍，
+都可以找出對應的幾個子列表，從而根據子列表的大小可以快速計算出每個快照範圍的「獨佔」數據塊、
+「共享」數據塊等大小，這不光在刪除快照時很有用，也可以用來根據大小估算 zfs send
+或者別的基於快照操作時需要的時間。
+
+從直覺上理解，雖然 ZFS 沒有直接記錄每個數據塊屬於哪個數據集，但是 ZFS
+跟蹤記錄了每個數據塊的歸屬信息，也就是說由哪個數據集負責釋放這個數據塊。
+在文件系統中刪除數據塊或者快照時，這個歸屬信息跟着共享數據塊轉移到別的快照中，直到最終被釋放掉。
+
+生存日誌：ZFS 如何管理克隆的空間佔用
+++++++++++++++++++++++++++++++++++++
+
+.. panel-default::
+    :title: Fast Clone Deletion by Sara Hartse
+
+    .. youtube:: GLABJRWwGMk
+
+以上三種算法負責在 ZFS 中跟蹤快照的空間佔用，它們都基於數據塊的誕生時間，所以都假設 ZFS
+中對數據塊的分配是位於連續的快照時間軸上。但是明顯 ZFS 除了快照和文件系統，
+還有另一種數據集可能分配數據塊，那就是 `克隆`_
+，於是還需要在克隆中使用不同的算法單獨管理因克隆而分配的數據塊。
+OpenZFS Summit 2017 有個演講 `Fast Clone Deletion by Sara Hartse <https://www.youtube.com/watch?v=GLABJRWwGMk>`_
+解釋了其中的細節。
+
+首先克隆的存在本身會鎖住克隆引用到的快照，不能刪除這些被依賴的快照，
+所以克隆無須擔心靠快照共享的數據塊的管理問題。因此克隆需要管理的，是從快照分離之後，
+新創建的數據塊。
+
+和🐢烏龜算法一樣，原理上刪除克隆的時候可以遍歷克隆引用的整個 DMU
+對象集，找出其中晚於快照的誕生時間的數據塊，然後釋放它們。也和🐢烏龜算法一樣，
+這樣掃描整個對象集的開銷很大，所以使用一個列表來記錄數據塊指針。
+克隆管理新數據塊的思路和快照的🐰兔子算法維持死亡列表的思路相反，
+記錄所有新誕生的數據塊，這個列表叫做「生存日誌（livelist）」。
+
+克隆不光要記錄新數據塊的誕生，還要記錄新數據塊可能的死亡，所以磁盤上保存的生存日誌雖然叫 livelist
+，但不像死亡列表那樣是列表的形式，而是日誌的形式，而內存中保存的生存日誌則組織成了棵
+`自平衡樹（AVLTree） <https://zh.wikipedia.org/wiki/AVL%E6%A0%91>`_ 來加速查找。
+
+.. ditaa::
+
+       ---->*----->*----->*---->*  fs1  
+                   |
+                   \----------->* clone1
+
+     +-------+-------+-------+-------+-------+--------+--------+
+     | A 123 | A 125 | A 126 | A 135 | F 126 | A 136  | ...    |   clone1 livelist
+     +-------+-------+-------+-------+-------+--------+--------+
+                         ^               |
+                         |               |
+                         \---------------/
+
+
+磁盤上存儲的生存日誌如上圖，每個表項記錄它是分配（A）或者刪除（F）一個數據塊，同時記錄數據塊的地址。
+這些記錄在一般情況下直接記錄在日誌末尾，隨着對克隆的寫入操作而不斷增長，長到一定程度則從內存中的
+AVL Tree 直接輸出一個新的生存日誌替代掉舊的，合併其中對應的分配和刪除操作。
+
+生存日誌可以無限增長，從而要將整個生存列表載入內存也有不小的開銷，這裏的解決方案有點像快照管理中用
+🐆豹子算法改進🐰兔子算法的思路，把一個克隆的整個生存日誌也按照數據塊的誕生時間拆分成子列表。
+Sara Hartse 的演講 Fast Clone Deletion 中繼續解釋了其中的細節和優化方案，感興趣的可以看看。
+
+
+btrfs 的空間跟蹤算法：反向引用
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+理解了 ZFS 中根據 birth txg 管理快照和克隆的算法之後，可以發現它們基於的假設難以用於 WAFL
+和 btrfs 。 ZFS 嚴格區分文件系統、快照、克隆，並且不存在 reflink ，從而可以用 birth txg
+判斷數據塊是否需要保留，而 WAFL 和 btrfs 中不存在 ZFS 的那些數據集分工，又想支持 reflink
+，可見單純基於 birth txg 不足以管理 WAFL 和 btrfs 子卷。
+
+讓我們回到一開始日誌結構文件系統中基於垃圾回收（GC）的思路上來，作爲程序員來看，
+當垃圾回收的性能不足時，很自然的思路是：引用計數（reference counting）。
+編程語言中用引用計數作爲內存管理策略的缺陷是：強引用不能成環，
+這在文件系統中看起來不是很嚴重的問題，文件系統總體上看是個樹狀結構，
+有很多指針類型也方便區分強弱引用。
+
+btrfs 中就是用引用計數的方式跟蹤和管理數據塊的。引用計數本身不能保存在 FS_TREE
+或者指向的數據塊中，因爲這個計數需要能夠變化，對只讀快照來說整個 FS_TREE 都是只讀的。
+計算機領域中的所有問題都可以靠增加一層抽象來解決， btrfs 中關於數據塊的引用計數用一個單獨的
+CoW B樹來記錄，叫做 EXTENT_TREE ，保存於 ROOT_TREE 中的 2 號對象位置。
+btrfs 中每個數據塊都是按 extent 的形式分配的，extent 是一塊連續的存儲空間而非 zfs
+中的固定大小，記錄數據塊的存儲位置和長度，以及這裏所說的引用計數。
+所以本文最開始講 `Btrfs 的子卷和快照`_ 中舉例的那個平坦佈局，如果畫上 EXTENT_TREE
+大概像是下圖這樣，其中每個粗箭頭是一個數據塊指針，指向磁盤中的邏輯地址，細箭頭則是指向
+EXTENT_TREE 中這塊數據塊的描述：
+
+.. dot::
+
+    digraph Flat_layout_extents_on_disk {
+        node [shape=record];rankdir=LR;ranksep=1;
+        superblock [label="<label> SUPERBLOCK |
+                           ... |
+                           <sn_root> root_tree |
+                           ...
+                           "];
+        roottree [label="<label> ROOT_TREE |
+                  <root_extent> 2: extent_tree |
+                  <root_chunk> 3: chunk_tree |
+                  <root_dev> 4: dev_tree |
+                  <root_fs> 5: fs_tree |
+                  <root_dir> 6: root_dir \"default\" \-\> ROOT_ITEM 256 |
+                  <root_free> 10: free_space_tree |
+                  <root_sub_root> 256: fs_tree \"root\"|
+                  <root_sub_home> 257: fs_tree \"home\"|
+                  <root_sub_www> 258: fs_tree \"www\"|
+                  <root_sub_postgres> 259: fs_tree \"postgres\"|
+                  <root_tree_log> -7: tree_log_tree |
+                  <root_orphan> -5: orphan_root
+                  "]
+        superblock:sn_root -> roottree:label [style=bold, weight=10];
+
+        toplevel [label="<label> FS_TREE \"toplevel\" ||
+                   <toplevel_inode_item> 256: inode_item DIR |
+                   <toplevel_dir_root> 256: dir_item: \"root\" \-\> ROOT_ITEM 256 |
+                   <toplevel_dir_home> 256: dir_item: \"home\" \-\> ROOT_ITEM 257 |
+                   <toplevel_dir_var> 256: dir_item: \"var\" \-\> INODE_ITEM 257 |
+                   <toplevel_dir_postgres> 256: dir_item: \"postgres\" \-\> ROOT_ITEM 259 ||
+                   <toplevel_inode_var> 257: inode_item DIR|
+                   <toplevel_dir_www> 257: dir_item: \"www\" \-\> ROOT_ITEM 258
+                  "]
+
+        toplevel:toplevel_dir_root -> roottree:root_sub_root [style=dashed, arrowhead=empty];
+        toplevel:toplevel_dir_home -> roottree:root_sub_home [style=dashed, arrowhead=empty];
+        toplevel:toplevel_dir_var:e -> toplevel:toplevel_inode_var:e [style=dashed, arrowhead=empty];
+        toplevel:toplevel_dir_postgres -> roottree:root_sub_postgres [style=dashed, arrowhead=empty];
+        toplevel:toplevel_dir_www -> roottree:root_sub_www [style=dashed, arrowhead=empty];
+
+        roottree:root_fs -> toplevel:label [style=bold, weight=1];
+        roottree:root_dir:e -> roottree:root_sub_root:e [style=dashed, arrowhead=empty];
+
+        root [label="<label> FS_TREE \"root\" |
+                     <inode_item> 256: inode_item DIR
+                    "]
+
+        home [label="<label> FS_TREE \"home\" |
+                     <inode_item> 256: inode_item DIR
+                    "]
+
+        www [label="<label> FS_TREE \"www\" |
+                     <inode_item> 256: inode_item DIR
+                    "]
+
+        postgres [label="<label> FS_TREE \"postgres\" |
+                     <inode_item> 256: inode_item DIR
+                    "]
+
+
+        roottree:root_sub_root -> root:label [style=bold, weight=10];
+        roottree:root_sub_home -> home:label [style=bold, weight=10];
+        roottree:root_sub_www -> www:label [style=bold, weight=10];
+        roottree:root_sub_postgres -> postgres:label [style=bold, weight=10];
+
+        extent_tree [label="<label> EXTENT_TREE ||
+                  <extent_roottree> extent 0x10000: ref 1 gen 6 |
+                  <extent_extent> extent 0x10100: ref 1 gen 6 |
+                  <extent_toplevel> extent 0x10200: ref 1 gen 6 |
+                  <extent_root> extent 0x10300: ref 1 gen 6 |
+                  <extent_home> extent 0x10400: ref 1 gen 6 |
+                  <extent_www> extent 0x10500: ref 1 gen 6 |
+                  <extent_postgres> extent 0x10600: ref 1 gen 6 |
+                  ...
+                  "]
+        
+        roottree:root_extent -> extent_tree:label  [style=bold, weight=10];
+        roottree:label -> extent_tree:extent_roottree;
+        extent_tree:extent_extent -> extent_tree:label;
+        toplevel:label -> extent_tree:extent_toplevel;
+        root:label -> extent_tree:extent_root;
+        home:label -> extent_tree:extent_home;
+        www:label -> extent_tree:extent_www;
+        postgres:label -> extent_tree:extent_postgres;
+    }
+
+包括 ROOT_TREE 和 EXTENT_TREE 在內，btrfs 中所有分配的數據塊（extent）都在 EXTENT_TREE
+中有對應的記錄，按數據塊的邏輯地址索引。從而給定一個數據塊，能從 EXTENT_TREE 中找到 ref
+字段描述這個數據塊有多少引用。不過 ROOT_TREE 、 EXTENT_TREE 和別的一些數據結構本身不是寫時拷貝的，
+這些數據結構對應的 extent 的引用計數總是 1 ；從 FS_TREE 開始的所有樹節點都可以寫時複製，
+這包括所有子卷的元數據和文件數據，這些數據塊對應的 extent 的引用計數可以大於 1 表示有多處引用。
+
+但是 btrfs 中通過引用計數管理子卷的一點困難之處在於，創建快照的操作中理論上要修改所有引用到的數據塊的計數，
+這顯然很影響創建快照的性能。所以 btrfs 採取的策略是在快照創建時只增加快照的 FS_TREE 頂層元數據塊的引用。
+換句話說 EXTENT_TREE 中保存的 ref ，是物理記錄中的引用計數，不是整個文件系統中引用到的數量，
+要得知邏輯上的引用計數，需要反過來從數據塊往回遍歷到樹根。
+也就是說單有引用計數還不夠，需要記錄具體反向的從數據塊往引用源頭指的引用，這種結構在 btrfs
+中叫做「反向引用（back reference，簡稱 backref）」。
