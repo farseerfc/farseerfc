@@ -1272,14 +1272,7 @@ EXTENT_TREE 中這塊數據塊的描述：
                    <toplevel_dir_www> 257: dir_item: \"www\" \-\> ROOT_ITEM 258
                   "]
 
-        toplevel:toplevel_dir_root -> roottree:root_sub_root [style=dashed, arrowhead=empty];
-        toplevel:toplevel_dir_home -> roottree:root_sub_home [style=dashed, arrowhead=empty];
-        toplevel:toplevel_dir_var:e -> toplevel:toplevel_inode_var:e [style=dashed, arrowhead=empty];
-        toplevel:toplevel_dir_postgres -> roottree:root_sub_postgres [style=dashed, arrowhead=empty];
-        toplevel:toplevel_dir_www -> roottree:root_sub_www [style=dashed, arrowhead=empty];
-
         roottree:root_fs -> toplevel:label [style=bold, weight=1];
-        roottree:root_dir:e -> roottree:root_sub_root:e [style=dashed, arrowhead=empty];
 
         root [label="<label> FS_TREE \"root\" |
                      <inode_item> 256: inode_item DIR
@@ -1304,13 +1297,13 @@ EXTENT_TREE 中這塊數據塊的描述：
         roottree:root_sub_postgres -> postgres:label [style=bold, weight=10];
 
         extent_tree [label="<label> EXTENT_TREE ||
-                  <extent_roottree> extent 0x10000: ref 1 gen 6 |
-                  <extent_extent> extent 0x10100: ref 1 gen 6 |
-                  <extent_toplevel> extent 0x10200: ref 1 gen 6 |
+                  <extent_roottree> extent 0x10000: ref 1 gen 8 |
+                  <extent_extent> extent 0x10100: ref 1 gen 8 |
+                  <extent_toplevel> extent 0x10200: ref 1 gen 8 |
                   <extent_root> extent 0x10300: ref 1 gen 6 |
                   <extent_home> extent 0x10400: ref 1 gen 6 |
                   <extent_www> extent 0x10500: ref 1 gen 6 |
-                  <extent_postgres> extent 0x10600: ref 1 gen 6 |
+                  <extent_postgres> extent 0x10600: ref 1 gen 7 |
                   ...
                   "]
         
@@ -1337,91 +1330,92 @@ EXTENT_TREE 修改其中記錄的引用計數。
 但是 btrfs 中通過引用計數管理子卷的一點反直覺之處在於，創建快照的操作，
 理論上要修改所有引用到的數據塊的計數，這顯然很影響創建快照的性能。
 所以 btrfs 採取的策略是在快照創建時只增加快照的 FS_TREE 頂層元數據塊的引用。
-換句話說 EXTENT_TREE 中保存的 ref ，是物理記錄中的引用計數，不是整個文件系統中引用到的數量，
+換句話說 EXTENT_TREE 中保存的 ref ，是物理記錄中的引用的計數，不是整個文件系統中引用到該塊的數量，
 要得知邏輯上一共有多少引用，需要反過來從數據塊往回遍歷到樹根。
 也就是說單有引用計數的一個數字還不夠，需要記錄具體反向的從數據塊往引用源頭指的引用，這種結構在
 btrfs 中叫做「反向引用（back reference，簡稱 backref）」。
 
+比如我們用如下命令創建了兩個文件，通過 reflink 讓它們共享數據塊，然後創建兩個快照，
+然後刪除文件系統中的 file2 ：
+
+.. code-block:: bash
+
+    write fs/file1
+    cp --reflink=always fs/file1 fs/file2
+    btrfs subvolume snapshot fs sn1
+    btrfs subvolume snapshot fs sn2
+    rm fs/file2
+
+經過以上操作之後，整個 extent_tree 的結構中記錄的引用計數大概如下圖所示：
 
 .. dot::
 
-    digraph Flat_layout_extents_on_disk {
+    digraph btrfs_reflink_backref {
         node [shape=record];rankdir=LR;ranksep=1;
-        superblock [label="<label> SUPERBLOCK |
-                           ... |
-                           <sn_root> root_tree |
-                           ...
-                           "];
-        roottree [label="<label> ROOT_TREE |
-                  <root_extent> 2: extent_tree |
-                  <root_chunk> 3: chunk_tree |
-                  <root_dev> 4: dev_tree |
-                  <root_fs> 5: fs_tree |
-                  <root_dir> 6: root_dir \"default\" \-\> ROOT_ITEM 256 |
-                  <root_free> 10: free_space_tree |
-                  <root_sub_root> 256: fs_tree \"root\"|
-                  <root_sub_home> 257: fs_tree \"home\"|
-                  <root_sub_www> 258: fs_tree \"www\"|
-                  <root_sub_postgres> 259: fs_tree \"postgres\"|
-                  <root_tree_log> -7: tree_log_tree |
-                  <root_orphan> -5: orphan_root
-                  "]
-        superblock:sn_root -> roottree:label [style=bold, weight=10];
+        root [label="<label> ROOT_TREE |
+            <sn1> sn1 |
+            <sn2> sn2 |
+            <fs> fs
+        "];
 
-        toplevel [label="<label> FS_TREE \"toplevel\" ||
-                   <toplevel_inode_item> 256: inode_item DIR |
-                   <toplevel_dir_root> 256: dir_item: \"root\" \-\> ROOT_ITEM 256 |
-                   <toplevel_dir_home> 256: dir_item: \"home\" \-\> ROOT_ITEM 257 |
-                   <toplevel_dir_var> 256: dir_item: \"var\" \-\> INODE_ITEM 257 |
-                   <toplevel_dir_postgres> 256: dir_item: \"postgres\" \-\> ROOT_ITEM 259 ||
-                   <toplevel_inode_var> 257: inode_item DIR|
-                   <toplevel_dir_www> 257: dir_item: \"www\" \-\> ROOT_ITEM 258
-                  "]
+        sn1 [label="<label> FS_TREE sn1 |
+            <leaf> leaf_node
+        "];
 
-        roottree:root_fs -> toplevel:label [style=bold, weight=1];
+        sn2 [label="<label> FS_TREE sn2 |
+            <leaf> leaf_node
+        "];
 
-        root [label="<label> FS_TREE \"root\" |
-                     <inode_item> 256: inode_item DIR
-                    "]
-
-        home [label="<label> FS_TREE \"home\" |
-                     <inode_item> 256: inode_item DIR
-                    "]
-
-        www [label="<label> FS_TREE \"www\" |
-                     <inode_item> 256: inode_item DIR
-                    "]
-
-        postgres [label="<label> FS_TREE \"postgres\" |
-                     <inode_item> 256: inode_item DIR
-                    "]
+        fs [label="<label> FS_TREE fs |
+            <leaf> leaf_node
+        "];
 
 
-        roottree:root_sub_root -> root:label [style=bold, weight=10];
-        roottree:root_sub_home -> home:label [style=bold, weight=10];
-        roottree:root_sub_www -> www:label [style=bold, weight=10];
-        roottree:root_sub_postgres -> postgres:label [style=bold, weight=10];
+        snleaf [label="<label> FS_TREE leaf_node |
+            <f1> file1 |
+            <f2> file2
+        "];
 
-        extent_tree [label="<label> EXTENT_TREE ||
-                  <extent_roottree> extent 0x10000: ref 1 gen 6 |
-                  <extent_extent> extent 0x10100: ref 1 gen 6 |
-                  <extent_toplevel> extent 0x10200: ref 1 gen 6 |
-                  <extent_root> extent 0x10300: ref 1 gen 6 |
-                  <extent_home> extent 0x10400: ref 1 gen 6 |
-                  <extent_www> extent 0x10500: ref 1 gen 6 |
-                  <extent_postgres> extent 0x10600: ref 1 gen 6 |
-                  ...
-                  "]
-        
-        roottree:root_extent -> extent_tree:label  [style=bold, weight=10];
-        roottree:label -> extent_tree:extent_roottree;
-        extent_tree:extent_extent -> extent_tree:label;
-        toplevel:label -> extent_tree:extent_toplevel;
-        root:label -> extent_tree:extent_root;
-        home:label -> extent_tree:extent_home;
-        www:label -> extent_tree:extent_www;
-        postgres:label -> extent_tree:extent_postgres;
+        fsleaf [label="<label> FS_TREE leaf_node |
+            <f1> file1 
+        "];
+
+        extent [label="<label> EXTENT_TREE extent_tree |
+            <root> root_tree : ref 1|
+            <sn1> sn1 fs_tree : ref 1|
+            <sn2> sn2 fs_tree : ref 1|
+            <snleaf> sn1 sn2 leaf_node: ref 2|
+            <fs> fs fs_tree : ref 1|
+            <fsleaf> fs leaf_node : ref 1|
+            <f1> file1 : ref 3
+        "];
+        root:sn1 -> sn1:label  [style=bold, weight=10];
+        root:sn2 -> sn2:label [style=bold, weight=10];
+        root:fs -> fs:label [style=bold, weight=10];
+
+        sn1:leaf -> snleaf:label [style=bold, weight=10];
+        sn2:leaf -> snleaf:label [style=bold, weight=10];
+        fs:leaf -> fsleaf:label [style=bold, weight=10];
+
+        root:label -> extent:root;
+        sn1:label -> extent:sn1;
+        sn2:label -> extent:sn2;
+        snleaf:label -> extent:snleaf;
+        fs:label -> extent:fs;
+        fsleaf:label -> extent:fsleaf;
+        snleaf:f1 -> extent:f1;
+        snleaf:f2 -> extent:f1;
+        fsleaf:f1 -> extent:f1;
     }
+
+圖中可見，整個文件系統中共有5個文件路徑可以訪問到同一個文件的內容，分別是
+:code:`sn1/file1, sn1/file2, sn2/file1, sn2/file2, fs/file1` ，
+在 extent_tree 中， sn1 和 sn2 可能共享了一個 B樹 葉子節點，這個葉子節點的引用計數爲 2
+，然後每個文件的內容都指向同一個 extent ，這個 extent 的引用計數爲 3 。
+單純從 extent 的引用計數難以看出整個文件系統所有子卷中有多少副本。
+所以在上圖中每一個單向的箭頭，在 btrfs 中都有記錄一條反向引用，
+通過反向引用記錄能反過來從被指針指向的位置找回到記錄指針的地方。
+
 
 反向引用（backref）是 btrfs 中非常關鍵的機制，在 
 `btrfs kernel wiki 專門有一篇頁面講 <https://btrfs.wiki.kernel.org/index.php/Resolving_Extent_Backrefs>`_
