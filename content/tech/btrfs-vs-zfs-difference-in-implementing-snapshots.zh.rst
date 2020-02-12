@@ -1004,7 +1004,7 @@ OpenZFS 的項目領導者，同時也是最初設計 ZFS 中 DMU 子系統的�
     ---->*----->*----->*---->*  fs1  
 
 其中只有 s2 不存在 somefile ，而 s1 、 s3 和當前的 fs 都有，並且都引用到了同一個數據塊。
-於是從時間線來���， somefile 的數據塊在 s2 中「死���了，又在 s3 中「復活」了。
+於是從時間線來�������， somefile 的數據塊在 s2 中「死���了，又在 s3 中「復活」了。
 
 而 ZFS (目前還）不支持 reflink ，所以沒法像這樣讓數據塊復活。一旦某個數據塊在某個快照中「死」了，
 就意味着它在隨後的所有快照中都不再被引用到了。
@@ -1212,6 +1212,7 @@ AVL Tree 直接輸出一個新的生存日誌替代掉舊的，合併其中對�
 Sara Hartse 的演講 Fast Clone Deletion 中繼續解釋了其中的細節和優化方案，感興趣的可以看看。
 
 
+
 btrfs 的空間跟蹤算法：反向引用
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -1329,13 +1330,104 @@ EXTENT_TREE 中這塊數據塊的描述：
 這些數據結構對應的 extent 的引用計數總是 1 ；從 FS_TREE 開始的所有樹節點都可以寫時複製，
 這包括所有子卷的元數據和文件數據，這些數據塊對應的 extent 的引用計數可以大於 1 表示有多處引用。
 
-但是 btrfs 中通過引用計數管理子卷的一點困難之處在於，創建快照的操作中理論上要修改所有引用到的數據塊的計數，
-這顯然很影響創建快照的性能。所以 btrfs 採取的策略是在快照創建時只增加快照的 FS_TREE 頂層元數據塊的引用。
+EXTENT_TREE 按數據塊的邏輯地址索引，意味着讀取文件系統內容的時候不需要經過 EXTENT_TREE
+，直接從塊指針記錄的邏輯地址可以找到數據塊，只有在刪除數據塊或者增加 reflink 的時候需要讀取
+EXTENT_TREE 修改其中記錄的引用計數。
+
+但是 btrfs 中通過引用計數管理子卷的一點反直覺之處在於，創建快照的操作，
+理論上要修改所有引用到的數據塊的計數，這顯然很影響創建快照的性能。
+所以 btrfs 採取的策略是在快照創建時只增加快照的 FS_TREE 頂層元數據塊的引用。
 換句話說 EXTENT_TREE 中保存的 ref ，是物理記錄中的引用計數，不是整個文件系統中引用到的數量，
-要得知邏輯上的引用計數，需要反過來從數據塊往回遍歷到樹根。
-也就是說單有引用計數還不夠，需要記錄具體反向的從數據塊往引用源頭指的引用，這種結構在 btrfs
-中叫做「反向引用（back reference，簡稱 backref）」。
+要得知邏輯上一共有多少引用，需要反過來從數據塊往回遍歷到樹根。
+也就是說單有引用計數的一個數字還不夠，需要記錄具體反向的從數據塊往引用源頭指的引用，這種結構在
+btrfs 中叫做「反向引用（back reference，簡稱 backref）」。
+
+
+.. dot::
+
+    digraph Flat_layout_extents_on_disk {
+        node [shape=record];rankdir=LR;ranksep=1;
+        superblock [label="<label> SUPERBLOCK |
+                           ... |
+                           <sn_root> root_tree |
+                           ...
+                           "];
+        roottree [label="<label> ROOT_TREE |
+                  <root_extent> 2: extent_tree |
+                  <root_chunk> 3: chunk_tree |
+                  <root_dev> 4: dev_tree |
+                  <root_fs> 5: fs_tree |
+                  <root_dir> 6: root_dir \"default\" \-\> ROOT_ITEM 256 |
+                  <root_free> 10: free_space_tree |
+                  <root_sub_root> 256: fs_tree \"root\"|
+                  <root_sub_home> 257: fs_tree \"home\"|
+                  <root_sub_www> 258: fs_tree \"www\"|
+                  <root_sub_postgres> 259: fs_tree \"postgres\"|
+                  <root_tree_log> -7: tree_log_tree |
+                  <root_orphan> -5: orphan_root
+                  "]
+        superblock:sn_root -> roottree:label [style=bold, weight=10];
+
+        toplevel [label="<label> FS_TREE \"toplevel\" ||
+                   <toplevel_inode_item> 256: inode_item DIR |
+                   <toplevel_dir_root> 256: dir_item: \"root\" \-\> ROOT_ITEM 256 |
+                   <toplevel_dir_home> 256: dir_item: \"home\" \-\> ROOT_ITEM 257 |
+                   <toplevel_dir_var> 256: dir_item: \"var\" \-\> INODE_ITEM 257 |
+                   <toplevel_dir_postgres> 256: dir_item: \"postgres\" \-\> ROOT_ITEM 259 ||
+                   <toplevel_inode_var> 257: inode_item DIR|
+                   <toplevel_dir_www> 257: dir_item: \"www\" \-\> ROOT_ITEM 258
+                  "]
+
+        roottree:root_fs -> toplevel:label [style=bold, weight=1];
+
+        root [label="<label> FS_TREE \"root\" |
+                     <inode_item> 256: inode_item DIR
+                    "]
+
+        home [label="<label> FS_TREE \"home\" |
+                     <inode_item> 256: inode_item DIR
+                    "]
+
+        www [label="<label> FS_TREE \"www\" |
+                     <inode_item> 256: inode_item DIR
+                    "]
+
+        postgres [label="<label> FS_TREE \"postgres\" |
+                     <inode_item> 256: inode_item DIR
+                    "]
+
+
+        roottree:root_sub_root -> root:label [style=bold, weight=10];
+        roottree:root_sub_home -> home:label [style=bold, weight=10];
+        roottree:root_sub_www -> www:label [style=bold, weight=10];
+        roottree:root_sub_postgres -> postgres:label [style=bold, weight=10];
+
+        extent_tree [label="<label> EXTENT_TREE ||
+                  <extent_roottree> extent 0x10000: ref 1 gen 6 |
+                  <extent_extent> extent 0x10100: ref 1 gen 6 |
+                  <extent_toplevel> extent 0x10200: ref 1 gen 6 |
+                  <extent_root> extent 0x10300: ref 1 gen 6 |
+                  <extent_home> extent 0x10400: ref 1 gen 6 |
+                  <extent_www> extent 0x10500: ref 1 gen 6 |
+                  <extent_postgres> extent 0x10600: ref 1 gen 6 |
+                  ...
+                  "]
+        
+        roottree:root_extent -> extent_tree:label  [style=bold, weight=10];
+        roottree:label -> extent_tree:extent_roottree;
+        extent_tree:extent_extent -> extent_tree:label;
+        toplevel:label -> extent_tree:extent_toplevel;
+        root:label -> extent_tree:extent_root;
+        home:label -> extent_tree:extent_home;
+        www:label -> extent_tree:extent_www;
+        postgres:label -> extent_tree:extent_postgres;
+    }
 
 反向引用（backref）是 btrfs 中非常關鍵的機制，在 
 `btrfs kernel wiki 專門有一篇頁面講 <https://btrfs.wiki.kernel.org/index.php/Resolving_Extent_Backrefs>`_
 它的原理和實現方式。
+
+ZFS 的 dedup vs btrfs 的 reflink
+++++++++++++++++++++++++++++++++++++
+
+上面討論了 ZFS 的快照和克隆如何跟蹤數據塊
