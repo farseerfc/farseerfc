@@ -1004,7 +1004,7 @@ OpenZFS 的項目領導者，同時也是最初設計 ZFS 中 DMU 子系統的�
     ---->*----->*----->*---->*  fs1  
 
 其中只有 s2 不存在 somefile ，而 s1 、 s3 和當前的 fs 都有，並且都引用到了同一個數據塊。
-於是從時間線來�������， somefile 的數據塊在 s2 中「死���了，又在 s3 中「復活」了。
+於是從時間線來�����������， somefile 的數據塊在 s2 中「死���了，又在 s3 中「復活」了。
 
 而 ZFS (目前還）不支持 reflink ，所以沒法像這樣讓數據塊復活。一旦某個數據塊在某個快照中「死」了，
 就意味着它在隨後的所有快照中都不再被引用到了。
@@ -1213,7 +1213,7 @@ Sara Hartse 的演講 Fast Clone Deletion 中繼續解釋了其中的細節和�
 
 
 
-btrfs 的空間跟蹤算法：反向引用
+btrfs 的空間跟蹤算法：引用計數與反向引用
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 理解了 ZFS 中根據 birth txg 管理快照和克隆的算法之後，可以發現它們基於的假設難以用於 WAFL
@@ -1224,18 +1224,24 @@ btrfs 的空間跟蹤算法：反向引用
 讓我們回到一開始日誌結構文件系統中基於垃圾回收（GC）的思路上來，作爲程序員來看，
 當垃圾回收的性能不足時，很自然的思路是：引用計數（reference counting）。
 編程語言中用引用計數作爲內存管理策略的缺陷是：強引用不能成環，
-這在文件系統中看起來不是很嚴重的問題，文件系統總體上看是個樹狀結構，
-有很多指針類型也方便區分強弱引用。
+這在文件系統中看起來不是很嚴重的問題，文件系統總體上看是個樹狀結構，或者就算有共享的數據也是個
+上下層級分明的有向圖，很少會使用成環的指針，以及文件系統記錄指針的時候也都會區分指針的類型，
+根據指針類型可以分出強弱引用。
+
+btrfs 的 EXTENT_TREE 和引用計數
+++++++++++++++++++++++++++++++++++++
 
 btrfs 中就是用引用計數的方式跟蹤和管理數據塊的。引用計數本身不能保存在 FS_TREE
 或者指向的數據塊中，因爲這個計數需要能夠變化，對只讀快照來說整個 FS_TREE 都是只讀的。
-計算機領域中的所有問題都可以靠增加一層抽象來解決， btrfs 中關於數據塊的引用計數用一個單獨的
-CoW B樹來記錄，叫做 EXTENT_TREE ，保存於 ROOT_TREE 中的 2 號對象位置。
-btrfs 中每個數據塊都是按 extent 的形式分配的，extent 是一塊連續的存儲空間而非 zfs
+所以這裏增加一層抽象， btrfs 中關於數據塊的引用計數用一個單獨的 CoW B樹來記錄，叫做
+EXTENT_TREE ，保存於 ROOT_TREE 中的 2 號對象位置。
+
+btrfs 中每個數據塊都是按 `extent <https://en.wikipedia.org/wiki/Extent_(file_systems)>`_
+的形式分配的，extent 是一塊連續的存儲空間，而非 zfs
 中的固定大小，記錄數據塊的存儲位置和長度，以及這裏所說的引用計數。
 所以本文最開始講 `Btrfs 的子卷和快照`_ 中舉例的那個平坦佈局，如果畫上 EXTENT_TREE
-大概像是下圖這樣，其中每個粗箭頭是一個數據塊指針，指向磁盤中的邏輯地址，細箭頭則是指向
-EXTENT_TREE 中這塊數據塊的描述：
+大概像是下圖這樣，其中每個粗箭頭是一個數據塊指針，指向磁盤中的邏輯地址，細箭頭則是對應的
+EXTENT_TREE 中關於這塊數據塊的描述：
 
 .. dot::
 
@@ -1297,13 +1303,13 @@ EXTENT_TREE 中這塊數據塊的描述：
         roottree:root_sub_postgres -> postgres:label [style=bold, weight=10];
 
         extent_tree [label="<label> EXTENT_TREE ||
-                  <extent_roottree> extent 0x10000: ref 1 gen 8 |
-                  <extent_extent> extent 0x10100: ref 1 gen 8 |
-                  <extent_toplevel> extent 0x10200: ref 1 gen 8 |
-                  <extent_root> extent 0x10300: ref 1 gen 6 |
-                  <extent_home> extent 0x10400: ref 1 gen 6 |
-                  <extent_www> extent 0x10500: ref 1 gen 6 |
-                  <extent_postgres> extent 0x10600: ref 1 gen 7 |
+                  <extent_roottree> 0x2000 len=0x1000 : ref=1 gen=8 |
+                    <extent_extent> 0x3000 len=0x1000 : ref=1 gen=8 |
+                 <extent_toplevel> 0x11000 len=0x1000 : ref=1 gen=8 |
+                     <extent_root> 0x12000 len=0x1000 : ref=1 gen=6 |
+                     <extent_home> 0x13000 len=0x1000 : ref=1 gen=6 |
+                      <extent_www> 0x14000 len=0x1000 : ref=1 gen=6 |
+                 <extent_postgres> 0x15000 len=0x1000 : ref=1 gen=7 |
                   ...
                   "]
         
@@ -1323,9 +1329,13 @@ EXTENT_TREE 中這塊數據塊的描述：
 這些數據結構對應的 extent 的引用計數總是 1 ；從 FS_TREE 開始的所有樹節點都可以寫時複製，
 這包括所有子卷的元數據和文件數據，這些數據塊對應的 extent 的引用計數可以大於 1 表示有多處引用。
 
-EXTENT_TREE 按數據塊的邏輯地址索引，意味着讀取文件系統內容的時候不需要經過 EXTENT_TREE
-，直接從塊指針記錄的邏輯地址可以找到數據塊，只有在刪除數據塊或者增加 reflink 的時候需要讀取
-EXTENT_TREE 修改其中記錄的引用計數。
+EXTENT_TREE 按數據塊的邏輯地址索引，包括了起始地址和長度，所以 EXTENT_TREE 也兼任 btrfs
+的空間利用統計，充當別的文件系統中 block bitmap 的指責。比如上面例子中的 extent_tree 就表示
+:code:`[0x2000,0x4000) [0x11000,0x16000)` 這兩段連續的空間是已用空間，
+剩下的空間按定義則是可用空間。爲了加速空間分配器， btrfs 也有額外的
+free space cache 記錄在 ROOT_TREE 的 10 號位置 free_space_tree 中，不過在 btrfs
+中這個 free_space_tree 記錄的信息只是緩存，必要時可以通過 :code:`btrfs check --clear-space-cache`
+扔掉這個緩存重新掃描 extent_tree 並重建可用空間。
 
 但是 btrfs 中通過引用計數管理子卷的一點反直覺之處在於，創建快照的操作，
 理論上要修改所有引用到的數據塊的計數，這顯然很影響創建快照的性能。
@@ -1417,11 +1427,11 @@ btrfs 中叫做「反向引用（back reference，簡稱 backref）」。
 通過反向引用記錄能反過來從被指針指向的位置找回到記錄指針的地方。
 
 
-反向引用（backref）是 btrfs 中非常關鍵的機制，在 
-`btrfs kernel wiki 專門有一篇頁面講 <https://btrfs.wiki.kernel.org/index.php/Resolving_Extent_Backrefs>`_
-它的原理和實現方式。
+反向引用（backref）是 btrfs 中非常關鍵的機制，在 btrfs kernel wiki 專門有一篇頁面
+`Resolving Extent Backrefs <https://btrfs.wiki.kernel.org/index.php/Resolving_Extent_Backrefs>`_
+解釋它的原理和實現方式。
 
 ZFS 的 dedup vs btrfs 的 reflink
-++++++++++++++++++++++++++++++++++++
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 上面討論了 ZFS 的快照和克隆如何跟蹤數據塊
