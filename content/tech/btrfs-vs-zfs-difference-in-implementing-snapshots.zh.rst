@@ -108,7 +108,61 @@ Btrfs 的子卷和快照
 於是子卷在存儲介質中是如何記錄的呢？
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-比如在 `SysadminGuide 這頁的 Flat 佈局 <https://btrfs.wiki.kernel.org/index.php/SysadminGuide#Flat>`_
+首先要說明， btrfs 中大部分長度可變的數據結構都是
+`CoW B-tree <https://www.usenix.org/legacy/events/lsf07/tech/rodeh.pdf>`_
+，一種經過修改適合寫時拷貝的B樹結構，所以在
+`on-disk format <https://btrfs.wiki.kernel.org/index.php/On-disk_Format>`_
+中提到了很多個樹。這裏的樹不是指文件系統中目錄結構樹，而是 CoW B-tree
+，如果不關心B樹細節的話可以把 btrfs 所說的一棵樹理解爲關係數據庫中的一個表，
+和數據庫的表一樣 btrfs 的樹的長度可變，然後表項內容根據一個 key 排序。
+
+B樹結構由索引 key 、中間節點和葉子節點構成。每個 key
+是一個 (uint64_t object_id,uint8_t item_type,uint64_t item_extra)
+這樣的三元組，三元组每一项的具体含义由 item_type 定義。中間節點和葉子節點結構如下：
+
+
+.. dot::
+
+    digraph btree_nodes {
+        node [shape=record];rankdir=LR;ranksep=1;
+        btree_node [label="<label> header TREE_NODE |
+                           <key0> key0: address |
+                           <key1> key1: address |
+                           <key2> key2: address |
+                           ...|
+                           <keyN> free space 
+                           "];
+        btree_leaf1 [label="<label> header LEAF_NODE |
+                           <key0> key0: offset size |
+                           <key1> key1: offset size |
+                           <key2> key2: offset size |
+                           ...|
+                           <keyN> keyN offset size ||
+                           free space ||
+                           <dataN> dataN |
+                           ...|
+                           <data2> data2 |
+                           <data1> data1 |
+                           <data0> data0
+                           "];
+
+        btree_node:key0 -> btree_leaf1:label;
+        btree_leaf1:key0:e -> btree_leaf1:data0:e [style=dashed, arrowhead=empty];
+        btree_leaf1:key1:w -> btree_leaf1:data1:w [style=dashed, arrowhead=empty];
+        btree_leaf1:key2:e -> btree_leaf1:data2:e [style=dashed, arrowhead=empty];
+    }
+
+由此，每個中間節點保存一系列 key 到葉子節點的指針，而葉子節點內保存一系列 item ，每個 item
+固定大小，並指向節點內某個可變大小位置的 data 。從而邏輯上一棵B樹可以包含任何類型的
+item ，每個 item 都可以有可變大小的附加數據。通過這樣的B樹結構，可以緊湊而靈活地表達很多數據類型。
+每棵樹都可以看作是一個數據庫中的表，可以包含很多表項，根據 key 排序。
+每個對象（object）在樹中用一個或多個表項（item）描述，同 object_id
+的表項共同描述一個對象。B樹中的 key 只用來比較大小而不必連續，從而 object_id
+也不必連續，只是按大小排序。有一些預留的 object_id 不能用作別的用途，他們的編號範圍是
+-255ULL 到 255ULL，也就是表中前 255 和最後 255 個編號預留。
+
+有這樣的背景之後，比如在
+`SysadminGuide 這頁的 Flat 佈局 <https://btrfs.wiki.kernel.org/index.php/SysadminGuide#Flat>`_
 有個子卷佈局的例子。
 
 .. code::
@@ -141,14 +195,10 @@ Btrfs 的子卷和快照
     }
 
 
-首先要說明， btrfs 中大部分長度可變的數據結構都是
-`CoW B-tree <https://www.usenix.org/legacy/events/lsf07/tech/rodeh.pdf>`_
-，一種經過修改適合寫時拷貝的B樹結構，所以在
-`on-disk format <https://btrfs.wiki.kernel.org/index.php/On-disk_Format>`_
-中提到了很多個樹。這裏的樹不是指文件系統中目錄結構樹，而是 CoW B-tree
-，如果不關心B樹細節的話可以把 btrfs 所說的一棵樹理解爲關係數據庫中的一個表，
-和數據庫的表一樣 btrfs 的樹的長度可變，然後表項內容根據一個 key 排序。
-有這樣的背景之後，上圖例子中的 Flat 佈局在 btrfs 中大概是這樣的數據結構：
+
+上圖例子中的 Flat 佈局在 btrfs 中大概是這樣的數據結構，
+其中實線箭頭是B樹一系列中間節點和葉子節點，邏輯上指向一棵B樹，虛線箭頭是根據
+inode 號之類的編號的引用：
 
 .. dot::
 
@@ -219,11 +269,7 @@ Btrfs 的子卷和快照
 
 上圖中已經隱去了很多和本文無關的具體細節，所有這些細節都可以通過
 `btrfs inspect-internal 的 dump-super 和 dump-tree <https://btrfs.wiki.kernel.org/index.php/Manpage/btrfs-inspect-internal>`_
-查看到。btrfs 中的每棵樹都可以看作是一個數據庫中的表，可以包含很多表項，根據 KEY 排序，而 KEY
-是 (object_id, item_type, item_extra) 這樣的三元組。每個對象（object）在樹中用一個或多個
-表項（item）描述，同 object_id 的表項共同描述一個對象（object）。B樹中的 key
-只用來比較大小不必連續，從而 object_id 也不必連續，只是按大小排序。有一些預留的 object_id
-不能用作別的用途，他們的編號範圍是 -255ULL 到 255ULL，也就是表中前 255 和最後 255 個編號預留。
+查看到。
 
 ROOT_TREE 中記錄了到所有別的B樹的指針，在一些文檔中叫做 tree of tree roots 。「所有別的B樹」
 舉例來說比如 2 號 extent_tree ，3 號 chunk_tree ， 4 號 dev_tree ，10 號 free_space_tree
@@ -849,6 +895,7 @@ n12 就是當前的寫入點。空盤上連續往後寫而不 GC 總會遇到空
 
 .. ditaa::
 
+    
     /--------+--------+--------+--------+--------\
     |     1  |cGRE 5  |cGRE 9  |cGRE n2 |cGRE 1  |
     +--------+--------+--------+--------+--------+
@@ -1004,7 +1051,7 @@ OpenZFS 的項目領導者，同時也是最初設計 ZFS 中 DMU 子系統的�
     ---->*----->*----->*---->*  fs1  
 
 其中只有 s2 不存在 somefile ，而 s1 、 s3 和當前的 fs 都有，並且都引用到了同一個數據塊。
-於是從時間線來�����������， somefile 的數據塊在 s2 中「死���了，又在 s3 中「復活」了。
+於是從時間線來�������������， somefile 的數據塊在 s2 中「死���了，又在 s3 中「復活」了。
 
 而 ZFS (目前還）不支持 reflink ，所以沒法像這樣讓數據塊復活。一旦某個數據塊在某個快照中「死」了，
 就意味着它在隨後的所有快照中都不再被引用到了。
@@ -1228,7 +1275,7 @@ btrfs 的空間跟蹤算法：引用計數與反向引用
 上下層級分明的有向圖，很少會使用成環的指針，以及文件系統記錄指針的時候也都會區分指針的類型，
 根據指針類型可以分出強弱引用。
 
-btrfs 的 EXTENT_TREE 和引用計數
+EXTENT_TREE 和引用計數
 ++++++++++++++++++++++++++++++++++++
 
 btrfs 中就是用引用計數的方式跟蹤和管理數據塊的。引用計數本身不能保存在 FS_TREE
@@ -1236,12 +1283,12 @@ btrfs 中就是用引用計數的方式跟蹤和管理數據塊的。引用計�
 所以這裏增加一層抽象， btrfs 中關於數據塊的引用計數用一個單獨的 CoW B樹來記錄，叫做
 EXTENT_TREE ，保存於 ROOT_TREE 中的 2 號對象位置。
 
-btrfs 中每個數據塊都是按 `extent <https://en.wikipedia.org/wiki/Extent_(file_systems)>`_
-的形式分配的，extent 是一塊連續的存儲空間，而非 zfs
-中的固定大小，記錄數據塊的存儲位置和長度，以及這裏所說的引用計數。
+btrfs 中每個塊都是按 `區塊（extent） <https://en.wikipedia.org/wiki/Extent_(file_systems)>`_
+的形式分配的，區塊是一塊連續的存儲空間，而非 zfs
+中的固定大小。每個區塊記錄存儲的位置和長度，以及這裏所說的引用計數。
 所以本文最開始講 `Btrfs 的子卷和快照`_ 中舉例的那個平坦佈局，如果畫上 EXTENT_TREE
-大概像是下圖這樣，其中每個粗箭頭是一個數據塊指針，指向磁盤中的邏輯地址，細箭頭則是對應的
-EXTENT_TREE 中關於這塊數據塊的描述：
+大概像是下圖這樣，其中每個粗箭頭是一個區塊指針，指向磁盤中的邏輯地址，細箭頭則是對應的
+EXTENT_TREE 中關於這塊區塊的描述：
 
 .. dot::
 
@@ -1323,29 +1370,21 @@ EXTENT_TREE 中關於這塊數據塊的描述：
         postgres:label -> extent_tree:extent_postgres;
     }
 
-包括 ROOT_TREE 和 EXTENT_TREE 在內，btrfs 中所有分配的數據塊（extent）都在 EXTENT_TREE
-中有對應的記錄，按數據塊的邏輯地址索引。從而給定一個數據塊，能從 EXTENT_TREE 中找到 ref
-字段描述這個數據塊有多少引用。不過 ROOT_TREE 、 EXTENT_TREE 和別的一些數據結構本身不是寫時拷貝的，
-這些數據結構對應的 extent 的引用計數總是 1 ；從 FS_TREE 開始的所有樹節點都可以寫時複製，
-這包括所有子卷的元數據和文件數據，這些數據塊對應的 extent 的引用計數可以大於 1 表示有多處引用。
+包括 ROOT_TREE 和 EXTENT_TREE 在內，btrfs 中所有分配的區塊（extent）都在 EXTENT_TREE
+中有對應的記錄，按區塊的邏輯地址索引。從而給定一個區塊，能從 EXTENT_TREE 中找到 ref
+字段描述這個區塊有多少引用。不過 ROOT_TREE 、 EXTENT_TREE 和別的一些數據結構本身不是寫時拷貝的，
+這些數據結構對應的區塊的引用計數總是 1 ；從 FS_TREE 開始的所有樹節點都可以寫時複製，
+這包括所有子卷的元數據和文件數據，這些區塊對應的引用計數可以大於 1 表示有多處引用。
 
-EXTENT_TREE 按數據塊的邏輯地址索引，包括了起始地址和長度，所以 EXTENT_TREE 也兼任 btrfs
-的空間利用統計，充當別的文件系統中 block bitmap 的指責。比如上面例子中的 extent_tree 就表示
+EXTENT_TREE 按區塊的邏輯地址索引，包括了起始地址和長度，所以 EXTENT_TREE 也兼任 btrfs
+的空間利用記錄，充當別的文件系統中 block bitmap 的指責。比如上面例子中的 extent_tree 就表示
 :code:`[0x2000,0x4000) [0x11000,0x16000)` 這兩段連續的空間是已用空間，
 剩下的空間按定義則是可用空間。爲了加速空間分配器， btrfs 也有額外的
 free space cache 記錄在 ROOT_TREE 的 10 號位置 free_space_tree 中，不過在 btrfs
 中這個 free_space_tree 記錄的信息只是緩存，必要時可以通過 :code:`btrfs check --clear-space-cache`
-扔掉這個緩存重新掃描 extent_tree 並重建可用空間。
+扔掉這個緩存重新掃描 extent_tree 並重建可用空間記錄。
 
-但是 btrfs 中通過引用計數管理子卷的一點反直覺之處在於，創建快照的操作，
-理論上要修改所有引用到的數據塊的計數，這顯然很影響創建快照的性能。
-所以 btrfs 採取的策略是在快照創建時只增加快照的 FS_TREE 頂層元數據塊的引用。
-換句話說 EXTENT_TREE 中保存的 ref ，是物理記錄中的引用的計數，不是整個文件系統中引用到該塊的數量，
-要得知邏輯上一共有多少引用，需要反過來從數據塊往回遍歷到樹根。
-也就是說單有引用計數的一個數字還不夠，需要記錄具體反向的從數據塊往引用源頭指的引用，這種結構在
-btrfs 中叫做「反向引用（back reference，簡稱 backref）」。
-
-比如我們用如下命令創建了兩個文件，通過 reflink 讓它們共享數據塊，然後創建兩個快照，
+比如我們用如下命令創建了兩個文件，通過 reflink 讓它們共享區塊，然後創建兩個快照，
 然後刪除文件系統中的 file2 ：
 
 .. code-block:: bash
@@ -1422,6 +1461,36 @@ btrfs 中叫做「反向引用（back reference，簡稱 backref）」。
 :code:`sn1/file1, sn1/file2, sn2/file1, sn2/file2, fs/file1` ，
 在 extent_tree 中， sn1 和 sn2 可能共享了一個 B樹 葉子節點，這個葉子節點的引用計數爲 2
 ，然後每個文件的內容都指向同一個 extent ，這個 extent 的引用計數爲 3 。
+
+刪除子卷時，通過引用計數就能準確地釋放掉子卷所引用的區塊。具體算法挺符合直覺的：
+
+1. 從子卷的 FS_TREE 往下遍歷
+
+   * 遇到引用計數 >1 的區塊，減小該塊的計數即可，不需要再遞歸下去
+   * 遇到引用計數 =1 的區塊，就是子卷獨佔的區塊，需要釋放該塊並遞歸往下繼續掃描
+
+大體思路挺像上面介紹的 `ZFS 快照刪除的🐢烏龜算法 <🐢烏龜算法：概念上 ZFS 如何刪快照>`_
+，只不過根據引用計數而非 birth txg 判斷是否獨佔數據塊。
+掃描 FS_TREE 可能需要耗時良久的，這個遞歸的每一步操作都會記錄在 ROOT_TREE
+中專門的結構，也就是說刪除一個子卷的操作可以執行很長時間並跨越多個 pool commit 。
+:code:`btrfs subvolume delete` 命令默認也只是記錄下這個刪除操作，然後就返回一句類似：
+:code:`Delete subvolume (no-commit): /subvolume/path` 的輸出，不會等刪除操作執行結束。
+相比之下 ZFS 那邊刪除一個快照或克隆必須在一個 txg 內執行完，沒有中間過程的記錄，
+所以如果耗時很久會影響整個 pool 的寫入，於是 ZFS 那邊必須對這些操作優化到能在一個 txg
+內執行完的程度。
+
+但是 btrfs 中通過引用計數管理子卷的一點反直覺之處在於，創建快照的操作，
+直覺上要修改所有引用到的區塊的計數，這顯然很影響創建快照的性能。
+所以 btrfs 採取的策略是在快照創建時只增加快照的 FS_TREE 頂層元區塊的引用。
+換句話說 EXTENT_TREE 中保存的 ref ，是物理記錄中的引用的計數，不是整個文件系統中引用到該塊的數量，
+要得知邏輯上一共有多少引用，需要反過來從區塊往回遍歷到樹根。
+也就是說單有引用計數的一個數字還不夠，需要記錄具體反向的從區塊往引用源頭指的引用，這種結構在
+btrfs 中叫做「反向引用（back reference，簡稱 backref）」。
+
+反向引用（back reference）
+++++++++++++++++++++++++++++++++++++
+
+
 單純從 extent 的引用計數難以看出整個文件系統所有子卷中有多少副本。
 所以在上圖中每一個單向的箭頭，在 btrfs 中都有記錄一條反向引用，
 通過反向引用記錄能反過來從被指針指向的位置找回到記錄指針的地方。
@@ -1432,6 +1501,6 @@ btrfs 中叫做「反向引用（back reference，簡稱 backref）」。
 解釋它的原理和實現方式。
 
 ZFS 的 dedup vs btrfs 的 reflink
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-------------------------------------------------------------------
 
 上面討論了 ZFS 的快照和克隆如何跟蹤數據塊
