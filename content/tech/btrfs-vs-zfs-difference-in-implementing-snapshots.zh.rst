@@ -1013,7 +1013,7 @@ ZFS 中關於快照和克隆的空間跟蹤算法
 
 
 OpenZFS 的項目領導者，同時也是最初設計 ZFS 中 DMU 子系統的作者 Matt Ahrens 在 DMU 和 DSL
-中設計並實現了 ZFS 獨特的快照的空間跟蹤算法。他也在很多地方發表演講，講過這個算法的思路和細節，
+中設計並�����現了 ZFS 獨特的快照的空間跟蹤算法。他也在很多地方發表演講，講過這個算法的思路和細節，
 比如右側就是他在 BSDCan 2019 做的演講 
 `How ZFS snapshots really work And why they perform well (usually) <https://youtu.be/NXg86uBDSqI>`_
 的 YouTube 視頻。
@@ -1053,7 +1053,7 @@ OpenZFS 的項目領導者，同時也是最初設計 ZFS 中 DMU 子系統的�
     ---->*----->*----->*---->*  fs1  
 
 其中只有 s2 不存在 somefile ，而 s1 、 s3 和當前的 fs 都有，並且都引用到了同一個數據塊。
-於是從時間線來�������������， somefile 的數據塊在 s2 中「死���了，又在 s3 中「復活」了。
+於是從時間線來看， somefile 的數據塊在 s2 中「死掉」了，又在 s3 中「復活」了。
 
 而 ZFS (目前還）不支持 reflink ，所以沒法像這樣讓數據塊復活。一旦某個數據塊在某個快照中「死」了，
 就意味着它在隨後的所有快照中都不再被引用到了。
@@ -1498,35 +1498,9 @@ reflink 其實就是 reference counted link 嘛），普通讀寫下也只需要
 btrfs 中叫做「反向引用（back reference，簡稱 backref）」。所以在上圖中每一個單向的箭頭，在
 btrfs 中都有記錄一條反向引用，通過反向引用記錄能反過來從被指針指向的位置找回到記錄指針的地方。
 
-
 反向引用（backref）是 btrfs 中非常關鍵的機制，在 btrfs kernel wiki 專門有一篇頁面
 `Resolving Extent Backrefs <https://btrfs.wiki.kernel.org/index.php/Resolving_Extent_Backrefs>`_
 解釋它的原理和實現方式。
-
-EXTENT_TREE 中每個 extent 記錄都同時記錄了引用到這個區塊的反向引用列表。反向引用有兩種記錄方式：
-
-1. 普通反向引用（Normal back references）。記錄這個指針來源所在是哪顆B樹、 B樹中的對象 id 和對象偏移。
-
-   - 對文件區塊而言，就是記錄文件所在子卷、inode、和文件內容的偏移。
-   - 對子卷的樹節點區塊而言，就是記錄該區塊的上級樹節點在哪個子卷和哪個 key 開始。
-
-2. 共享反向引用（Shared back references）。記錄這個指針來源區塊的邏輯地址。
-
-   - 無論對文件區塊而言，還是對子卷的樹節點區塊而言，都是直接記錄了保存這個區塊指針的上層樹節點的邏輯地址。
-
-有兩種記錄方式是因爲它們各有性能上的優缺點：
-
-普通反向引用
-    因爲通過對象編號記錄，所以當樹節點 CoW 時不需要改變，
-    從而在普通的讀寫和快照之類的操作下有更好的性能，
-    但是在解析反向引用時需要額外一次樹查找。
-    同時因爲這個額外查找，普通反向引用也叫間接反向引用。
-共享反向引用
-    因爲直接記錄了邏輯地址，所以當這個地址的節點被 CoW 的時候也許有調整這裏記錄的地址。
-    在普通的讀寫和快照操作下會影響性能，但是在解析反向引用時更快。
-
-通常創建出來的引用是普通反向引用，在一些條件下普通反向引用會變成共享反向引用，
-共享反向引用不會變回普通反向引用。
 
 對上面的引用計數的例子畫出反向引用的指針大概是這樣：
 
@@ -1540,6 +1514,7 @@ EXTENT_TREE 中每個 extent 記錄都同時記錄了引用到這個區塊的反
             <fs> fs
         "];
 
+        {rank = same;
         sn1 [label="<label> FS_TREE sn1 |
             <leaf> leaf_node
         "];
@@ -1551,8 +1526,9 @@ EXTENT_TREE 中每個 extent 記錄都同時記錄了引用到這個區塊的反
         fs [label="<label> FS_TREE fs |
             <leaf> leaf_node
         "];
+        }
 
-
+        {rank=same;
         snleaf [label="<label> FS_TREE leaf_node |
             <f1> file1 |
             <f2> file2
@@ -1561,24 +1537,25 @@ EXTENT_TREE 中每個 extent 記錄都同時記錄了引用到這個區塊的反
         fsleaf [label="<label> FS_TREE leaf_node |
             <f1> file1 
         "];
+        }
 
         extent [label="<label> EXTENT_TREE extent_tree |
-            <root> root_tree : ref 1||
+            <root> root_tree : ref 1|
             <sn1> sn1 fs_tree : ref 1|
-            <br1> backref ROOT_TREE sn1 ||
+            <br1> backref ROOT_TREE sn1 |
             <sn2> sn2 fs_tree : ref 1|
-            <br2> backref ROOT_TREE sn2 ||
+            <br2> backref ROOT_TREE sn2 |
             <snleaf> sn1 sn2 leaf_node: ref 2|
             <br3> backref sn1 FS_TREE node |
-            <br4> backref sn2 FS_TREE node ||
+            <br4> backref sn2 FS_TREE node |
             <fs> fs fs_tree : ref 1|
-            <br5> backref ROOT_TREE fs ||
+            <br5> backref ROOT_TREE fs |
             <fsleaf> fs leaf_node : ref 1|
-            <br6> backref fs FS_TREE node ||
+            <br6> backref fs FS_TREE node |
             <f1> file1 : ref 3 |
-            <br7> backref FS_TREE sn leaf_node file1 |
-            <br8> backref FS_TREE sn leaf_node file2 |
-            <br9> backref FS_TREE fs leaf_node file1
+            <br7> backref sn FS_TREE leaf_node file1 |
+            <br8> backref sn FS_TREE leaf_node file2 |
+            <br9> backref fs FS_TREE leaf_node file1
         "];
         root:sn1 -> sn1:label  [style=bold, weight=10];
         root:sn2 -> sn2:label [style=bold, weight=10];
@@ -1609,12 +1586,197 @@ EXTENT_TREE 中每個 extent 記錄都同時記錄了引用到這個區塊的反
         fsleaf:f1 -> extent:f1 [style="invis", weight=10];
     }
 
-遍歷反向引用
+
+EXTENT_TREE 中每個 extent 記錄都同時記錄了引用到這個區塊的反向引用列表。反向引用有兩種記錄方式：
+
+1. 普通反向引用（Normal back references）。記錄這個指針來源所在是哪顆B樹、 B樹中的對象 id 和對象偏移。
+
+   - 對文件區塊而言，就是記錄文件所在子卷、inode、和文件內容的偏移。
+   - 對子卷的樹節點區塊而言，就是記錄該區塊的上級樹節點在哪個B樹的哪個位置開始。
+
+2. 共享反向引用（Shared back references）。記錄這個指針來源區塊的邏輯地址。
+
+   - 無論對文件區塊而言，還是對子卷的樹節點區塊而言，都是直接記錄了保存這個區塊指針的上層樹節點的邏輯地址。
+
+有兩種記錄方式是因爲它們各有性能上的優缺點：
+
+普通反向引用
+    因爲通過對象編號記錄，所以當樹節點 CoW 改變了地址時不需要改變，
+    從而在普通的讀寫和快照之類的操作下有更好的性能，
+    但是在解析反向引用時需要額外一次樹查找。
+    同時因爲這個額外查找，普通反向引用也叫間接反向引用。
+共享反向引用
+    因爲直接記錄了邏輯地址，所以當這個地址的節點被 CoW 的時候也許有調整這裏記錄的地址。
+    在普通的讀寫和快照操作下，調整地址會增加寫入從而影響性能，但是在解析反向引用時更快。
+
+通常通過普通寫入、快照、 reflink 等方式創建出來的引用是普通反向引用，
+由於普通反向引用記錄了包含它的B樹，從而可以說綁在了某棵樹比如某個子卷上，
+當這個普通反向引用指向的對象不再存在，而這個反向引用還在通過別的途徑共享時，
+這個普通反向引用會變成共享反向引用；共享反向引用在存在期間不會變回普通反向引用。
+
+比如上圖反向引用的例子中，我們先假設所有畫出的反向引用都是普通反向引用，於是圖中標爲 file1
+引用數爲 3 的那個區塊有 3 條反向引用記錄，其中前兩條都指向 sn1 裏面的文件，分別是 sn1/file1
+和 sn1/file2 ，然後 sn1 和 sn2 共享了 FS_TREE 的葉子節點。
+
+假設這時我們刪除 sn1/file2，執行了代碼 :code:`rm sn1/file2` 之後：
+
+
+.. dot::
+
+    digraph btrfs_reflink_shared_backref {
+        node [shape=record];rankdir=LR;ranksep=1;
+        root [label="<label> ROOT_TREE |
+            <sn1> sn1 |
+            <sn2> sn2 |
+            <fs> fs
+        "];
+
+        {rank = same;
+        sn1 [label="<label> FS_TREE sn1 |
+            <leaf> leaf_node
+        "];
+
+        sn2 [label="<label> FS_TREE sn2 |
+            <leaf> leaf_node
+        "];
+
+        fs [label="<label> FS_TREE fs |
+            <leaf> leaf_node
+        "];
+        }
+
+        {rank=same;
+        sn1leaf [label="<label> FS_TREE leaf_node |
+            <f1> file1
+        "];
+
+        snleaf [label="<label> FS_TREE leaf_node |
+            <f1> file1 |
+            <f2> file2
+        "];
+
+        fsleaf [label="<label> FS_TREE leaf_node |
+            <f1> file1 
+        "];
+        }
+
+        extent [label="<label> EXTENT_TREE extent_tree |
+            <root> root_tree : ref 1|
+            <sn1> sn1 fs_tree : ref 1|
+            <br1> backref ROOT_TREE sn1 |
+            <sn2> sn2 fs_tree : ref 1|
+            <br2> backref ROOT_TREE sn2 |
+            <snleaf> sn1 sn2 leaf_node: ref 2|
+            <br3> backref sn1 FS_TREE node |
+            <br4> backref sn2 FS_TREE node |
+            <fs> fs fs_tree : ref 1|
+            <br5> backref ROOT_TREE fs |
+            <fsleaf> fs leaf_node : ref 1|
+            <br6> backref fs FS_TREE node |
+            <f1> file1 : ref 3 |
+            <br7> backref FS_TREE leaf_node file1 |
+            <br8> backref FS_TREE leaf_node file2 |
+            <br9> backref fs FS_TREE leaf_node file1 |
+            <br10> backref sn1 FS_TREE leaf_node file1 |
+        "];
+        root:sn1 -> sn1:label  [style=bold, weight=10];
+        root:sn2 -> sn2:label [style=bold, weight=10];
+        root:fs -> fs:label [style=bold, weight=10];
+
+        sn1:leaf -> sn1leaf:label [style=bold, weight=10];
+        sn2:leaf -> snleaf:label [style=bold, weight=10];
+        fs:leaf -> fsleaf:label [style=bold, weight=10];
+
+        extent:br1 -> root:label [weight=0];
+        extent:br2 -> root:label [weight=0];
+        extent:br3 -> sn1:label [weight=0];
+        extent:br4 -> sn2:label [weight=0];
+        extent:br5 -> root:label [weight=0];
+        extent:br6 -> fs:label [weight=0];
+        extent:br7 -> snleaf:label [style=dashed, weight=0];
+        extent:br8 -> snleaf:label [style=dashed, weight=0];
+        extent:br9 -> fsleaf:label [weight=0];
+        extent:br10 -> sn1leaf:label [weight=0];
+
+        root:label -> extent:root [style="invis", weight=10];
+        sn1:label -> extent:sn1 [style="invis", weight=10];
+        sn2:label -> extent:sn2 [style="invis", weight=10];
+        snleaf:label -> extent:snleaf [style="invis", weight=10];
+        fs:label -> extent:fs [style="invis", weight=10];
+        fsleaf:label -> extent:fsleaf [style="invis", weight=10];
+        snleaf:f1 -> extent:f1 [style="invis", weight=10];
+        snleaf:f2 -> extent:f1 [style="invis", weight=10];
+        fsleaf:f1 -> extent:f1 [style="invis", weight=10];
+    }
+
+那麼 sn1 會 CoW 那個和 sn2 共享的葉子節點，有了新的屬於 sn1 的葉子，從而斷開了原本 file1
+中對這個共享葉子節點的兩個普通反向引用，轉化成共享反向引用（圖中用虛線箭頭描述），
+並且插入了一個新的普通反向引用指向新的 sn1 的葉子節點。
+
+遍歷反向引用(backref walking)
 ++++++++++++++++++++++++++++++++++++
 
-有了反向引用記錄之後
+有了反向引用記錄之後，可以給定一個邏輯地址，從 EXTENT_TREE 中找到地址的區塊記錄，
+然後從區塊記錄中的反向引用記錄一步步往回遍歷，直到遇到 ROOT_TREE
+，最終確定這個邏輯地址的區塊在整個文件系統中有多少路徑能訪問它。
+這個遍歷反向引用的操作，在 btrfs 文檔和代碼中被稱作 backref walking 。
 
-ZFS 的 dedup vs btrfs 的 reflink
+比如還是上面的反向引用圖例中 sn1 和 sn2 完全共享葉子節點的那個例子，通過 backref walking
+，我們能從 file1 所記錄的 3 個反向引用，推出全部 5 個可能的訪問路徑。
+
+backref walking 作爲很多功能的基礎設施，從 btrfs 相當早期（3.3內核）就有，很多 btrfs
+的功能實際依賴 backref walking 的正確性。列舉一些需要 backref walking 來實現的功能：
+
+1. qgroup
+
+   btrfs 的子卷沒有記錄子卷的磁盤佔用開銷，靠引用計數來刪除子卷，所以也不需要詳細統計子卷的佔用。
+   不過有些場合下，統計子卷佔用很有用。由於 reflink 的存在，顯然子卷佔用不能靠累計加減法算出來，
+   所以有了 qgroup 和 quota 功能，用來統計子卷佔用空間。爲了實現 qgroup ，需要 backref
+   walking 來計算區塊共享的情況。
+
+2. send
+
+   btrfs send 在計算子卷間的差異時，也通過 backref walking 尋找能 reflink
+   的區塊，從而避免傳輸數據。
+
+3. balance/scrub
+
+   balance 和 scrub 都會調整區塊的地址，通過 backref walking
+   能找到所有引用到這個地址的位置並正確修改地址。
+
+可見 backref walking 的能力對 btrfs 的許多功能都非常重要。不過 backref walking
+根據區塊共享的情況也可能導致挺大的運行期開銷，包括算法時間上的和內存佔用方面的。
+比如某個子卷中有 100 個文件通過 reflink 共享了同一個區塊，然後對這個子卷做了 100 個快照，
+那麼對這一個共享區塊的 backref walking 結果可能解析出 10000 個路徑。可見隨着使用 reflink
+和快照， backref walking 的開銷可能爆炸式增長。
+
+值得再強調的是，在沒有開啓 qgroup 的前提下，正常創建刪除快照或reflink
+，正常寫入和覆蓋區塊之類的文件系統操作，只需要引用計數就足夠，不需要動用
+backref walking 這樣的重型武器。
+
+btrfs vs ZFS 的 dedup 現狀
 -------------------------------------------------------------------
 
-上面討論了 ZFS 的快照和克隆如何跟蹤數據塊
+上面討論 ZFS 的快照和克隆如何跟蹤數據塊時，故意避開了 ZFS 的 dedup 功能，因爲要講 dedup
+可能需要先理解引用計數在文件系統中的用法，而 btrfs 正好用了引用計數。
+於是我們再回來 ZFS 這邊，看看 ZFS 的 dedup 是具體如何運作的。
+
+稍微瞭解過 btrfs 和 ZFS 兩者的人，或許有不少 btrfs 用戶都眼饞 ZFS 有 in-band dedup
+的能力，可以在寫入數據塊的同時就去掉重複數據，而 btrfs 只能「退而求其次」地選擇第三方 dedup
+方案，用外部工具掃描已經寫入的數據，將其中重複的部分改爲 reflink 。又或許有不少 btrfs
+用戶以爲 zfs 的 dedup 就是在內存和磁盤中維護一個類似
+`Bloom filter <https://en.wikipedia.org/wiki/Bloom_filter>`_
+的結構，然後根據結果對數據塊增加 reflink ，從而 zfs 內部大概一定有類似 reflink
+的東西，進一步質疑爲什麼 btrfs 還遲遲沒有實現這樣一個 Bloom filter 。
+或許還有 ZFS 用戶有疑惑，
+`爲什麼 ZFS 還沒有暴露出 reflink 的用戶空間接口 <https://github.com/zfsonlinux/zfs/issues/405>`_
+，或者既然 ZFS 已經有了 dedup ，
+`能不能臨時開關 dedup 來提供類似 reflink 式的共享數據塊 <https://github.com/zfsonlinux/zfs/issues/2554>`_
+而避免長期開 dedup 的巨大開銷。
+
+看過上面 `ZFS 中關於快照和克隆的空間跟蹤算法`_ 之後我們會發現，其實 ZFS 中並沒有
+能對應 btrfs reflink 的功能，而是根據數據塊指針中的 birth txg
+來跟蹤快照和克隆的共享數據塊的。這引來更多疑惑： 
+
+ZFS 是如何實現 dedup 的？
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
