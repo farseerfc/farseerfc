@@ -36,8 +36,8 @@ ZFS 之前就有 `NetApp <https://en.wikipedia.org/wiki/NetApp>`_ 的商業產�
 我一開始也帶着「 Btrfs 和 ZFS
 都提供了類似的功能，因此兩者必然有類似的設計」這樣的先入觀念，嘗試去使用這兩個文件系統，
 卻經常撞上兩者細節上的差異，導致使用時需要不盡相同的工作流，
-或者看似相似的用法有不太一樣的性能表現，又或者一邊有的功能（比如 ZFS 的 inband dedup ，
-Btrfs 的 reflink ）在另一邊沒有的情況。後來看到了
+或者看似相似的用法有不太一樣的性能表現，又或者一邊有的功能，比如 ZFS 的在線去重（in-band dedup）
+， Btrfs 的 reflink ，在另一邊沒有的情況，進而需要不同細粒度的子卷劃分方案。後來看到了
 `LWN 的這篇 《A short history of btrfs》 <https://lwn.net/Articles/342892/>`_
 讓我意識到 btrfs 和 ZFS 雖然表面功能上看起來類似，但是實現細節上完全不一樣，
 所以需要不一樣的用法，適用於不一樣的使用場景。
@@ -112,14 +112,19 @@ Btrfs 的子卷和快照
 `CoW B-tree <https://www.usenix.org/legacy/events/lsf07/tech/rodeh.pdf>`_
 ，一種經過修改適合寫時拷貝的B樹結構，所以在
 `on-disk format <https://btrfs.wiki.kernel.org/index.php/On-disk_Format>`_
-中提到了很多個樹。這裏的樹不是指文件系統中目錄結構樹，而是 CoW B-tree
+中提到了很多個樹。這裏的樹不是指文件系統中目錄結構樹，而是寫時拷貝B樹（CoW B-tree，下文簡稱B樹）
 ，如果不關心B樹細節的話可以把 btrfs 所說的一棵樹理解爲關係數據庫中的一個表，
 和數據庫的表一樣 btrfs 的樹的長度可變，然後表項內容根據一個 key 排序。
 
 B樹結構由索引 key 、中間節點和葉子節點構成。每個 key
-是一個 (uint64_t object_id,uint8_t item_type,uint64_t item_extra)
-這樣的三元組，三元组每一项的具体含义由 item_type 定義。中間節點和葉子節點結構如下：
+是一個 :code:`(uint64_t object_id, uint8_t item_type, uint64_t item_extra)`
+這樣的三元組，三元组每一项的具体含义由 item_type 定義。 key
+三元組構成了對象的概念，每個對象（object）在樹中用一個或多個表項（item）描述，同 object_id
+的表項共同描述一個對象。B樹中的 key 只用來比較大小而不必連續，從而 object_id
+也不必連續，只是按大小排序。有一些預留的 object_id 不能用作別的用途，他們的編號範圍是
+-255ULL 到 255ULL，也就是表中前 255 和最後 255 個編號預留。
 
+B樹中間節點和葉子節點結構大概像是這個樣子：
 
 .. dot::
 
@@ -155,11 +160,6 @@ B樹結構由索引 key 、中間節點和葉子節點構成。每個 key
 由此，每個中間節點保存一系列 key 到葉子節點的指針，而葉子節點內保存一系列 item ，每個 item
 固定大小，並指向節點內某個可變大小位置的 data 。從而邏輯上一棵B樹可以包含任何類型的
 item ，每個 item 都可以有可變大小的附加數據。通過這樣的B樹結構，可以緊湊而靈活地表達很多數據類型。
-每棵樹都可以看作是一個數據庫中的表，可以包含很多表項，根據 key 排序。
-每個對象（object）在樹中用一個或多個表項（item）描述，同 object_id
-的表項共同描述一個對象。B樹中的 key 只用來比較大小而不必連續，從而 object_id
-也不必連續，只是按大小排序。有一些預留的 object_id 不能用作別的用途，他們的編號範圍是
--255ULL 到 255ULL，也就是表中前 255 和最後 255 個編號預留。
 
 有這樣的背景之後，比如在
 `SysadminGuide 這頁的 Flat 佈局 <https://btrfs.wiki.kernel.org/index.php/SysadminGuide#Flat>`_
@@ -290,7 +290,8 @@ FS_TREE 中， object_id 同時也是它所描述對象的 inode 號，所以 bt
 的 **子卷有互相獨立的 inode 編號** ，不同子卷中的文件或目錄可以擁有相同的 inode 。
 或許有人不太清楚子卷間 inode 編號獨立意味着什麼，簡單地說，這意味着你不能跨子卷創建
 hard link ，不能跨子卷 mv 移動文件而不產生複製操作。不過因爲 reflink 和 inode 無關，
-可以跨子卷創建 reflink ，也可以用 reflink + rm 的方式快速移動文件。
+可以跨子卷創建 reflink ，也可以用 reflink + rm 的方式快速「移動」文件（這裏移動加引號是因爲
+inode 變了，傳統上不算移動）。
 
 FS_TREE 中一個目錄用一個 inode_item 和多個 dir_item 描述， inode_item 是目錄自己的 inode
 ，那些 dir_item 是目錄的內容。 dir_item 可以指向別的 inode_item 來描述普通文件和子目錄，
@@ -754,10 +755,11 @@ ZPL 的元對象集
     }
 
 如上簡圖所示，首先 ZFS pool 級別有個 uberblock ，具體每個 vdev 如何存儲和找到這個 uberblock
-今後有空再聊，這裏認爲整個 zpool 有唯一的一個 uberblock 。從 uberblock 有個指針指向元對象集（MOS, Meta Object Set）
-，它是個 DMU 的對象集，它包含整個 pool 的一些配置信息，和根數據集（root dataset）。
-根數據集再包含整個 pool 中保存的所有頂層數據集，每個數據集有一個 DSL Directory 結構。
-然後從每個數據集的 DSL Directory 可以找到一系列子數據集和一系列快照等結構。最後每個數據集有個 active
+今後有空再聊，這裏認爲整個 zpool 有唯一的一個 uberblock 。從 uberblock
+有個指針指向元對象集（MOS, Meta Object Set），它是個 DMU 的對象集，它包含整個 pool
+的一些配置信息，和根數據集（root dataset）。根數據集再包含整個 pool
+中保存的所有頂層數據集，每個數據集有一個 DSL Directory 結構。然後從每個數據集的
+DSL Directory 可以找到一系列子數據集和一系列快照等結構。最後每個數據集有個 active
 的 DMU 對象集，這是整個文件系統的當前寫入點，每個快照也指向一個各自的 DMU 對象集。
 
 
@@ -777,9 +779,9 @@ DSL 層的每個數據集的邏輯結構也可以用下面的圖表達（來自 
 
 需要記得 ZFS 中沒有類似 btrfs 的 CoW b-tree 這樣的統一數據結構，所以上面的這些設施是用各種不同的數據結構表達的。
 尤其每個 Directory 的結構可以包含一個 ZAP 的鍵值對存儲，和一個 DMU 對象。
-可以理解爲， DSL 用 DMU 對象集（Objectset）表示一個整數（uinit64_t 的 dnode）到 DMU 對象的映射，
-然後用 ZAP 對象表示一個名字到整數的映射，然後又有很多額外的存儲於 DMU 對象中的 DSL 結構體。
-如果我們畫出不同的指針和不同的結構體，那麼會得到一個稍顯複雜的圖，見右邊「ZFS
+可以理解爲， DSL 用 DMU 對象集（Objectset）表示一個整數（uinit64_t 的 dnode 編號）到 DMU
+對象的映射，然後用 ZAP 對象表示一個名字到整數的映射，然後又有很多額外的存儲於 DMU 對象中的 DSL
+結構體。如果我們畫出不同的指針和不同的結構體，那麼會得到一個稍顯複雜的圖，見右邊「ZFS
 On Disk Format 中 4.2 節的 Meta Object Set」，圖中還只畫到了 root_dataset 爲止。
 
 看到這裏，大概可以理解在 ZFS 中創建一個 ZFS 快照的操作其實很簡單：找到數據集的 DSL Directory
@@ -1269,7 +1271,7 @@ btrfs 的空間跟蹤算法：引用計數與反向引用
 ，可見單純基於 birth txg 不足以管理 WAFL 和 btrfs 子卷。
 
 讓我們回到一開始日誌結構文件系統中基於垃圾回收（GC）的思路上來，作爲程序員來看，
-當垃圾回收的性能不足時，很自然的思路是：引用計數（reference counting）。
+當垃圾回收的性能不足以滿足當前需要時，大概很自然地會想到：引用計數（reference counting）。
 編程語言中用引用計數作爲內存管理策略的缺陷是：強引用不能成環，
 這在文件系統中看起來不是很嚴重的問題，文件系統總體上看是個樹狀結構，或者就算有共享的數據也是個
 上下層級分明的有向圖，很少會使用成環的指針，以及文件系統記錄指針的時候也都會區分指針的類型，
@@ -1284,10 +1286,9 @@ btrfs 中就是用引用計數的方式跟蹤和管理數據塊的。引用計�
 EXTENT_TREE ，保存於 ROOT_TREE 中的 2 號對象位置。
 
 btrfs 中每個塊都是按 `區塊（extent） <https://en.wikipedia.org/wiki/Extent_(file_systems)>`_
-的形式分配的，區塊是一塊連續的存儲空間，而非 zfs
-中的固定大小。每個區塊記錄存儲的位置和長度，以及這裏所說的引用計數。
-所以本文最開始講 `Btrfs 的子卷和快照`_ 中舉例的那個平坦佈局，如果畫上 EXTENT_TREE
-大概像是下圖這樣，其中每個粗箭頭是一個區塊指針，指向磁盤中的邏輯地址，細箭頭則是對應的
+的形式分配的，區塊是一塊連續的存儲空間，而非 zfs 中的固定大小。每個區塊記錄存儲的位置和長度，
+以及這裏所說的引用計數。所以本文最開始講 `Btrfs 的子卷和快照`_ 中舉例的那個平坦佈局，如果畫上
+EXTENT_TREE 大概像是下圖這樣，其中每個粗箭頭是一個區塊指針，指向磁盤中的邏輯地址，細箭頭則是對應的
 EXTENT_TREE 中關於這塊區塊的描述：
 
 .. dot::
@@ -1372,16 +1373,18 @@ EXTENT_TREE 中關於這塊區塊的描述：
 
 包括 ROOT_TREE 和 EXTENT_TREE 在內，btrfs 中所有分配的區塊（extent）都在 EXTENT_TREE
 中有對應的記錄，按區塊的邏輯地址索引。從而給定一個區塊，能從 EXTENT_TREE 中找到 ref
-字段描述這個區塊有多少引用。不過 ROOT_TREE 、 EXTENT_TREE 和別的一些數據結構本身不是寫時拷貝的，
-這些數據結構對應的區塊的引用計數總是 1 ；從 FS_TREE 開始的所有樹節點都可以寫時複製，
-這包括所有子卷的元數據和文件數據，這些區塊對應的引用計數可以大於 1 表示有多處引用。
+字段描述這個區塊有多少引用。不過 ROOT_TREE 、 EXTENT_TREE 和別的一些數據結構本身不是引用計數的，
+這些數據結構對應的區塊的引用計數總是 1 ，不會和別的樹共享區塊；從 FS_TREE
+開始的所有樹節點都可以共享區塊，這包括所有子卷的元數據和文件數據，這些區塊對應的引用計數可以大於
+1 表示有多處引用。
 
-EXTENT_TREE 按區塊的邏輯地址索引，包括了起始地址和長度，所以 EXTENT_TREE 也兼任 btrfs
+EXTENT_TREE 按區塊的邏輯地址索引，記錄了起始地址和長度，所以 EXTENT_TREE 也兼任 btrfs
 的空間利用記錄，充當別的文件系統中 block bitmap 的指責。比如上面例子中的 extent_tree 就表示
 :code:`[0x2000,0x4000) [0x11000,0x16000)` 這兩段連續的空間是已用空間，
 剩下的空間按定義則是可用空間。爲了加速空間分配器， btrfs 也有額外的
 free space cache 記錄在 ROOT_TREE 的 10 號位置 free_space_tree 中，不過在 btrfs
-中這個 free_space_tree 記錄的信息只是緩存，必要時可以通過 :code:`btrfs check --clear-space-cache`
+中這個 free_space_tree 記錄的信息只是緩存，必要時可以通過
+:code:`btrfs check --clear-space-cache`
 扔掉這個緩存重新掃描 extent_tree 並重建可用空間記錄。
 
 比如我們用如下命令創建了兩個文件，通過 reflink 讓它們共享區塊，然後創建兩個快照，
@@ -1479,26 +1482,137 @@ free space cache 記錄在 ROOT_TREE 的 10 號位置 free_space_tree 中，不�
 所以如果耗時很久會影響整個 pool 的寫入，於是 ZFS 那邊必須對這些操作優化到能在一個 txg
 內執行完的程度。
 
-但是 btrfs 中通過引用計數管理子卷的一點反直覺之處在於，創建快照的操作，
-直覺上要修改所有引用到的區塊的計數，這顯然很影響創建快照的性能。
-所以 btrfs 採取的策略是在快照創建時只增加快照的 FS_TREE 頂層元區塊的引用。
-換句話說 EXTENT_TREE 中保存的 ref ，是物理記錄中的引用的計數，不是整個文件系統中引用到該塊的數量，
-要得知邏輯上一共有多少引用，需要反過來從區塊往回遍歷到樹根。
-也就是說單有引用計數的一個數字還不夠，需要記錄具體反向的從區塊往引用源頭指的引用，這種結構在
-btrfs 中叫做「反向引用（back reference，簡稱 backref）」。
+只有引用計數就足夠完成快照的創建、刪除之類的功能，也能支持 reflink 了（仔細回想，
+reflink 其實就是 reference counted link 嘛），普通讀寫下也只需要引用計數。
+但是只有引用計數不足以知道區塊的歸屬，不能用引用計數統計每個子卷分別佔用多少空間，
+獨佔多少區塊而又共享多少區塊。上面的例子就可以看出，所有文件都指向同一個區塊，該區塊的引用計數爲
+3 ，而文件系統中一共有 5 個路徑能訪問到該文件。可見從區塊根據引用計數反推子卷歸屬信息不是那麼一目瞭然的。
+
 
 反向引用（back reference）
 ++++++++++++++++++++++++++++++++++++
 
 
-單純從 extent 的引用計數難以看出整個文件系統所有子卷中有多少副本。
-所以在上圖中每一個單向的箭頭，在 btrfs 中都有記錄一條反向引用，
-通過反向引用記錄能反過來從被指針指向的位置找回到記錄指針的地方。
+單純從區塊的引用計數難以看出整個文件系統所有子卷中有多少副本。
+也就是說單有引用計數的一個數字還不夠，需要記錄具體反向的從區塊往引用源頭指的引用，這種結構在
+btrfs 中叫做「反向引用（back reference，簡稱 backref）」。所以在上圖中每一個單向的箭頭，在
+btrfs 中都有記錄一條反向引用，通過反向引用記錄能反過來從被指針指向的位置找回到記錄指針的地方。
 
 
 反向引用（backref）是 btrfs 中非常關鍵的機制，在 btrfs kernel wiki 專門有一篇頁面
 `Resolving Extent Backrefs <https://btrfs.wiki.kernel.org/index.php/Resolving_Extent_Backrefs>`_
 解釋它的原理和實現方式。
+
+EXTENT_TREE 中每個 extent 記錄都同時記錄了引用到這個區塊的反向引用列表。反向引用有兩種記錄方式：
+
+1. 普通反向引用（Normal back references）。記錄這個指針來源所在是哪顆B樹、 B樹中的對象 id 和對象偏移。
+
+   - 對文件區塊而言，就是記錄文件所在子卷、inode、和文件內容的偏移。
+   - 對子卷的樹節點區塊而言，就是記錄該區塊的上級樹節點在哪個子卷和哪個 key 開始。
+
+2. 共享反向引用（Shared back references）。記錄這個指針來源區塊的邏輯地址。
+
+   - 無論對文件區塊而言，還是對子卷的樹節點區塊而言，都是直接記錄了保存這個區塊指針的上層樹節點的邏輯地址。
+
+有兩種記錄方式是因爲它們各有性能上的優缺點：
+
+普通反向引用
+    因爲通過對象編號記錄，所以當樹節點 CoW 時不需要改變，
+    從而在普通的讀寫和快照之類的操作下有更好的性能，
+    但是在解析反向引用時需要額外一次樹查找。
+    同時因爲這個額外查找，普通反向引用也叫間接反向引用。
+共享反向引用
+    因爲直接記錄了邏輯地址，所以當這個地址的節點被 CoW 的時候也許有調整這裏記錄的地址。
+    在普通的讀寫和快照操作下會影響性能，但是在解析反向引用時更快。
+
+通常創建出來的引用是普通反向引用，在一些條件下普通反向引用會變成共享反向引用，
+共享反向引用不會變回普通反向引用。
+
+對上面的引用計數的例子畫出反向引用的指針大概是這樣：
+
+.. dot::
+
+    digraph btrfs_reflink_backref {
+        node [shape=record];rankdir=LR;ranksep=1;
+        root [label="<label> ROOT_TREE |
+            <sn1> sn1 |
+            <sn2> sn2 |
+            <fs> fs
+        "];
+
+        sn1 [label="<label> FS_TREE sn1 |
+            <leaf> leaf_node
+        "];
+
+        sn2 [label="<label> FS_TREE sn2 |
+            <leaf> leaf_node
+        "];
+
+        fs [label="<label> FS_TREE fs |
+            <leaf> leaf_node
+        "];
+
+
+        snleaf [label="<label> FS_TREE leaf_node |
+            <f1> file1 |
+            <f2> file2
+        "];
+
+        fsleaf [label="<label> FS_TREE leaf_node |
+            <f1> file1 
+        "];
+
+        extent [label="<label> EXTENT_TREE extent_tree |
+            <root> root_tree : ref 1||
+            <sn1> sn1 fs_tree : ref 1|
+            <br1> backref ROOT_TREE sn1 ||
+            <sn2> sn2 fs_tree : ref 1|
+            <br2> backref ROOT_TREE sn2 ||
+            <snleaf> sn1 sn2 leaf_node: ref 2|
+            <br3> backref sn1 FS_TREE node |
+            <br4> backref sn2 FS_TREE node ||
+            <fs> fs fs_tree : ref 1|
+            <br5> backref ROOT_TREE fs ||
+            <fsleaf> fs leaf_node : ref 1|
+            <br6> backref fs FS_TREE node ||
+            <f1> file1 : ref 3 |
+            <br7> backref FS_TREE sn leaf_node file1 |
+            <br8> backref FS_TREE sn leaf_node file2 |
+            <br9> backref FS_TREE fs leaf_node file1
+        "];
+        root:sn1 -> sn1:label  [style=bold, weight=10];
+        root:sn2 -> sn2:label [style=bold, weight=10];
+        root:fs -> fs:label [style=bold, weight=10];
+
+        sn1:leaf -> snleaf:label [style=bold, weight=10];
+        sn2:leaf -> snleaf:label [style=bold, weight=10];
+        fs:leaf -> fsleaf:label [style=bold, weight=10];
+
+        extent:br1 -> root:label [weight=0];
+        extent:br2 -> root:label [weight=0];
+        extent:br3 -> sn1:label [weight=0];
+        extent:br4 -> sn2:label [weight=0];
+        extent:br5 -> root:label [weight=0];
+        extent:br6 -> fs:label [weight=0];
+        extent:br7 -> snleaf:label [weight=0];
+        extent:br8 -> snleaf:label [weight=0];
+        extent:br9 -> fsleaf:label [weight=0];
+
+        root:label -> extent:root [style="invis", weight=10];
+        sn1:label -> extent:sn1 [style="invis", weight=10];
+        sn2:label -> extent:sn2 [style="invis", weight=10];
+        snleaf:label -> extent:snleaf [style="invis", weight=10];
+        fs:label -> extent:fs [style="invis", weight=10];
+        fsleaf:label -> extent:fsleaf [style="invis", weight=10];
+        snleaf:f1 -> extent:f1 [style="invis", weight=10];
+        snleaf:f2 -> extent:f1 [style="invis", weight=10];
+        fsleaf:f1 -> extent:f1 [style="invis", weight=10];
+    }
+
+遍歷反向引用
+++++++++++++++++++++++++++++++++++++
+
+有了反向引用記錄之後
 
 ZFS 的 dedup vs btrfs 的 reflink
 -------------------------------------------------------------------
