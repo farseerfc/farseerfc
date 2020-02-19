@@ -1934,7 +1934,7 @@ reflink 的數量。這將會暴露出 backref walking 這樣的基礎設施中�
 不知不覺圍繞 btrfs 和 zfs 的快照功能寫了一大篇，前前後後寫了一個半月，
 文中提及的很多細節我自己也沒有自信，如果有錯誤還請指出。
 
-稍微列舉一些我覺得比較重要的結論，算是 TLDR; 的 takeaway notes 吧：
+稍微列舉一些我覺得比較重要的結論，算是 TL;DR 的 takeaway notes 吧：
 
 - ZFS 的快照非常輕量。完全可以每小時一個快照，每天24小時，每年365天不間斷地創建快照，
   實際似乎也有公司是這樣用的。如此頻繁的快照不同於 NILFS2
@@ -1986,8 +1986,7 @@ ZFS 的 ZPL_ 層原作者之一的
 `Mark Shellenbaum 在 OpenZFS developer summit 2016 <https://youtu.be/xMH5rCL8S2k?t=1037>`_
 也曾說過這樣的話：
 
-    Q: Are there any things that we that we have regretted we did?
-
+    (Q: Are there any things that we that we have regretted we did?)
     A: I guess not so much on the ZPL, but with the way block pointers maybe weren't
     fully virtualized, you know that things like that.
 
