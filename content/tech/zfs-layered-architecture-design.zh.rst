@@ -5,7 +5,7 @@ ZFS 分層架構設計
 :translation_id: zfs-layered-architecture-design
 :lang: zh
 :date: 2020-02-04 16:59
-:tags: zfs, layered, architecture, SPA, DMU, ZPL, ZIO, VDEV, ARC, ZAP, DSL, ZIL, ZVOL
+:tags: FS筆記, zfs, layered, architecture, SPA, DMU, ZPL, ZIO, VDEV, ARC, ZAP, DSL, ZIL, ZVOL
 :series: FS筆記
 :issueid: 92
 
