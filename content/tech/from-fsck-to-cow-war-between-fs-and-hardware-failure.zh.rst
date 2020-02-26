@@ -5,7 +5,7 @@
 :translation_id: from-fsck-to-cow-war-between-fs-and-hardware-failure
 :lang: zh
 :date: 2020-02-20 15:45
-:tags: FS筆記, btrfs, zfs, cow, snapshot, clone, subvolume, dedup, reflink, SPA, DMU, DSL, ZPL
+:tags: FS筆記, FS notes, btrfs, zfs, cow, snapshot, clone, subvolume, dedup, reflink, SPA, DMU, DSL, ZPL
 :series: FS筆記
 :status: draft
 

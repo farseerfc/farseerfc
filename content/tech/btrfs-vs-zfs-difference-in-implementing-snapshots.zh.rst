@@ -5,7 +5,7 @@ Btrfs vs ZFS 實現 snapshot 的差異
 :translation_id: btrfs-vs-zfs-difference-in-implementing-snapshots
 :lang: zh
 :date: 2020-02-19 15:45
-:tags: FS筆記, btrfs, zfs, cow, snapshot, clone, subvolume, dedup, reflink, SPA, DMU, DSL, ZPL
+:tags: FS筆記, FS notes, btrfs, zfs, cow, snapshot, clone, subvolume, dedup, reflink, SPA, DMU, DSL, ZPL
 :series: FS筆記
 :issueid: 93
 
@@ -492,7 +492,7 @@ ZFS 中把文件系統、快照、克隆、zvol 等概念統稱爲數據集（da
 存儲池中的數據集一同共享可用的存儲空間，每個數據集單獨跟蹤自己所消耗掉的存儲空間。
 
 數據集之間有類似文件夾的層級父子關係，這一點有用的地方在於可以在父級數據集上設定一些 ZFS 參數，
-這些參數可以被子級數據集基礎，從而通過層級關係可以方便地微調 ZFS 參數。在 btrfs
+這些參數可以被子級數據集繼承，從而通過層級關係可以方便地微調 ZFS 參數。在 btrfs
 中目前還沒有類似的屬性繼承的功能。
 
 zvol 的概念和本文關係不大，可以參考我上一篇 `ZFS 子系統筆記中 ZVOL 的說明 <{filename}./zfs-layered-architecture-design.zh.rst#ZVOL>`_
@@ -1011,7 +1011,7 @@ ZFS 中關於快照和克隆的空間跟蹤算法
 
 
 OpenZFS 的項目領導者，同時也是最初設計 ZFS 中 DMU 子系統的作者 Matt Ahrens 在 DMU 和 DSL
-中設計並實�����了 ZFS 獨特的快照的空間跟蹤算法。他也在很多地方發表演講，講過這個算法的思路和細節，
+中設計並實現了 ZFS 獨特的快照的空間跟蹤算法。他也在很多地方發表演講，講過這個算法的思路和細節，
 比如右側就是他在 BSDCan 2019 做的演講 
 `How ZFS snapshots really work And why they perform well (usually) <https://youtu.be/NXg86uBDSqI>`_
 的 YouTube 視頻。

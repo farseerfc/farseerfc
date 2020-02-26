@@ -1,46 +1,56 @@
-ZFS 分層架構設計
+ZFS layered Architecture Design
 ================================================
 
 :slug: zfs-layered-architecture-design
 :translation_id: zfs-layered-architecture-design
-:lang: zh
+:lang: en
 :date: 2020-02-04 16:59
 :tags: FS筆記, FS notes, zfs, layered, architecture, SPA, DMU, ZPL, ZIO, VDEV, ARC, ZAP, DSL, ZIL, ZVOL
 :series: FS筆記
 :issueid: 92
+:status: draft
 
 .. contents::
 
 
 .. label-warning::
 
-    **2020年2月9日更新過**
+    **Updated in 2020-02-09**
 
-ZFS 在設計之初源自於 Sun 內部多次重寫 UFS 的嘗試，背負了重構 Solaris
-諸多內核子系統的重任，從而不同於 Linux 的文件系統只負責文件系統的功能而把其餘功能（比如內存髒頁管理，
-IO調度）交給內核更底層的子系統， ZFS 的整體設計更層次化並更獨立，很多部分可能和 Linux/FreeBSD
-內核已有的子系統有功能重疊。
+The design of ZFS originated from multiple attempts inside Sun to rewrite
+a new FS that replaces Solaris UFS, therefore it had the burden to refactor many of the
+subsystems inside Solaris kernel. This is different from those filesystems in
+the Linux kernel that only provide File System features and delegate the rest to
+underlaying subsystems (eg. dirty page management, IO scheduling). The overall
+architecture of ZFS is more layered and independent because of this,
+and many of these layers may overlap in features with other subsystems already
+in a Linux/FreeBSD kernel.
+
+It seems to me that there are many talks and slides about ZFS on the Internet,
+that talk about this ZFS subsystem architecture, but I cannot find some related
+documentation. So I decided to write down this note for myself, to record
+the functions of these subsystems in ZFS, with some accompanied videos from
+OpenZFS Developer Summit to record the history of ZFS development.
 
 
-似乎很多關於 ZFS 的視頻演講和幻燈片有講到子系統架構，但是找了半天也沒找到網上關於這個的說明文檔。
-於是寫下這篇筆記試圖從 ZFS 的早期開發歷程開始，記錄一下 ZFS 分層架構中各個子系統之間的分工。
-也有幾段 OpenZFS Summit 視頻佐以記錄那段歷史。
-
-
-
-早期架構
+Early Architecture
 ---------------------------------------------------------------
 
-早期 ZFS 在開發時大體可以分爲上下三層，分別是 ZPL， DMU 和 SPA ，這三層分別由三組人負責。
+In the early design, ZFS can be roughly seperated as 3 layers, which are
+ZPL, DMU and SPA. Three seperated groups of people are in charge of these 3 layers.
 
-最初在 Sun 內部帶領 ZFS 開發的是 `Jeff Bonwick <https://blogs.oracle.com/bonwick/>`_
-，他首先有了對 ZFS 整體架構的構思，然後遊說 Sun 高層，親自組建起了 ZFS
-開發團隊，招募了當時剛從大學畢業的 `Matt Ahrens <http://open-zfs.org/wiki/User:Mahrens>`_
-。作爲和 Sun 高層談妥的條件， Jeff 也必須負責 Solaris 整體的 Storage & Filesystem Team
-，於是他又從 Solaris 的 Storage Team 抽調了 UFS 部分的負責人 Mark Shellenbaum 和
-Mark Maybee 來開發 ZFS 。而如今昔日昇陽已然日落， Jeff
-成立了獨立公司繼續開拓服務器存儲領域， Matt 是 OpenZFS 項目的負責人，兩位 Mark 則留在了
-Sun/Oracle 成爲了 Oracle ZFS 分支的維護者。
+In the begining, `Jeff Bonwick <https://blogs.oracle.com/bonwick/>`_ leads the
+initial ideas of ZFS inside Sun. He got the general design ideas, and prosvaded
+the management people from Sun to agree on this idea. He hired then newly graduated
+`Matt Ahrens <http://open-zfs.org/wiki/User:Mahrens>`_ , and created a team of
+people to work on ZFS. As the negotiation with Sun management went, Jeff also
+have to lead the whole Storage & Filesystem Team for Solaris. He then arrange
+the maintainers of UFS, Mark Shellenbaum and Mark Maybee to join the development
+of ZFS. Nowadays, Sun has been aquired by Oracle, Jeff went on to a startup
+company continuing to explore the server storage market; Matt became the leader
+of the OpenZFS project, and the other 2 Mark(s) remained in Oracle to lead the
+maintanence of Oracle ZFS branch.
+
 
 .. panel-default::
     :title: The Birth of ZFS by Jeff Bonwick
@@ -63,14 +73,17 @@ Sun/Oracle 成爲了 Oracle ZFS 分支的維護者。
     .. youtube:: c1ek1tFjhH8
 
 
-在開發早期，作爲分工， Jeff 負責 ZFS 設計中最底層的 SPA ，提供多個存儲設備組成的存儲池抽象；
-Matt 負責 ZFS 設計中最至關重要的 DMU 引擎，在塊設備基礎上提供具有事務語義的對象存儲；
-而兩位 Mark 負責 ZFS 設計中直接面向用戶的 ZPL ，在 DMU 基礎上提供完整 POSIX 文件系統語義。
-ZFS 設計中這最初的分工也體現在了 ZFS 現在子系統分層的架構上，繼續影響（增強或者限制） ZFS
-今後發展的方向。
+In this early development stage, Jeff worked on the lower layer of ZFS which
+became the SPA, that provides the abstraction for a storage pool on top of many
+storage devices; Matt developped the most important part of ZFS namely the DMU
+engine, that provides a object storage with transactional semantics on top of
+a block device; 2 Mark(s) are in charge of ZPL, provides a complete
+POSIX-compatible filesystem layer on top of DMU.
+This early division in development later became the subsystems in ZFS now,
+and influnce (either enhancing or limiting) the future development of ZFS.
 
 
-子系統整體架構
+Overview of ZFS Subsystems
 ---------------------------------------------------------------
 
 首先 ZFS 整體架構如下圖，其中圓圈是 ZFS 給內核層的外部接口，方框是 ZFS 內部子系統（
