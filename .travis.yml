@@ -12,7 +12,7 @@ cache:
 
 before_install:
     - sudo apt-get update
-    - sudo apt-get install ditaa parallel graphviz fonts-noto-cjk plantuml texlive-latex-extra texlive-pictures texlive-latex-recommended inkscape
+    - sudo apt-get install ditaa parallel graphviz fonts-noto-cjk plantuml texlive-latex-extra texlive-pictures texlive-latex-recommended inkscape poppler-data
     - dot -V || true
     - ditaa -h || true
     - inkscape --without-gui --version || true

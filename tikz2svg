@@ -88,7 +88,7 @@ sub tikz2svg{
 		$end = "\\end{tikzpicture}\n".$end;
 	}
 
-	open PDFLATEX, "| pdflatex -- ";
+	open PDFLATEX, "| xelatex -- ";
 	print PDFLATEX $begin;
 	print PDFLATEX <TEX>;
 	print PDFLATEX $end;
