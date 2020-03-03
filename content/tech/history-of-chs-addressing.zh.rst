@@ -47,4 +47,87 @@
 「柱面-磁頭-扇區」這個尋址方式，聽起來可能不太符合直覺，尤其是柱面的概念。直覺上，
 可能更合理的尋址方式是「盤片-盤面-磁道-扇區」，而柱面在這裏是同磁道不同盤片盤面構成的一個集合。
 不過理解了磁盤的機械結構的話，柱面的概念就比較合理了，尋址時先驅動磁頭臂旋轉，
-磁頭臂上多個磁頭一起飛到某個磁道上，從而運動磁頭臂的動作定義了一個柱面
+磁頭臂上多個磁頭一起飛到某個磁道上，從而運動磁頭臂的動作定義了一個柱面。
+
+
+.. tikz::
+    :libs: positioning,calc,decorations.pathreplacing
+    
+    \def\centerarc[#1](#2)(#3:#4:#5:#6)% Syntax: [draw options] (center) (initial angle:final angle:radius)
+    { \draw[#1] ($(#2)+({#5*cos(#3)},{#6*sin(#3)})$) arc [start angle=#3, end angle=#4, x radius=#5, y radius=#6]; }
+
+    \def\sectors(#1){
+        \foreach \r in {1.0,1.2,...,2.0} {
+            \foreach \x in {0,20,...,350} { \centerarc[](#1)(\x:\x+18:\r*2:\r); };
+        };
+    };
+    \def\plate[#1](#2){
+        \filldraw[fill=#1!50!white] (#2) ellipse [x radius=4, y radius=2];
+        \fill[#1!40!white] (#2) ellipse [x radius=3.5, y radius=1.75]; 
+        \fill[#1!30!white] (#2) ellipse [x radius=3, y radius=1.5]; 
+        \fill[#1!20!white] (#2) ellipse [x radius=2.5, y radius=1.25]; 
+        \draw[fill=white] (#2) ellipse [x radius=2, y radius=1];
+    }
+
+    \plate[red](4,0);
+    \sectors(4,0);
+    \plate[orange](4,1);
+    \sectors(4,1);
+    \draw (0,0) -- (0,1);  \draw (8,0) -- (8,1);
+    \draw (4,1) node {磁碟3};
+    
+    \plate[yellow](4,4);
+    \sectors(4,4);
+    \plate[green](4,5);
+    \sectors(4,5);
+    \draw (0,4) -- (0,5);  \draw (8,4) -- (8,5);
+    \draw (4,5) node {磁碟2};
+
+    \plate[cyan](4,8);
+    \sectors(4,8);
+    \plate[blue](4,9);	
+    \sectors(4,9);
+    \draw (0,8) -- (0,9);  \draw (8,8) -- (8,9);
+    \draw (4,9) node {磁碟1};
+
+    \draw (-1,9) node {磁頭0};
+    \draw (-1,8) node {磁頭1};
+    \draw (-1,5) node {磁頭2};
+    \draw (-1,4) node {磁頭3};
+    \draw (-1,1) node {磁頭4};
+    \draw (-1,0) node {磁頭5};
+
+    \foreach \x in {0,20,...,350} { \centerarc[red!80!black, thick](4,9)(\x:\x+18:3.6:1.8); };
+    \draw[red!80!black, ->, very thick, fill=white, text=black] (4,12) node[above] {磁道} -> (4,10.8);
+
+    \def\sectorline[#1](#2,#3,#4){
+        \fill[#1!50!white] (#2,#3+3.0) rectangle (#2+10.5,#3+3.5);
+        \draw[dash pattern=on 20 off 3, very thick] (#2+0.25,#3+3.25) -- (#2+10.25,#3+3.25);
+        \draw            (#2,#3+3.25) node[left] {磁頭#4};
+        \fill[#1!40!white] (#2,#3    ) rectangle (#2+10.5,#3+0.5);
+        \draw[dash pattern=on 20 off 3, very thick] (#2+0.25,#3+0.25) -- (#2+10.25,#3+0.25);
+        \draw			 (#2,#3+0.25) node[left] {磁頭#4};
+        \fill[#1!30!white] (#2,#3-2.5) rectangle (#2+10.5,#3-3.0);
+        \draw[dash pattern=on 20 off 3, very thick] (#2+0.25,#3-2.75) -- (#2+10.25,#3-2.75);
+        \draw			 (#2,#3-2.75) node[left] {磁頭#4};
+        \fill[#1!20!white] (#2,#3-5.5) rectangle (#2+10.5,#3-6.0);
+        \draw[dash pattern=on 20 off 3, very thick] (#2+0.25,#3-5.75) -- (#2+10.25,#3-5.75);
+        \draw			 (#2,#3-5.75) node[left] {磁頭#4};
+        \fill[#1!10!white] (#2,#3-8.5) rectangle (#2+10.5,#3-9.0);
+        \draw[dash pattern=on 20 off 3, very thick] (#2+0.25,#3-8.75) -- (#2+10.25,#3-8.75);
+        \draw			 (#2,#3-8.75) node[left] {磁頭#4};
+    }
+    \sectorline[blue](10,9,0);
+    \sectorline[cyan](10,8.5,1);
+    \sectorline[green](10,8,2);
+    \sectorline[yellow](10,7.5,3);
+    \sectorline[orange](10,7,4);
+    \sectorline[red](10,6.5,5);
+
+    \draw [decorate,decoration={brace,amplitude=5}] (20.75,12.25) -- (20.75, 9.5) node [black,right,midway,xshift=5] {柱面0};
+    \draw [decorate,decoration={brace,amplitude=5}] (20.75, 9.25) -- (20.75, 6.5) node [black,right,midway,xshift=5] {柱面1};
+    \draw [decorate,decoration={brace,amplitude=5}] (20.75, 6.25) -- (20.75, 3.5) node [black,right,midway,xshift=5] {柱面2};
+    \draw [decorate,decoration={brace,amplitude=5}] (20.75, 3.25) -- (20.75, 0.5) node [black,right,midway,xshift=5] {柱面3};
+    \draw [decorate,decoration={brace,amplitude=5}] (20.75, 0.25) -- (20.75,-2.5) node [black,right,midway,xshift=5] {柱面4};
+
+    \draw[->, thick] (12, 13) node [left] {扇區} -> (19,13);

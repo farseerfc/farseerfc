@@ -17,25 +17,61 @@
 ），但是沒提爲什麼我們需要 CoW FS 。
 
 .. tikz::
-    :libs: automata,positioning
+    :libs: positioning,calc
+    
+    
+        \def\centerarc[#1](#2)(#3:#4:#5:#6)% Syntax: [draw options] (center) (initial angle:final angle:radius)
+        { \draw[#1] ($(#2)+({#5*cos(#3)},{#6*sin(#3)})$) arc [start angle=#3, end angle=#4, x radius=#5, y radius=#6]; }
 
-    \draw[help lines]       (0,0)                       grid (3,2);
-    \node[state,initial]    (q_0)                       {$q_0$};
-    \node[state]            (q_1) [above right=of q_0]  {$q_1$};
-    \node[state]            (q_2) [below right=of q_0]  {$q_2$};
-    \node[state,accepting]  (q_3) [below right=of q_1]  {$q_3$};
-    \path[->]               (q_0)   edge node           {0} (q_1)
-                                    edge node [swap]    {1} (q_2)
-                            (q_1)   edge node
-    {1} (q_3)
-    edge [loop above]
-    node
-    {0} ()
-    (q_2) edge
-    node [swap] {0} (q_3)
-    edge [loop below]
-    node
-    {1} ();
+        \def\sectors(#1){
+            \foreach \r in {1.0,1.2,...,2.0} {
+                \foreach \x in {0,20,...,350} { \centerarc[](#1)(\x:\x+18:\r*2:\r); };
+            };
+        };
+        \def\plate[#1](#2){
+            \filldraw[fill=#1!50!white] (#2) ellipse [x radius=4, y radius=2];
+            \fill[#1!40!white] (#2) ellipse [x radius=3.5, y radius=1.75]; 
+            \fill[#1!30!white] (#2) ellipse [x radius=3, y radius=1.5]; 
+            \fill[#1!20!white] (#2) ellipse [x radius=2.5, y radius=1.25]; 
+            \draw[fill=white] (#2) ellipse [x radius=2, y radius=1];
+        }
+        %\draw[help lines]  (0,0) grid (20,10);
+
+        \plate[red](4,0);
+        \sectors(4,0);
+        \plate[orange](4,1);
+        \sectors(4,1);
+        \draw (0,0) -- (0,1);  \draw (8,0) -- (8,1);
+        \draw (4,1) node {Plate 3};
+        
+
+        \plate[yellow](4,4);
+        \sectors(4,4);
+        \plate[green](4,5);
+        \sectors(4,5);
+        \draw (0,4) -- (0,5);  \draw (8,4) -- (8,5);
+        \draw (4,5) node {Plate 2};
+
+        \plate[cyan](4,8);
+        \sectors(4,8);
+        \plate[blue](4,9);	
+        \sectors(4,9);
+        \draw (0,8) -- (0,9);  \draw (8,8) -- (8,9);
+        \draw (4,9) node {Plate 1};
+
+        \draw (-1,9) node {Head 1};
+        \draw (-1,8) node {Head 2};
+        \draw (-1,5) node {Head 3};
+        \draw (-1,4) node {Head 4};
+        \draw (-1,1) node {Head 5};
+        \draw (-1,0) node {Head 6};
+
+        %\plate[white](15,5);
+        %\sectors(15,5);
+        \foreach \x in {0,20,...,350} { \centerarc[red!80!black, thick](4,9)(\x:\x+18:3.6:1.8); };
+        \draw[red!80!black, ->, very thick, fill=white, text=black] (4,12) node[above] {Track} -> (4,10.8);
+
+
 
 
 test7
