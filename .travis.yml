@@ -12,14 +12,16 @@ cache:
 
 before_install:
     - sudo apt-get update
-    - sudo apt-get install ditaa parallel graphviz fonts-noto-cjk plantuml
+    - sudo apt-get install ditaa parallel graphviz fonts-noto-cjk plantuml texlive-pictures texlive-latex-recommended inkscape
     - dot -V || true
     - ditaa -h || true
+    - inkscape --without-gui --version || true
 
 install:
     - pip install 'pelican'
     - pip install jinja2 py3babel babel beautifulsoup4 markdown
     - plantuml -version
+    - sudo cp tikz2svg /usr/bin/
     - git clone --depth 1 https://github.com/farseerfc/opencc-bin opencc-bin
     - cd opencc-bin
     - sudo install -t /usr/bin src/opencc

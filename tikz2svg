@@ -1,0 +1,115 @@
+#!/usr/bin/env perl
+################################################################################
+# tikz2svg:	TikZ to SVG converter
+# Requires:	pdflatex with standalone and tikz packages, pdf2svg
+# Author:	Huidae Cho
+# Since:	January 12, 2019
+#
+# Copyright (C) 2019, Huidae Cho <https://idea.isnew.info>
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+# FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+# OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+# HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+# LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+# OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+# SUCH DAMAGE.
+################################################################################
+use strict;
+
+sub tikz2svg{
+	my ($tex, $svg) = @_;
+
+	if($tex ne "-" && $tex eq $svg){
+		print STDERR "Input and output cannot be the same\n";
+		exit 1;
+	}
+
+	if($tex eq "-"){
+		*TEX = *STDIN;
+	}elsif(-f $tex){
+		open TEX, $tex;
+	}else{
+		print STDERR "$tex: File not found\n";
+		exit 1;
+	}
+
+	my $first;
+	while(<TEX>){
+		next if /^[ \t]*$/;
+		$first = $_;
+		last;
+	}
+	$first =~ s/^[ \t]+//;
+	if($first !~ /^\\/){
+		print STDERR "First word not a command\n";
+		exit 1;
+	}
+
+	my $type;
+	$_ = $first;
+	if(/^\\documentclass.*\{standalone\}/){
+		$type = 1;
+	}elsif(/^\\documentclass/ && !/\{standalone\}/){
+		$type = 2;
+	}elsif(/^\\begin\{document\}/){
+		$type = 3;
+	}elsif(/^\\begin\{tikzpicture\}/ || /^\\tikz(?:$|[^a-z])/){
+		$type = 4;
+	}else{
+		$type = 5;
+	}
+
+	my ($begin, $end);
+	$begin = $first if $type == 1;
+	$begin = "\\documentclass[tikz]{standalone}\n" if $type >= 2;
+	$begin .= $first if $type == 3;
+	if($type >= 4){
+		$begin .= "\\begin{document}\n";
+		$end = "\\end{document}\n";
+	}
+	$begin .= $first if $type == 4;
+	if($type >= 5){
+		$begin .= "\\begin{tikzpicture}\n";
+		$end = "\\end{tikzpicture}\n".$end;
+	}
+
+	open PDFLATEX, "| pdflatex -- > /dev/null";
+	print PDFLATEX $begin;
+	print PDFLATEX <TEX>;
+	print PDFLATEX $end;
+	close PDFLATEX;
+	close TEX if $tex ne "-";
+
+	$svg = "/dev/stdout" if $svg eq "-";
+	print `inkscape --without-gui texput.pdf -l $svg`;
+
+	unlink glob "texput.*";
+}
+
+if($ARGV[0] eq "-h" || $ARGV[0] eq "--help"){
+	print<<'EOT';
+Usage: tikz2svg [input.tex] [output.svg]
+       - for stdin/stdout
+EOT
+	exit 0;
+}
+
+my $tex = $#ARGV >= 0 ? $ARGV[0] : "-";
+my $svg = $#ARGV >= 1 ? $ARGV[1] : "-";
+
+tikz2svg($tex, $svg);
