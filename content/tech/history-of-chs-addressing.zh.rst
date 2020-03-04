@@ -53,41 +53,36 @@
 .. tikz::
     :libs: positioning,calc,decorations.pathreplacing
     
-    \def\centerarc[#1](#2)(#3:#4:#5:#6)% Syntax: [draw options] (center) (initial angle:final angle:radius)
-    { \draw[#1] ($(#2)+({#5*cos(#3)},{#6*sin(#3)})$) arc [start angle=#3, end angle=#4, x radius=#5, y radius=#6]; }
-
+    \def\centerarc[#1](#2)(#3:#4:#5:#6){
+        \draw[#1] ($(#2)+({#5*cos(#3)},{#6*sin(#3)})$) arc [start angle=#3, end angle=#4, x radius=#5, y radius=#6];
+    }
     \def\sectors(#1){
-        \foreach \r in {1.0,1.2,...,2.0} {
-            \foreach \x in {0,20,...,350} { \centerarc[](#1)(\x:\x+18:\r*2:\r); };
+        \foreach \r in {1.1,1.3,...,1.9} {
+            \foreach \x in {0,20,...,350} { \centerarc[](#1)(\x:\x+18:(\r+\r):(\r)); };
         };
-    };
+    }
     \def\plate[#1](#2){
-        \filldraw[fill=#1!50!white] (#2) ellipse [x radius=4, y radius=2];
-        \fill[#1!40!white] (#2) ellipse [x radius=3.5, y radius=1.75]; 
-        \fill[#1!30!white] (#2) ellipse [x radius=3, y radius=1.5]; 
-        \fill[#1!20!white] (#2) ellipse [x radius=2.5, y radius=1.25]; 
+        \filldraw[fill=#1!50!white, thick] (#2) ellipse [x radius=4, y radius=2];
+        \fill[#1!40!white] (#2) ellipse [x radius=3.6, y radius=1.8]; 
+        \fill[#1!30!white] (#2) ellipse [x radius=3.2, y radius=1.6]; 
+        \fill[#1!20!white] (#2) ellipse [x radius=2.8, y radius=1.4]; 
+        \fill[#1!10!white] (#2) ellipse [x radius=2.4, y radius=1.2]; 
         \draw[fill=white] (#2) ellipse [x radius=2, y radius=1];
     }
 
-    \plate[red](4,0);
-    \sectors(4,0);
-    \plate[orange](4,1);
-    \sectors(4,1);
-    \draw (0,0) -- (0,1);  \draw (8,0) -- (8,1);
+    \plate[red](4,0);       \sectors(4,0);
+    \plate[orange](4,1);    \sectors(4,1);
+    \draw[thick] (0,0) -- (0,1) (8,0) -- (8,1);
     \draw (4,1) node {磁碟3};
     
-    \plate[yellow](4,4);
-    \sectors(4,4);
-    \plate[green](4,5);
-    \sectors(4,5);
-    \draw (0,4) -- (0,5);  \draw (8,4) -- (8,5);
+    \plate[yellow](4,4);    \sectors(4,4);
+    \plate[green](4,5);     \sectors(4,5);
+    \draw[thick] (0,4) -- (0,5)  (8,4) -- (8,5);
     \draw (4,5) node {磁碟2};
 
-    \plate[cyan](4,8);
-    \sectors(4,8);
-    \plate[blue](4,9);	
-    \sectors(4,9);
-    \draw (0,8) -- (0,9);  \draw (8,8) -- (8,9);
+    \plate[cyan](4,8);      \sectors(4,8);
+    \plate[blue](4,9);      \sectors(4,9);
+    \draw[thick] (0,8) -- (0,9)  (8,8) -- (8,9);
     \draw (4,9) node {磁碟1};
 
     \draw (-1,9) node {磁頭0};
@@ -97,37 +92,32 @@
     \draw (-1,1) node {磁頭4};
     \draw (-1,0) node {磁頭5};
 
-    \foreach \x in {0,20,...,350} { \centerarc[red!80!black, thick](4,9)(\x:\x+18:3.6:1.8); };
-    \draw[red!80!black, ->, very thick, fill=white, text=black] (4,12) node[above] {磁道} -> (4,10.8);
+    \foreach \x in {0,20,...,350} { \centerarc[red!80!black, thick](4,9)(\x:\x+18:3.8:1.9); };
+    \draw[red!80!black, ->, very thick, fill=white, text=black] (4,12) node[above] {磁道} -> (4,10.9);
 
     \def\sectorline[#1](#2,#3,#4){
-        \fill[#1!50!white] (#2,#3+3.0) rectangle (#2+10.5,#3+3.5);
-        \draw[dash pattern=on 20 off 3, very thick] (#2+0.25,#3+3.25) -- (#2+10.25,#3+3.25);
-        \draw            (#2,#3+3.25) node[left] {磁頭#4};
-        \fill[#1!40!white] (#2,#3    ) rectangle (#2+10.5,#3+0.5);
-        \draw[dash pattern=on 20 off 3, very thick] (#2+0.25,#3+0.25) -- (#2+10.25,#3+0.25);
-        \draw			 (#2,#3+0.25) node[left] {磁頭#4};
-        \fill[#1!30!white] (#2,#3-2.5) rectangle (#2+10.5,#3-3.0);
-        \draw[dash pattern=on 20 off 3, very thick] (#2+0.25,#3-2.75) -- (#2+10.25,#3-2.75);
-        \draw			 (#2,#3-2.75) node[left] {磁頭#4};
-        \fill[#1!20!white] (#2,#3-5.5) rectangle (#2+10.5,#3-6.0);
-        \draw[dash pattern=on 20 off 3, very thick] (#2+0.25,#3-5.75) -- (#2+10.25,#3-5.75);
-        \draw			 (#2,#3-5.75) node[left] {磁頭#4};
-        \fill[#1!10!white] (#2,#3-8.5) rectangle (#2+10.5,#3-9.0);
-        \draw[dash pattern=on 20 off 3, very thick] (#2+0.25,#3-8.75) -- (#2+10.25,#3-8.75);
-        \draw			 (#2,#3-8.75) node[left] {磁頭#4};
+        \fill[#1!50!white] (#2,#3+3.0) rectangle (#2+7.75,#3+3.5);\draw[dash pattern=on 20 off 3, very thick] (#2+0.25,#3+3.25) -- (#2+7.5,#3+3.25);
+        \draw (#2,#3+3.25) node[left] {磁頭 #4};
+        \fill[#1!40!white] (#2,#3    ) rectangle (#2+7.75,#3+0.5);\draw[dash pattern=on 20 off 3, very thick] (#2+0.25,#3+0.25) -- (#2+7.5,#3+0.25);
+        \draw (#2,#3+0.25) node[left] {磁頭 #4};
+        \fill[#1!30!white] (#2,#3-2.5) rectangle (#2+7.75,#3-3.0);\draw[dash pattern=on 20 off 3, very thick] (#2+0.25,#3-2.75) -- (#2+7.5,#3-2.75);
+        \draw (#2,#3-2.75) node[left] {磁頭 #4};
+        \fill[#1!20!white] (#2,#3-5.5) rectangle (#2+7.75,#3-6.0);\draw[dash pattern=on 20 off 3, very thick] (#2+0.25,#3-5.75) -- (#2+7.5,#3-5.75);
+        \draw (#2,#3-5.75) node[left] {磁頭 #4};
+        \fill[#1!10!white] (#2,#3-8.5) rectangle (#2+7.75,#3-9.0);\draw[dash pattern=on 20 off 3, very thick] (#2+0.25,#3-8.75) -- (#2+7.55,#3-8.75);
+        \draw (#2,#3-8.75) node[left] {磁頭 #4};
     }
-    \sectorline[blue](10,9,0);
-    \sectorline[cyan](10,8.5,1);
-    \sectorline[green](10,8,2);
-    \sectorline[yellow](10,7.5,3);
-    \sectorline[orange](10,7,4);
-    \sectorline[red](10,6.5,5);
+    \sectorline[blue](10,9,1);
+    \sectorline[cyan](10,8.5,2);
+    \sectorline[green](10,8,3);
+    \sectorline[yellow](10,7.5,4);
+    \sectorline[orange](10,7,5);
+    \sectorline[red](10,6.5,6);
 
-    \draw [decorate,decoration={brace,amplitude=5}] (20.75,12.25) -- (20.75, 9.5) node [black,right,midway,xshift=5] {柱面0};
-    \draw [decorate,decoration={brace,amplitude=5}] (20.75, 9.25) -- (20.75, 6.5) node [black,right,midway,xshift=5] {柱面1};
-    \draw [decorate,decoration={brace,amplitude=5}] (20.75, 6.25) -- (20.75, 3.5) node [black,right,midway,xshift=5] {柱面2};
-    \draw [decorate,decoration={brace,amplitude=5}] (20.75, 3.25) -- (20.75, 0.5) node [black,right,midway,xshift=5] {柱面3};
-    \draw [decorate,decoration={brace,amplitude=5}] (20.75, 0.25) -- (20.75,-2.5) node [black,right,midway,xshift=5] {柱面4};
+    \draw [decorate,decoration={brace,amplitude=5}] (18,12.25) -- (18, 9.5) node [black,right,midway,xshift=5] {柱面 1};
+    \draw [decorate,decoration={brace,amplitude=5}] (18, 9.25) -- (18, 6.5) node [black,right,midway,xshift=5] {柱面 2};
+    \draw [decorate,decoration={brace,amplitude=5}] (18, 6.25) -- (18, 3.5) node [black,right,midway,xshift=5] {柱面 3};
+    \draw [decorate,decoration={brace,amplitude=5}] (18, 3.25) -- (18, 0.5) node [black,right,midway,xshift=5] {柱面 4};
+    \draw [decorate,decoration={brace,amplitude=5}] (18, 0.25) -- (18,-2.5) node [black,right,midway,xshift=5] {柱面 5};
 
-    \draw[->, thick] (12, 13) node [left] {扇區} -> (19,13);
+    \draw[->, thick] (12, 13) node [left] {扇區} -> (16,13);
