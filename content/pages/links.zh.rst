@@ -145,7 +145,7 @@
 	:del:`前端` :del:`後端` 全棧工程師！ :del:`又是` 一個夏娜廚，親手打造了 lilac 的打包狀態頁 `KISS2UI <https://build.archlinuxcn.org/packages/>`_ 。
 
 .. friend:: alynx
-	:nick: `AlynxZhou <https://sh.alynx.moe/>`_
+	:nick: `AlynxZhou <https://sh.alynx.one/>`_
 	:logo: https://avatars0.githubusercontent.com/u/8444615
 
 	電磁炮廚， :del:`Hexo 的博客也|換成了自己寫的 Hikaru 還是` 很漂亮，Arch Linux CN 社區中珍貴的 Gnome 用戶。喜歡 C 語言甚至在 B站 直播教學。CS:GO 玩家。
