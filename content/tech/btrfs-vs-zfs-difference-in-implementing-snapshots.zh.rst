@@ -1010,7 +1010,8 @@ ZFS 中關於快照和克隆的空間跟蹤算法
     :html:`<embed src="{static}/images/500_How_ZFS_Snapshots_Really_Work.pdf" class="embed-responsive-item" style="width:90%;height:480px" />`
 
 
-OpenZFS 的項目領導者，同時也是最初設計 ZFS 中 DMU 子系統的作者 Matt Ahrens 在 DMU 和 DSL
+OpenZFS 的項目領導者，同時也是最初設計 ZFS 中 DMU 子系統的作者 Matt Ahrens 在 DMU
+和                                                    DSL
 中設計並實現了 ZFS 獨特的快照的空間跟蹤算法。他也在很多地方發表演講，講過這個算法的思路和細節，
 比如右側就是他在 BSDCan 2019 做的演講 
 `How ZFS snapshots really work And why they perform well (usually) <https://youtu.be/NXg86uBDSqI>`_
