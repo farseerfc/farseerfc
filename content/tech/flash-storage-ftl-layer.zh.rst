@@ -4,7 +4,7 @@ SSD 就是大U盤？聊聊閃存類存儲的轉換層
 :slug: flash-storage-ftl-layer
 :translation_id: flash-storage-ftl-layer
 :lang: zh
-:date: 2020-03-21 15:45
+:date: 2020-03-18 15:45
 :tags: FS筆記, FS notes, FTL, SSD, USB stick, eMMC, MMC, SD Card
 :series: FS筆記
 :issueid: 95
@@ -451,3 +451,6 @@ TL;DR 低端 vs 高端
 .. |p7| replace:: 寫入單元模式
 .. |l7| replace:: TLC
 .. |h7| replace:: 長期存儲 MLC， 模擬 SLC 日誌
+
+介紹完閃存類存儲，下篇來講講文件系統的具體磁盤佈局，考察一下常見文件系統如何使用 HDD/SSD
+這些不同讀寫特性的設備。
