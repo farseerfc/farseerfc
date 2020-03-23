@@ -70,7 +70,7 @@ Flash 爲基礎的存儲技術能得以替代硬盤等存儲設備。
   * `漢民碼 <https://zh.wikipedia.org/zh-hans/%E6%B1%89%E6%98%8E%E7%A0%81>`_
     可根據 n bit 探測 :math:`2^n - n -1` 中的 2 bit 錯誤，修正 1 bit 錯誤。
   * `BCH碼 <https://zh.wikipedia.org/wiki/BCH%E7%A0%81>`_ 可根據 :math:`n*m` bit
-    糾錯 :math:`2^n` bit 中的 m bit 錯誤。
+    糾錯 :math:`2^n` bit 中的 :math:`m` bit 錯誤。
   * `LDPC <https://zh.wikipedia.org/wiki/%E4%BD%8E%E5%AF%86%E5%BA%A6%E5%A5%87%E5%81%B6%E6%AA%A2%E6%9F%A5%E7%A2%BC>`_
     原理上類似擴展的漢民碼，能做到使用更少校驗位糾錯更多錯誤。
 
