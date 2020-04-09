@@ -208,5 +208,5 @@
 	:nick: `竹子 <https://blog.justforlxz.com/>`_
 	:logo: https://avatars1.githubusercontent.com/u/12298476
 
-	竹咂！好像是用着 Arch Linux 開發 Deepin Linux 的開發者， :del:`用 DDE 有蟲子就找他！` 
+	竹砸！是在 Arch Linux 下偷偷開發 Deepin Linux 的開發者 :del:`用 DDE 有蟲子就找他！` 
 
