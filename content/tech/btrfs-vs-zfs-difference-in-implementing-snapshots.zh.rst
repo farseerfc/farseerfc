@@ -130,17 +130,17 @@ B樹中間節點和葉子節點結構大概像是這個樣子：
         node [shape=record];rankdir=LR;ranksep=1;
         btree_node [label="<label> header TREE_NODE |
                            <key0> key0: address |
-                           <key1> key1: address |
-                           <key2> key2: address |
+                           <key10> key10: address |
+                           <key20> key20: address |
                            ...|
                            <keyN> free space 
                            "];
         btree_leaf1 [label="<label> header LEAF_NODE |
-                           <key0> key0: offset size |
-                           <key1> key1: offset size |
-                           <key2> key2: offset size |
+                           <key0> key0: offset, size |
+                           <key1> key1: offset, size |
+                           <key2> key2: offset, size |
                            ...|
-                           <keyN> keyN offset size ||
+                           <keyN> keyN offset, size ||
                            free space ||
                            <dataN> dataN |
                            ...|
@@ -149,7 +149,7 @@ B樹中間節點和葉子節點結構大概像是這個樣子：
                            <data0> data0
                            "];
 
-        btree_node:key0 -> btree_leaf1:label;
+        btree_node:key00 -> btree_leaf1:label;
         btree_leaf1:key0:e -> btree_leaf1:data0:e [style=dashed, arrowhead=empty];
         btree_leaf1:key1:w -> btree_leaf1:data1:w [style=dashed, arrowhead=empty];
         btree_leaf1:key2:e -> btree_leaf1:data2:e [style=dashed, arrowhead=empty];
