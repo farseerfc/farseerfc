@@ -123,7 +123,7 @@ TOPS-10 的文件系統已經可以說非常初級了，沒法支持很大的文
     compete with physicists: we have our own fundamental constant of the
     universe, it's a medium file size ……
 
-    文件的平均大小是 4K 。在前幾年的兩次研究中它也是 4K。其實我們回顧了既往的學術研究，發現在過去30
+    文件大小中位數是 4K 。在前幾年的兩次研究中它也是 4K 。其實我們回顧了既往的學術研究，發現在過去30
     年中每個研究都說它是 4K 這個值。這是個好消息，我們終於有了一個堪比物理學家的結論：我們有我們自己的
     宇宙基本常數了，是文件大小中位數。
 
@@ -148,8 +148,8 @@ cookie ，這類不被用戶知曉的文件可能在數量上反而佔據絕大�
     find /home -type f -printf "%s %p\n" > myhome.txt
 
 上述命令對 :code:`/home` 中的所有普通文件而忽略文件夾和符號鏈接之類的（ :code:`-type f`
-），輸出文件大小字節數和文件路徑（ :code:`-printf "%s %p\n"` ）。
-如果文件名路徑中有特殊符號可能之後比較難處理，那麼可以 :code:`-printf "%s\n"`
+），輸出文件大小字節數和文件路徑（ :code:`-printf "%s %p\\n"` ）。
+如果文件名路徑中有特殊符號可能之後比較難處理，那麼可以 :code:`-printf "%s\\n"`
 忽略路徑。
 
 然後用 Python 的 Matplotlib 和 NumPy 對收集到的文件大小數據畫個直方圖（histogram）。
