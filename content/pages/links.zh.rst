@@ -12,7 +12,7 @@
 以下列出我在網上認識的好 :ruby:`朋友|jī yǒu` 們，排名不分先後。歡迎交換友鏈。
 
 .. friend:: lilydjwg
-	:nick: `lilydjwg 依雲 百合仙子 <http://lilydjwg.is-programmer.com/>`_
+	:nick: `lilydjwg 依雲 百合仙子 <http://blog.lilydjwg.me/>`_
 	:gravatar: lilydjwg@gmail.com
 
 	:irc:`archlinuxcn` 社區管理者之一。
@@ -103,7 +103,7 @@
 	Fcitx 開發者 ， KDE 開發者， Chakra 開發者， `ikde 社區 <https://www.ikde.org/>`_ 維護者。強悍的開源貢獻實力無人能出其右。有個剛出生的小女兒叫 Alice :del:`（下一個叫 Marisa ）` ，新博客是魔理沙主題的。
 
 .. friend:: void001
-	:nick: `VOID 001 <https://voidisprogramer.com/>`_
+	:nick: `VOID 001 <https://void-shana.moe/>`_
 	:gravatar: zhangjianqiu13@gmail.com
 
 	頭像是夏娜，/dev/horo 絕讚開發中。
@@ -209,4 +209,10 @@
 	:logo: https://avatars1.githubusercontent.com/u/12298476
 
 	竹砸！是在 Arch Linux 下偷偷開發 Deepin Linux 的開發者 :del:`用 DDE 有蟲子就找他！` 
+
+.. friend:: recursiveg
+	:nick: `Recursive G <https://recursiveg.me/>`_
+	:logo: https://avatars3.githubusercontent.com/u/2658114
+
+	也是一位社區中珍貴的 Gnome 用戶，喵窩住民，ptrace專門家，NOIPer，博客似乎是 Hexo 很清爽的界面。
 
