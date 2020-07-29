@@ -1399,7 +1399,7 @@ EXTENT_TREE 中關於這塊區塊的描述：
 1 表示有多處引用。
 
 EXTENT_TREE 按區塊的邏輯地址索引，記錄了起始地址和長度，所以 EXTENT_TREE 也兼任 btrfs
-的空間利用記錄，充當別的文件系統中 block bitmap 的指責。比如上面例子中的 extent_tree 就表示
+的空間利用記錄，充當別的文件系統中 block bitmap 的職責。比如上面例子中的 extent_tree 就表示
 :code:`[0x2000,0x4000) [0x11000,0x16000)` 這兩段連續的空間是已用空間，
 剩下的空間按定義則是可用空間。爲了加速空間分配器， btrfs 也有額外的
 free space cache 記錄在 ROOT_TREE 的 10 號位置 free_space_tree 中，不過在 btrfs
