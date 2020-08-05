@@ -81,6 +81,7 @@ THEME = "theme"
 SLUGIFY_SOURCE='metadata'
 ARTICLE_TRANSLATION_ID = "slug"
 
+
 I18N_SUBSITES = {
     'jp': dict(
         LOCALE='ja_JP.utf8',
@@ -151,6 +152,9 @@ GITHUB_REPO = 'farseerfc/farseerfc.github.io'
 GITHUB_SIDEBAR = True
 OTHER_BLOG = 'https://sak.uy/'
 OTHER_BLOG_TITLE = 'Sakuya的音樂盒'
+TG_CHANNEL = 'fcnotes'
+TG_CHANNEL_URL = 'https://t.me/s/'+TG_CHANNEL
+TG_CHANNEL_TITLE = 'fc fs筆記'
 DISPLAY_BREADCRUMBS = True
 DISPLAY_PAGES_ON_MENU = True
 DISPLAY_CATEGORY_IN_BREADCRUMBS = True
