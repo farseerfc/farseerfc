@@ -34,12 +34,12 @@
 然後接下來就是我承諾的翻譯了
 ------------------------------------------------------------
 
-
-.. translate-paragraph::
+.. translate-collapse-paragraph::
 
     問：你是否同意說你貶低了 GPLv3 ? 以及……
 
         Q: Do you agree that you undermine GPLv3? and ...
+
 
     L: 是的
 
@@ -53,9 +53,9 @@
 
         L: What?
 
-    問：我們如何纔能讓你別這麼做？
+    問：……我們如何纔能讓你別這麼做？
 
-        Q: How can we get you to stop?
+        Q: ...How can we get you to stop?
 
     L: 哦我討厭 GPLv3 ，我是在故意貶低它。實際上我覺得 GPLv3 的擴展非常可怕。
     我能理解爲什麼人們想要做這個，但是我覺得它本應是一個全新的協議。
@@ -64,7 +64,6 @@
         I actually thought the GPLv3 extensions were horrible.
         I understand why people would want to do them but I think it should have
         been a completely new license.
-
 
     嗯我喜歡版本 2 的那些理由，並且我仍然覺得版本 2 是一個非常棒的協議，
     理由是：「我給你源代碼，你給我你對它的修改，我們就扯平了」
@@ -138,7 +137,7 @@
     的法律上的空子，所以 FSF 提出了 GPLv3 封堵這種做法。
 
 
-.. translate-paragraph::
+.. translate-collapse-paragraph::
 
     L: 沒錯，Tivoization 的事情一直是我反對版本 3 的主要根據。並且，FSF
     在這件事上表現得極不誠實。「嘿，其實我們允許你無效化 Tivoization 條款」，這樣他們試圖，
@@ -281,7 +280,7 @@
     ISC 協議是一個開源軟件協議，和兩句的 BSD 協議功能相同。OpenBSD 項目選擇儘量用 ISC
     協議公開他們新寫的代碼。
 
-.. translate-paragraph::
+.. translate-collapse-paragraph::
 
     L: 我的意思是別誤解……我也喜歡別的協議。我用過……到底是哪個 BSD 協議是可以接受的？
     有一個 BSD 協議實際上非常不錯。它實際上是……什麼？

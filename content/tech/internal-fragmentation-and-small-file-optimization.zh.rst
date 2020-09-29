@@ -14,6 +14,8 @@
 
 副標題2：文件系統的微觀結構
 
+.. contents:: 目录
+
 上篇「 `系統中的大多數文件有多大？ <{filename}./file-size-histogram.zh.rst>`_
 」提到，文件系統中大部分文件其實都很小，中位數一直穩定在 4K
 左右，而且這個數字並沒有隨着存儲設備容量的增加而增大。但是存儲設備的總體容量實際是在逐年增長的，
@@ -29,6 +31,9 @@
 現代文件系統都有這個塊大小或者簇大小的概念，從而基本的文件空間分配可以獨立於硬件設備本身的扇區大小。
 塊大小越大，單次分配空間越大，文件系統所需維護的元數據越小，複雜度越低，實現起來也越容易。
 而塊大小越小，越能節約可用空間，避免內部碎片造成的浪費，但是跟蹤空間所需的元數據也越複雜。
+
+按塊分配的文件系統
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 具體塊/簇大小對文件系統設計帶來什麼樣的挑戰？
 我們先來看一下（目前還在用的）最簡單的文件系統怎麼存文件的吧：
@@ -495,25 +500,114 @@ indirect block）」，其位置寫在 inode 中第 11 個塊地址上，間接�
 UFS 使用這種 inode 中存儲塊映射引出間接塊樹的形式存儲文件塊地址，這使得 UFS 中定位到文件的
 inode 之後查找文件存儲的塊比 FAT 類的文件系統快，因爲不再需要去讀取 FAT 表。這種方式另一個特徵是，
 當文件較大時，讀寫文件前段部分的數據，比如 inode 中記錄的前10塊直接塊地址的時候，比隨後 10~1024
-塊一級間接塊要快，同樣的訪問一級間接塊中的數據也比二級和三級間接塊要快。一些 Unix 工具比如
+塊一級間接塊要快一些，同樣的訪問一級間接塊中的數據也比二級和三級間接塊要快一些。一些 Unix 工具比如
 :code:`file` 判斷文件內容的類型只需要讀取文件前段的內容，在這種記錄方式下也可以比較高效。
 
+以 ext2/3 爲例，補充一下擴展屬性和希疏文件
+-------------------------------------------------------------------
 
-FFS 中的整塊與碎塊
+ext2/3 的 inode 存儲方式基本上類似上述 UFS ，具體到它們的 inode 結構而言， ext2/3 中每個
+inode 佔用 128 字節，其中有 60 字節存儲塊映射，可以存放 12 個直接塊指針和三級間接塊指針。
+詳細的 ext2 inode 結構可見下圖，結構來自 `ext2 文檔 <https://www.nongnu.org/ext2-doc/ext2.html#inode-table>`_
+。
+
+
+.. tikz::
+    :libs: positioning,calc,decorations.pathreplacing,fit
+
+    \def\rect(#1)(#2)(#3){
+        \node[fit={(#1) (#2)}] (rect)  {\tt #3};
+        \draw[thick] (#1) rectangle (#2);
+    }
+
+    \begin{scope}[yshift=-1em,xshift=1em,yscale=-1]
+        \rect(0,0)(8,1)(ext2 inode 結構);
+        \node[fit={(-1,1) (0,2)}] (rect) {0};
+        \rect(0,1)(2,2)(mode\\{\footnotesize ?rwxrwxrwx});
+        \rect(2,1)(4,2)(uid\\{\footnotesize 所屬用戶});
+        \rect(4,1)(8,2)(size\\{\footnotesize 實際大小（字節數）});
+        \node[fit={(-1,2) (0,3)}] (rect) {8};
+        \rect(0,2)(4,3)(atime\\{\footnotesize 訪問時間});
+        \rect(4,2)(8,3)(ctime\\{\footnotesize 修改時間（元數據）});
+        \node[fit={(-1,3) (0,4)}] (rect) {16};
+        \rect(0,3)(4,4)(mtime\\{\footnotesize 編輯時間（數據）});
+        \rect(4,3)(8,4)(dtime\\{\footnotesize 刪除時間（亦用作刪除列表）});
+        \node[fit={(-1,4) (0,5)}] (rect) {24};
+        \rect(0,4)(2,5)(gid\\{\footnotesize 所屬組});
+        \rect(2,4)(4,5)(links\_count\\{\footnotesize 硬鏈接數});
+        \rect(4,4)(8,5)(blocks\\{\footnotesize 佔用大小（512字節塊塊數）});
+        \node[fit={(-1,5) (0,6)}] (rect) {32};
+        \rect(0,5)(4,6)(flags\\{\footnotesize 標誌位});
+        \rect(4,5)(8,6)(osd1\\{\footnotesize});
+        \node[fit={(-1,6) (0,7)}] (rect) {40};
+        \node[fit={(-1,7) (0,8)}] (rect) {...};
+        \node[fit={(-1,8) (0,9)}] (rect) {96};
+        \draw[thick] (0,6) -- (8,6) -- (8,8) -- (4,8) -- (4,9) -- (0,9) -- (0,6);
+        \node[fit={(0,6) (8,8)}] (rect) {\tt block\\{\footnotesize 塊映射數組 $15 \times 4$}};
+        \rect(4,8)(8,9)(generation\\{\footnotesize 文件版本（NFS用）});
+        \node[fit={(-1,9) (0,10)}] (rect) {104};
+        \rect(0,9)(4,10)(file\_acl\\{\footnotesize 擴展屬性塊});
+        \rect(4,9)(8,10)(dir\_acl\\{\footnotesize 未使用（ext4 中爲 size\_high）});
+        \node[fit={(-1,10) (0,11)}] (rect) {112};
+        \rect(0,10)(4,11)(faddr\\{\footnotesize 未使用（ext2 本爲碎塊地址）});
+        \node[fit={(-1,11) (0,12)}] (rect) {120};
+        \draw[thick] (4,10) -- (8,10) -- (8,12) -- (0,12) -- (0,11) -- (4,11) -- (4,10);
+        \node[fit={(0,11) (8,12)}] (rect) {\tt osd2};
+        \draw [decorate,decoration={brace,amplitude=5}] (8.1,1) -- (8.1,12)
+               node [black,midway,xshift=25] {\footnotesize 128字節};
+    \end{scope}
+
+結構中 osd1 和 osd2 兩大塊被定義爲是系統實現相關（OS Dependent）的區域，具體到 Linux 上的
+ext2/3 實現中 osd2 的部分區域被拿來保存 uid/gid/size/blocks 等位數不夠的數據的高位，
+具體參考後文 ext4 的 inode 結構。
+
+傳統上 Unix 的文件系統支持擴展屬性（xattr, eXtended ATTRibutes）和希疏文件（sparse
+files）這兩個比較少用的高級特性，每個 Unix 分支的 UFS 實現在實現這兩個特性的方面都略有不同，
+所以拿 ext2/3 來舉例說明一下擴展屬性和希疏文件的存儲方式。
+
+首先擴展屬性是保存在 inode 中，文件系統本身不太關心，但是對系統別的部分而言需要保存的關於文件的一些屬性。
+一開始擴展屬性主要是保存 POSIX 訪問控制列表（ACL） ，不同於普通的 POSIX 權限位（permissions flags），
+POSIX ACL 提供了更細粒度的文件權限的控制。後來擴展屬性也用來存儲 NFS 、 SELinux
+或者別的子系統用的屬性。不同於「權限位」或者「修改時間」這些文件系統內置屬性是保存在固定的 inode
+結構體中，擴展屬性在文件系統 API 中是以鍵值對（key-value pair）的方式存儲的。
+
+在 ext2/3 的 inode 中如果文件有擴展屬性，是保存在額外的擴展屬性塊中，然後塊指針寫在
+:code:`inode.i_file_acl` 裏面。擴展屬性塊是文件系統塊大小，只能有一塊，而且 API
+限制所有擴展屬性「鍵值對」的大小加起來不能超過 4KiB 。這個限制使得 ext2/3 有了對擴展屬性支持不佳的評價。
+
+支持擴展屬性的需求一開始不那麼緊迫，隨着 ext2 被部署到企業級應用中，對擴展屬性的需求逐漸緊迫起來。
+像 POSIX ACL 和 SELinux 所需的擴展屬性有個特點是它們經常遞歸地設置在文件夾樹上，很多文件會直接
+繼承父級文件夾設置的擴展屬性。後來 ext2 有了個 ea_inode 的特性，用單獨的特殊 inode
+保存擴展屬性，這個 inode 不存在於任何文件夾，其文件內容是引用它的文件的擴展屬性，很多普通文件可以共享一個
+ea_inode 來表達相同的擴展屬性。
+
+希疏文件（sparse files）是文件地址範圍內有部分地址空間沒有分配對應存儲塊的文件，
+常用於存儲磁盤鏡像文件之類地址範圍很大，而有很多空洞的文件。
+在 ext2/3 的塊映射中，對希疏文件如果有文件地址沒有分配塊，則把該塊的指針存成 0 的方式表達。
+可見在表達希疏文件的時候， ext2/3 雖然不需要分配塊，但是仍然要存儲空指針。
+
+總體而言對擴展屬性和希疏文件的支持一開始並不在 ext2/3 文件系統的原始設計中，
+這兩個較少使用的特性都是後來增加的，如果大量使用這兩個特性可能帶來一些性能問題。
+
+FFS 中的整塊與碎塊設計
 -------------------------------------------------------------------
 
 FreeBSD 用的 FFS 基於傳統 UFS 的存儲方式，爲了對抗比較小的塊大小導致塊分配器的性能損失，
-FFS 創新的使用兩種塊大小記錄文件塊，在此我們把兩種塊大小分佈叫整塊（block）和碎塊（fragment）。
+FFS 創新的使用兩種塊大小記錄文件塊，在此我們把兩種塊大小分別叫整塊（block）和碎塊（fragment）。
 整塊和碎塊的大小比例最多是 8:1，也可以是 4:1 或者 2:1，比如可以使用 4KiB 的整塊和 1KiB
-的碎塊，或者用 32KiB 的整塊並配有 4KiB 大小的碎塊。寫文件時先把末端不足一個整塊的內容寫入碎塊中，
-多個碎塊的長度湊足一個整塊後分配一個整塊並把之前分配的碎塊內容複製到整塊裏。
+的碎塊，或者用 32KiB 的整塊並配有 4KiB 的碎塊。寫文件時先把末端不足一個整塊的內容寫入碎塊中，
+之後多個碎塊的長度湊足一個整塊後再分配一個整塊並把之前分配的碎塊內容複製到整塊裏。
 
+另一種考慮碎塊設計的方式是可以看作 FFS 每次在結束寫入時，會對文件末尾做一次小範圍的碎片整理（
+defragmentation），將多個碎塊整理成一個整塊。就像普通的碎片整理，這種積攢多個碎塊直到構成一個整塊，
+然後搬運碎塊寫入整塊的操作，會造成一定程度的寫入放大；不過因爲對碎塊的碎片整理只針對碎塊，
+所以多次寫入不會像普通的碎片整理那樣產生多次寫入放大，而只會發生一次。
 
 .. panel-default::
-    :title: ext2 中的碎塊計劃
+    :title: ext2 中實現碎塊的計劃
 
     ext2 曾經也計劃過類似 FFS 碎塊的設計，超級塊（superblock）中有個 s_log_frag_size
-    記錄碎塊大小， inode 中也有碎塊數量之類的記錄，不過 ext2 的 Linux/Hurd
+    記錄碎塊大小， inode 中也有碎塊地址 i_faddr 之類的記錄，不過 ext2 的 Linux/Hurd
     實現最終都沒有完成對碎塊的支持，於是超級塊中記錄的碎塊大小永遠等於整塊大小，而
     inode 記錄的碎塊永遠爲 0 。到 ext4 時代這些記錄已經被標爲了過期，不再計劃支持碎塊設計。
 
@@ -527,21 +621,308 @@ UFS 。碎塊大小不應小於底層存儲設備的扇區大小，而 FFS
 記錄碎塊的方式使得整塊的大小不能大於碎塊大小的 8 倍。
 
 不考慮希疏文件（sparse files）的前提下，碎塊記錄只發生在文件末尾，而且在文件系統實際寫入到設備前，
-內存中仍舊用整塊的方式記錄，避免那些寫入比較慢而一直在寫入的程序比如日志文件產生大量碎塊到整塊的搬運。
+內存中仍舊用整塊的方式記錄，避免那些寫入比較慢而一直在寫入的程序（比如日志文件）產生大量碎塊到整塊的搬運。
 
-另一種考慮碎塊設計的方式是可以看作 FFS 每次在結束寫入時，會對文件末尾做一次小範圍的碎片整理（
-defragmentation），將多個碎塊整理成一個整塊。
 
-NTFS 與區塊（extent）
+F2FS 的對閃存優化
+-------------------------------------------------------------------
+
+打亂一下歷史發展順序，介紹完 FAT 系和傳統 Unix 系文件系統的微觀結構之後，這裏時間線跳到現代，
+稍微聊一下 F2FS 的微觀結構的實現方式。打亂時間線的原因等我們看完 F2FS 的設計就知道了。
+
+三星的 F2FS 是爲有閃存控制器（FTL）的閃存類存儲設備優化的日誌結構（log-structured）文件系統。
+「爲有閃存控制器（FTL）的閃存類存儲設備優化」這一點聽起來比較商業噱頭，換個說法 F2FS
+實際做的是一個寫入模式從宏觀上看很像 FAT32/exFAT 的日誌結構文件系統。
+
+關於 `日誌結構文件系統的實現思路在我很久之前的一篇博客中稍微有介紹到 <{filename}./btrfs-vs-zfs-difference-in-implementing-snapshots#id21>`_
+，傳統上日誌結構文件系統是爲了優化硬盤類存儲設備上的寫入速度而設計的，
+寫入時能保持在一大段空閒空間內連續寫入，避免寫入時發生尋道。這一點設計雖然是對硬盤的優化，
+但是反而對後來的閃存類存儲設備而言更爲友好。
+之前也有文章分別介紹 `硬盤 <{filename}./history-of-chs-addressing.zh.rst>`_
+和 `閃存 <{filename}./flash-storage-ftl-layer.zh.rst>`_
+的特點，稍微總結性概括一下的話閃存類存儲設備相比硬盤有如下特點：
+
+1. 讀取和寫入的非對稱性。讀取可以任意地址尋址無須在意尋道開銷，而寫入必須順序寫入來減少寫放大。
+2. 寫入和擦除的非對稱性。讀寫的時候是基本扇區（比如4K）大小，而擦除的時候一次性擦除更大一塊（比如 128K~8M）。
+
+傳統上的日誌結構文件系統中，每修改一個文件，無論是修改文件數據還是元數據，
+都分配新塊寫入在日誌結構末尾，然後重新寫入新的文件元數據（比如間接塊和 inode ）和文件系統關鍵結構
+（比如 inode 表等），避免任何覆蓋寫入的操作。不做覆蓋寫入本身對 FTL 的閃存很友好，
+但是每次內容變化都需要重新寫入整個文件系統元數據中涉及到的樹結構，直到樹根，這會造成一部分寫放大。
+F2FS 的設計者把傳統日誌結構文件系統中，文件系統的關鍵樹結構在整個存儲空間中不斷遷移的現象叫做
+`漫遊樹問題（wandering tree problem） <https://www.kernel.org/doc/html/latest/filesystems/f2fs.html#wandering-tree-problem>`_
+。
+
+F2FS 的設計認識到，實際配有 FTL 的存儲設備一般爲了支持類似 FAT 的寫入模式，會區別對待地址範圍內
+前面一小部分 FAT 表佔用的地址空間和後面 FAT 的數據區所在的地址空間，通常 FAT 表佔用的地址空間
+允許高效地隨機地址寫入。基於 FTL 閃存這樣的存儲特點，F2FS 有了解決漫遊樹問題的方案：
+在地址空間前面一小部分通常是 FAT 表的範圍內，放入一個節點地址轉換表（NAT，Node Address Table），
+隨後當文件內容或者 inode 改變的時候只需要更新 NAT 中記錄的地址，就可以切斷漫遊樹需要更新到樹根的特點，
+避免每次修改一個文件都需要重新寫入核心樹結構導致的寫入放大。於是 F2FS 的宏觀結構看起來像是下圖：
+
+
+.. tikz::
+    :libs: positioning,calc,decorations.pathreplacing,fit
+
+    \node[fit={(0,3) (2,3.8)}] (rect)  {超級塊\\superblock};
+    \draw[thick]  (0,3) rectangle (2,4);
+    \draw[thick,fill=red!30!white]  (2,3) rectangle (3,4);
+    \draw[thick,fill=red!20!white]  (3,3) rectangle (8,4);
+    \draw[thick,fill=red!10!white]  (8,3) rectangle (18,4);
+    \foreach \x in {3.0,3.2,...,18.0} { \draw[thick] (\x,3) -- (\x,4); }
+    \foreach \x in {3.2,3.4,...,3.8} { \draw[thick] (8.0,\x) -- (18.0,\x); }
+
+
+    \node[fit={(2,3) (3,3.8)}] (rect)  {\footnotesize 檢查點\\（CP）};
+    \draw [decorate,decoration={brace,mirror,amplitude=5}] (8,4.1) -- (3, 4.1) 
+        node [black,midway,yshift=10] {段信息表（SIT）};
+    \draw [decorate,decoration={brace,mirror,amplitude=5}] (18,4.1) -- (8, 4.1) 
+        node [black,midway,yshift=10] {節點地址表（NAT）};
+    \foreach \x in {0,1,...,17} {
+        \draw[thick,fill=green!30!white] (\x,2) rectangle (\x + 1,2.9);
+        \draw[thick,fill=green!30!white] (\x,1) rectangle (\x + 1,1.9);
+        \draw[thick,fill=green!30!white] (\x,0) rectangle (\x + 1,0.9);
+        \draw[thick,fill=green!30!white] (\x,-1) rectangle (\x + 1,-0.1);
+    }
+    \draw [decorate,decoration={brace,amplitude=5}] (18.1,3) -- (18.1,-1)
+        node [black,right,midway,xshift=10] {主數據區（Main Area）};
+    \draw [decorate,decoration={brace,amplitude=5}] (-0.1,2) -- (-0.1,2.9)
+        node [black,midway,xshift=-50] {段（segment）};
+    \draw [decorate,decoration={brace,amplitude=5}] (1,-1.1) -- (0,-1.1)
+        node [black,midway,yshift=-10] {塊（block）};
+
+超級塊（SB, superblock）中記錄關於文件系統不變的元信息，傳統 UFS
+中那些會變化的統計信息（比如共有多少 inode ，其中用了多少 inode ）單獨分出來記錄，叫做檢查點（
+CP, checkpoint），隨後是段信息表（SIT, segment information table）記錄每一段的信息（比如寫入指針），
+接下來是上述節點地址轉換表（NAT, Node Address Table），是一個地址數組，
+記錄每個節點（node）的地址。
+
+F2FS 中節點（node）的概念包含兩種節點，一是傳統 UFS 的 inode 節點，
+二是當需要間接地址塊時的間接節點。從而當很大的文件使用了間接塊記錄地址的時候，
+修改了間接塊地址只需要修改間接塊節點在 NAT 中的地址，而不需要修改 inode 本身。
+
+F2FS 的 inode 節點散佈在主數據區（main area）中，每個 inode 和普通文件塊一樣大，
+比傳統 UFS 的 inode 要大得多。比如 ext2 的 inode 是 128 字節， ext4 的 inode 是 256
+字節，而常見的 F2FS 的 inode 有 4KiB 大小。如此大的 inode 仍然使用傳統 UFS
+的塊映射的方式存放文件地址，可以估算除了文件屬性之類的元數據需要的近 100 字節空間外，
+F2FS 的 inode 可以存儲非常多的塊指針。實際上 4KiB 中可存放最多 923 個直接塊指針，
+外加 2 個一級間接節點，2 個二級間接節點，1 個三級間接節點。
+
+NAT 表大小和節點數量來看， F2FS 需要的節點數量大於傳統 UFS 的 inode 數量（因爲每個 inode
+都是一個 F2FS 節點，而存儲大文件用的間接塊也是 F2FS 節點），但是小於主數據區的塊數量（因爲
+inode 和別的數據塊都佔用主數據區）。從而 F2FS 的 NAT 表大小遠小於同樣塊大小的 exFAT 的 FAT
+表大小。因爲 F2FS 使用 4KiB 塊大小而 exFAT 一般使用 32KiB 或者 128KiB
+這樣的塊大小，所以通常 F2FS 的 NAT 大小大概正好較小於同設備上用 exFAT 時 FAT 的大小。
+NAT 大小這一點對 F2FS 所說的閃存類存儲設備優化很關鍵，一旦 NAT 超過了 FAT
+大小，就可能難以享受針對 FAT 類閃存設備對 FAT 系文件系統的特殊優化了。
+
+因爲 F2FS 使用 4KiB 的 inode ，使得 F2FS 很適合做小文件內聯優化，對很小的文件（大約小於 3400
+字節）可以直接將文件內容寫入 inode 中用來存放塊映射的那部分空間，避免對文件內容單獨分配數據塊。
+F2FS 也支持文件夾和符號鏈接等特殊文件的小文件內聯，以及支持擴展屬性內聯存儲在 inode 中。
+
+從 F2FS 的設計中可以看出， F2FS 是一個拼命表現得像是 FAT 的日誌結構文件系統（LFS），
+進而可以說是 FAT 和 UFS 特點的結合，比起後繼的那些爲了減少硬盤尋道而優化的現代文件系統而言，
+F2FS 的設計更古典樸素一些。
+
+連續區塊分配的文件系統
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+前述幾個文件系統都是按塊分配的文件系統，意味着它們的文件元數據中以某種方式逐一記錄了所有數據塊的地址。
+FAT 系文件系統用 FAT 表中的單鏈表穿起了文件簇的地址， ext2/3 和 FFS 和 F2FS 這些基於傳統
+UFS 設計的文件系統用塊映射的方式記錄了所有塊地址。
+
+隨着存儲設備不斷增大而塊大小基本保持不變，導致的結果是存儲文件的數據塊經常有連續地址的多塊構成，
+從而在按塊分配的文件系統中要逐一記錄連續的塊地址，導致較大的元數據。
+並且逐塊分配的文件系統也通常不考慮塊與塊之間是否連續，導致 **外部碎片** 降低硬盤上的讀寫效率。
+
+新的文件系統設計中爲了解決這個問題，通常使用區塊分配器，一次分配連續的多塊存放文件，
+並且在文件元數據中也以（起始地址，區塊長度）的方式記錄連續的多塊存儲空間。
+這種記錄連續多塊地址的方式通常叫做 `區塊（extent） <https://en.wikipedia.org/wiki/Extent_(file_systems)>`_
+每個文件的內容由多個區塊構成，接下來介紹一些使用區塊記錄文件地址的文件系統。
+
+最早使用區塊方式記錄文件地址，並且使用連續分配的分配器算法避免產生外部碎片的文件系統
+可能是 SGI 的 EFS (Extent Filesystem)，這種設計在其繼任的 SGI XFS 中被傳承並且發揚光大。
+
+XFS 的區塊記錄
+-------------------------------------------------------------------
+
+
+.. panel-default::
+    :title: XFS 在線文檔的圖示
+
+    `XFS 在線文檔 <https://xfs.org/docs/xfsdocs-xml-dev/XFS_Filesystem_Structure//tmp/en-US/html/index.html>`_
+    中提供了針對 XFS 數據結構相當明確的圖示，本文中使用關於 XFS 的圖示全都來自這裏。
+
+
+首先 XFS 中沒有 UFS 那樣的固定位置的 inode 表，而是把小塊的 inode 表散佈在整個存儲空間中。
+每次需要新的空間保存 inode 的時候，一次分配 64 個 inode 所需的數據塊，而每個 inode 是 256 字節大小，
+從而一個存放 inode 表的數據塊大概佔用 16KiB 。
+
+傳統 UFS 中用 inode 號表示在 inode 表內的數組偏移可以快速定位到 inode ，也可以通過掃描 inode
+表的方式找到文件系統中的所有 inode 。而 XFS 中通過兩種方式支持快速定位 inode 。
+
+1. 給定 inode 號找 inode 的時候， XFS 把 inode 所在數據塊的地址和 inode
+   在數據塊中的數組下標直接 `編碼在了 inode 號 <https://xfs.org/docs/xfsdocs-xml-dev/XFS_Filesystem_Structure/tmp/en-US/html/AG_Inode_Management.html#Inode_Numbers>`_
+   中。比如使用 32位 inode 號的時候，可能有 26 位記錄數據塊地址，6位記錄數據塊內的 64 個 inode
+   中的哪一個。具體使用 inode 號的多少位作爲數據塊地址，還有多少位作爲下標，要看超級塊中的
+   sb_inoplog 記錄。這種 inode 號的編碼方式使得 XFS 的 inode 號通常非常大，並且32位CPU架構上使用 XFS
+   時的 inode 號與64位CPU架構上的 XFS 並不兼容。
+
+   .. image:: {static}/images/xfs-18.png
+      :alt: XFS inode number
+
+2. 用平衡樹（B+Tree）記錄所有保存 inode 的數據塊的地址和利用率信息，叫做
+   `inode B+tree <https://xfs.org/docs/xfsdocs-xml-dev/XFS_Filesystem_Structure/tmp/en-US/html/Inode_Btrees.html>`_
+   ，從而掃描 inode b+tree 可以遍歷文件系統中所有在使用的 inode 。
+
+   高度只有一級的 inode B+Tree 結構類似這樣：
+
+   .. image:: {static}/images/xfs-20a.png
+      :alt: XFS single level inode b+tree
+
+   高度爲二級的 inode B+Tree 結構類似這樣：
+
+   .. image:: {static}/images/xfs-20b.png
+      :alt: XFS 2-level inode b+tree
+
+定位到 inode 之後，每個文件至少 256 字節的 inode 又分爲三大部分： inode core
+、數據分支（data fork）、擴展屬性分支（extended attribute fork）。
+
+.. image:: {static}/images/xfs-23.png
+   :alt: XFS inode 三部分
+
+其中 XFS 的 inode core 像是 ext 的 inode 中去掉塊映射的部分，記錄文件元數據，
+數據分支記錄文件的地址信息，擴展屬性分支則記錄文件的擴展屬性。XFS 的 inode 結構是有版本號區分的，在
+v4 版本結構體中 inode core 佔用 96 字節，在 v5 版本結構體中佔用 176 字節，從而
+inode 剩餘的空間可以用來存儲數據分支和擴展屬性。
+
+在 inode 的數據分支中用區塊的方式記錄文件地址，每個區塊是這樣一個 128 位（32字節）的結構：
+
+.. image:: {static}/images/xfs-31.png
+   :alt: XFS extent
+
+結構記錄了文件的（文件內起始偏移、塊地址、塊數）三部分信息，和一個標誌位。標誌位可以用來區分這個區塊是
+普通區塊還是預分配區塊（unwritten），用來支持 fallocate 預分配空間。通過跳過一部分起始偏移，
+這種區塊記錄方式可以自然地表達希疏文件，而不需要像 ext2/3 那樣記錄空指針。
+每個區塊記錄可以表示 2^21 塊連續的數據塊。
+
+如果文件數據的所有區塊記錄都可以塞入 inode 的數據分支中，那麼 XFS 用 inode
+中的區塊列表記錄這些區塊，否則 XFS 會分配區塊的 B+Tree ，把這些區塊信息寫入 B+Tree 的葉節點中。
+單層的區塊 B+Tree 看起來像是這樣：
+
+.. image:: {static}/images/xfs-35.png
+   :alt: XFS extent B+Tree
+
+
+對擴展屬性的支持也是類似， 當擴展屬性比較小的時候 XFS 可以將擴展屬性列表直接存入 inode
+的擴展屬性分支中，當擴展屬性較大的時候 XFS 分配間接數據塊保存擴展屬性的 B+Tree 。
+
+ext4 中的小文件內聯優化
+-------------------------------------------------------------------
+
+ext4 中首先將 ext2/3 的 128 字節 inode 擴展到了默認 256 字節大小，整個結構類似下圖：
+
+.. tikz::
+    :libs: positioning,calc,decorations.pathreplacing,fit
+
+    \def\rect(#1)(#2)(#3){
+        \node[fit={(#1) (#2)}] (rect)  {\tt #3};
+        \draw[thick] (#1) rectangle (#2);
+    }
+
+    \begin{scope}[yshift=-1em,xshift=1em,yscale=-1]
+        \rect(0,0)(8,1)(ext4 inode 結構);
+        \node[fit={(-1,1) (0,2)}] (rect) {0};
+        \rect(0,1)(2,2)(mode\\{\footnotesize ?rwxrwxrwx});
+        \rect(2,1)(4,2)(uid\_lo\\{\footnotesize 所屬用戶});
+        \rect(4,1)(8,2)(size\_lo\\{\footnotesize 實際大小低32位（字節數）});
+        \node[fit={(-1,2) (0,3)}] (rect) {8};
+        \rect(0,2)(4,3)(atime\\{\footnotesize 訪問時間});
+        \rect(4,2)(8,3)(ctime\\{\footnotesize 修改時間（元數據）});
+        \node[fit={(-1,3) (0,4)}] (rect) {16};
+        \rect(0,3)(4,4)(mtime\\{\footnotesize 編輯時間（數據）});
+        \rect(4,3)(8,4)(dtime\\{\footnotesize 刪除時間（亦用作刪除列表）});
+        \node[fit={(-1,4) (0,5)}] (rect) {24};
+        \rect(0,4)(2,5)(gid\_lo\\{\footnotesize 所屬組});
+        \rect(2,4)(4,5)(links\_count\\{\footnotesize 硬鏈接數});
+        \rect(4,4)(8,5)(blocks\_lo\\{\footnotesize 佔用大小低32位（塊數）});
+        \node[fit={(-1,5) (0,6)}] (rect) {32};
+        \rect(0,5)(4,6)(flags\\{\footnotesize 標誌位});
+        \rect(4,5)(8,6)(version\_lo\\{\footnotesize inode版本});
+        \node[fit={(-1,6) (0,7)}] (rect) {40};
+        \node[fit={(-1,7) (0,8)}] (rect) {...};
+        \node[fit={(-1,8) (0,9)}] (rect) {96};
+        \draw[thick] (0,6) -- (8,6) -- (8,8) -- (4,8) -- (4,9) -- (0,9) -- (0,6);
+        \node[fit={(0,6) (8,8)}] (rect) {\tt block\\{\footnotesize 塊映射數組60字節}};
+        \rect(4,8)(8,9)(generation\\{\footnotesize 文件版本（NFS用）});
+        \node[fit={(-1,9) (0,10)}] (rect) {104};
+        \rect(0,9)(4,10)(file\_acl\_lo\\{\footnotesize 擴展屬性塊低32位});
+        \rect(4,9)(8,10)(size\_hi\\{\footnotesize 實際大小高32位（字節數）});
+        \node[fit={(-1,10) (0,11)}] (rect) {112};
+        \rect(0,10)(4,11)(faddr\\{\footnotesize 未使用（ext2 本爲碎塊地址）});
+        \rect(4,10)(6,11)(\footnotesize blocks\_hi);
+        \rect(6,10)(8,11)(\footnotesize file\_acl\_hi);
+        \node[fit={(-1,11) (0,12)}] (rect) {120};
+        \rect(0,11)(2,12)(uid\_hi);
+        \rect(2,11)(4,12)(gid\_hi);
+        \rect(4,11)(6,12)(cksum\_lo\\{\footnotesize inode校驗和});
+        \rect(6,11)(8,12)(未使用);
+
+        \node[fit={(-1,12) (0,13)}] (rect) {128};
+        \rect(0,12)(2,13)(extra\_isize);
+        \rect(2,12)(4,13)(cksum\_hi);
+        \rect(4,12)(8,13)(ctime\_extra);
+        \node[fit={(-1,13) (0,14)}] (rect) {136};
+        \rect(0,13)(4,14)(mtime\_extra);
+        \rect(4,13)(8,14)(atime\_extra);
+        \node[fit={(-1,14) (0,15)}] (rect) {144};
+        \rect(0,14)(4,15)(crtime);
+        \rect(4,14)(8,15)(crtime\_extra);
+        \node[fit={(-1,15) (0,16)}] (rect) {152};
+        \rect(0,15)(4,16)(version\_hi);
+        \rect(4,15)(8,16)(projid);
+        \draw [decorate,decoration={brace,amplitude=5}] (8.1,1) -- (8.1,12)
+               node [black,midway,xshift=25] {\footnotesize 128字節};
+        \draw [decorate,decoration={brace,amplitude=5}] (8.1,12) -- (8.1,16)
+               node [black,midway,xshift=30] {\footnotesize extra\_isize};
+    \end{scope}
+
+對比上面 ext2 的 inode ，ext4 中用 osd2 的位置額外存了很多數據的高位，擴展了那些數據的位數，
+隨後在增加的結構中加入了幾個時間戳的納秒支持。之後總共 256 字節的 inode 保存了大約 156 的
+inode 結構後還有大概 100 字節空間剩餘，ext4 用這些剩餘空間保存擴展屬性。
+
+inode 中 60 字節的 block 數組在 ext2/3 中是用來保存塊映射，而在 ext4 中保存區塊結構。
+ext4 中每個區塊記錄佔用 12 字節，多個區塊記錄和 XFS 一樣以樹的形式構成。
+
+注意到典型的 Unix 文件系統中，有很多「小」文件小於 60 字節的塊映射大小，而且不止有很多小的普通文件，
+包括目錄文件、軟鏈接、設備文件之類的特殊 Unix 文件通常也很小。爲了存這些小文件而單獨分配一個塊
+並在 inode 中記錄單個塊指針顯得很浪費，於是有了 **小文件內聯優化 (small file inlining)**
+。
+
+一言以蔽之小文件內聯優化就是在 inode 中的 60 字節的塊映射區域中直接存放文件內容。
+在 inode 前半標誌位 （flags）中安插一位記錄(EXT4_INLINE_DATA_FL)，判斷後面這
+60 字節的塊映射區是存儲爲內聯文件，還是真的存放塊映射。這些被內聯優化掉的小文件磁盤佔用會顯示爲 0
+，因爲沒有分配數據塊，但是仍然要佔用完整一個 inode 。
+
+ext4 實現的小文件內聯還利用了擴展屬性佔用的空間，當 60 字節的塊映射區還不足存放文件內容時，
+ext4 會分配一個特殊的擴展屬性 “system.data” 直接保存文件內容。
+
+對較小的目錄文件，inode 中的 60 字節 block 空間可以直接保存目錄的內容。對符號鏈接文件，
+這部分空間可以直接保存符號鏈接的目標，這兩種特殊文件可以視作小文件內聯優化的特例。
+
+NTFS 的 MFT 表
 -------------------------------------------------------------------
 
 NTFS 雖然是出自微軟之手，其微觀結構卻和 FAT 很不一樣，某種角度來看更像是一個 UFS 後繼。
 NTFS 沒有固定位置的 inode 表，但是有一個巨大的文件叫 $MFT (Master File Table
 ），整個 $MFT 的作用就像是 UFS 中 inode 表的作用。NTFS 中的每個文件都在 $MFT
 中存有一個對應的 MFT 表項， MFT 表現有固定長度 1024 字節，整個 $MFT 文件就是一個巨大的
-MFT 表現的數組。每個文件可以根據 MFT 序號在 $MFT 中找到具體位置。
+MFT 表項構成的數組。每個文件可以根據 MFT 序號作爲數組下標在 $MFT 中找到具體位置。
+網上經常有人說 NTFS 中所有東西都是文件，包括 $MFT 也是個文件，這其實是在說所有東西包括 $MFT
+本身都在 $MFT 中有個佔用 1KiB 的文件記錄。
 
-$MFT 本身也是個文件，所以它不必連續存放，在 $MFT 中記錄的第一項文件記錄了 $MFT 自身的元數據。
+$MFT 本身也是個文件，所以它不必連續存放也沒有固定的開始位置，在引導塊中記錄了 $MFT 的起始位置，然後在
+$MFT 起始位置中記錄的第一項文件記錄了關於 $MFT 自身的元數據，也就包含 $MFT 佔用的別的空間的信息。
 於是可以先讀取 $MFT 的最初幾塊，找到 $MFT 文件存放的地址信息，繼而勾勒出整個 $MFT 所佔的空間。
 實際上 Windows 的 NTFS 驅動在創建文件系統時給 $MFT 預留了很大一片存儲區， Windows XP
 之後的碎片整理工具也會非常積極地對 $MFT 文件本身做碎片整理，於是通常存儲設備上的 $MFT
@@ -550,7 +931,7 @@ $MFT 本身也是個文件，所以它不必連續存放，在 $MFT 中記錄的
 .. tikz::
     :libs: positioning,calc,decorations.pathreplacing,fit
 
-    \node[fit={(0,3) (2,4)}] (rect)  {保留塊};
+    \node[fit={(0,3) (2,4)}] (rect)  {引導塊};
     \draw[thick]  (0,3) rectangle (2,4);
 
     \draw[thick,fill=red!50!white]  (2,3) rectangle (12,4);
@@ -577,39 +958,22 @@ $MFT 本身也是個文件，所以它不必連續存放，在 $MFT 中記錄的
         node [black,right,midway,xshift=10] {數據區（data area)};
 
 
-ext4 中的小文件內聯優化
--------------------------------------------------------------------
-
-https://lwn.net/Articles/468678/
-
-ext4 的 inode 存儲方式基本上類似上述 UFS ，具體到 inode 而言， ext2/3 中每個 inode 佔用
-128 字節，其中末尾有 60 字節存儲塊映射，可以存放 12 個直接塊指針和三級間接塊指針。
-詳細的 ext2 inode 結構可見 `ext2 文檔 <https://www.nongnu.org/ext2-doc/ext2.html#inode-table>`_ 。
-
-注意到典型的 Unix 文件系統中，有很多「小」文件小於 60 字節的塊映射大小，而且不止有很多小的普通文件，
-包括目錄文件、軟鏈接、設備文件之類的特殊 Unix 文件通常也很小。爲了存這些小文件而單獨分配一個塊
-並在 inode 中記錄單個塊指針顯得很浪費，於是有了 **小文件內聯優化 (small file inlining)**
-。
-
-一言以蔽之小文件內聯優化就是在 inode 中的 60 字節的塊映射區域中直接存放文件內容。
-在 inode 前半標誌位 （i_flags）中安插一位記錄(EXT4_INLINE_DATA_FL)，判斷後面這 60 字節的塊映射區是存儲爲內聯文件，
-還是真的存放塊映射。這些被內聯優化掉的小文件磁盤佔用會顯示爲 0
-，因爲沒有分配數據塊，但是仍然要佔用完整一個 inode 。
 
 
 上述文件系統彙總
--------------------------------------------------------------------
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. csv-table:: 文件系統彙總
-    :header: 文件系统,基礎分配單位,常見塊大小,文件尋址方式,支持文件內聯
+    :header: 文件系统,基礎分配單位,常見塊大小,文件尋址方式,小文件內聯
     
     FAT32,簇,32K,FAT單鏈表,否
     exFAT,簇,128K,FAT單鏈表,否
-    NTFS,MFT項/簇,1K/4K,區塊,900
+    NTFS,MFT項/簇,1K/4K,區塊,~900
     FFS,inode/碎塊/整塊,128/4K/32K,塊映射,否
-    Ext4,inode/塊,256/4K,塊映射/區塊树,~150
-    xfs,inode/塊,256/4K,區塊树,僅目錄和符號連接
+    ext2/3,inode/塊,128/4K,塊映射,否
+    ext4,inode/塊,256/4K,塊映射/區塊树,~150
+    xfs,inode/塊,256/4K,區塊树,~80，僅目錄和符號連接
     F2FS,node,4K,塊映射,~3400
     reiser3,tree node/blob,4K/4K,塊映射,4k(尾內聯)
-    btrfs,tree node/block,16K/4K,區塊樹,~2K(區塊內聯)
+    btrfs,tree node/block,16K/4K,區塊樹,2K(區塊內聯)
     ZFS,ashift/recordsize,4K/128K,區塊树,~100(塊指針內聯)
