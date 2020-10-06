@@ -45,7 +45,7 @@ Unit）做虛擬內存地址到物理內存地址的地址翻譯，現代架構�
 
 很多朋友也理解上述操作系統實現虛擬內存的方式，但是仍然會有疑問：「我知道虛擬內存和交換區的區別，
 但是沒有交換區的話，虛擬內存地址都有物理內存對應，不用交換區的話就不會遇到讀虛擬內存需要讀寫磁盤
-導致的卡噸了嘛」。
+導致的卡頓了嘛」。
 
 這種理解也是錯的，禁用交換區的時候，也會有一部分分配給程序的虛擬內存不對應物理內存，
 比如使用 :code:`mmap` 調用實現內存映射文件的時候。實際上即便是使用 :code:`read/write`
@@ -137,7 +137,7 @@ swap ，內核可能會嘗試丟棄 page cache 甚至丟棄 vfs cache (dentry ca
 程序分配虛擬內存的速率可以是「突發」的，比如一個系統調用中分配 1GiB 大小，而實際寫入數據的速率會被
 CPU 執行速度等因素限制，不會短期內突然寫入很多頁面。
 這個分配速率導致的時間差內內核可以完成很多後臺工作，比如回收內存，
-比如把會收到的別的進程用過的內存頁面初始化爲全0，這部分後臺工作可以和程序的執行過程並行，
+比如把回收到的別的進程用過的內存頁面初始化爲全0，這部分後臺工作可以和程序的執行過程並行，
 從而當程序實際用到內存的時候，需要的準備工作已經做完了，大部分場景下可以直接分配物理內存出來。
 
 如果程序要做實時響應，想避免因爲惰性分配造成的性能不穩定，可以使用 :code:`mlock/mlockall`
@@ -294,7 +294,7 @@ DMA32, Normal 。三個 Zone 的物理地址範圍（spanned）加起來大概�
 具體這些水位線的確定方式基於幾個 sysctl 。首先 min 基於 :code:`vm.min_free_kbytes` 
 默認是基於內核低端內存量的平方根算的值，並限制到最大 64MiB 再加點餘量，比如我這臺機器上 
 :code:`vm.min_free_kbytes = 67584` ，於是 min 水位線在這個位置。
-其它兩個水位線基於這個計算，在 low 基礎上增加總內存量的 :code:`vm.watermark_scale_factor / 10000` 
+其它兩個水位線基於這個計算，在 min 基礎上增加總內存量的 :code:`vm.watermark_scale_factor / 10000` 
 比例（在小內存的系統上還有額外考慮），默認 :code:`vm.watermark_scale_factor = 10`
 在大內存系統上意味着 low 比 min 高 0.1% ， high 比 low 高 0.1% 。
 
@@ -379,9 +379,8 @@ DMA32, Normal 。三個 Zone 的物理地址範圍（spanned）加起來大概�
 swap 或者調低 swappiness 之後就不會這樣了。於是網上大量流傳着解釋這一現象，並進一步建議禁用
 swap 或者調低 swappiness 的文章。我相信不少關心系統性能調優的人看過這篇「
 `Tales from responsivenessland: why Linux feels slow, and how to fix that <https://rudd-o.com/linux-and-free-software/tales-from-responsivenessland-why-linux-feels-slow-and-how-to-fix-that>`_
-」或是它的轉載、翻譯，用中文搜索的話還能找到更多
-`錯誤解釋 swappiness 目的 <http://blog.itpub.net/29371470/viewspace-1250975>`_
-的文章，將 swappiness 解釋成是控制內存和交換區比例的參數。
+」或是它的轉載、翻譯，用中文搜索的話還能找到更多錯誤解釋 swappiness 目的的文章，比如
+`這篇將 swappiness 解釋成是控制內存和交換區比例的參數 <http://blog.itpub.net/29371470/viewspace-1250975>`_ 。
 
 除去那些有技術上謬誤的文章，這些網文中描述的現象是有道理的，不單純是以訛傳訛。
 桌面環境中內存分配策略的不確定性和服務器環境中很不一樣，複製、下載、解壓大文件等導致一段時間內
@@ -403,6 +402,22 @@ reflink 的文件系統比如 btrfs 或者開了 reflink=1 的 xfs 達到類似�
 v2 ，前面 Chris 的文章也有提到 cgroup v2 的 :code:`memory.low` 可以某種程度上建議內存子系統
 儘量避免回收某些 cgroup 進程的內存。
 
+於是有了 cgroup 之後，另一種思路是把複製文件等大量使用內存而之後又不需要保留頁面緩存的程序單獨放入
+cgroup 內限制它的內存用量，用一點點複製文件時的性能損失換來整體系統的響應流暢度。
+
+.. panel-default::
+    :title: 關於 cgroup v1 和 v2
+
+    稍微跑題說一下 cgroup v2 相對於 v1 帶來的優勢。這方面優勢在
+    `Chris Down 另一個關於 cgroup v2 演講 <https://www.youtube.com/watch?v=ikZ8_mRotT4>`_
+    中有提到。老 cgroup v1 按控制器區分 cgroup 層級，從而內存控制器所限制的東西和 IO
+    控制器所限制的東西是獨立的。在內核角度來看，頁面寫回（page writeback）和交換（swap）正是
+    夾在內存控制器和IO控制器管理的邊界上，從而用 v1 的 cgroup 難以同時管理。 v2
+    通過統一控制器層級解決了這方面限制。具體見下面 Chris Down 的演講。
+
+    .. youtube:: ikZ8_mRotT4
+
+
 用 cgroup v2 限制進程的內存分配
 ------------------------------------------------------------------------------------------------------
 
@@ -423,7 +438,8 @@ v2 ，前面 Chris 的文章也有提到 cgroup v2 的 :code:`memory.low` 可以
 到達這些 cgroup 設定閾值的時候，還可以設置內核回調的處理程序，從用戶空間做一些程序相關的操作。
 
 Linux 有了 cgroup v2 之後，就可以通過對某些程序設置內存用量限制，避免他們產生的頁面請求把別的
-程序所需的頁面擠出物理內存。使用 systemd 的系統中，首先需要 `啓用 cgroup v2 <https://wiki.archlinux.org/index.php/Cgroups#Switching_to_cgroups_v2>`_
+程序所需的頁面擠出物理內存。使用 systemd 的系統中，首先需要
+`啓用 cgroup v2 <https://wiki.archlinux.org/index.php/Cgroups#Switching_to_cgroups_v2>`_
 ，在內核引導參數中加上 :code:`systemd.unified_cgroup_hierarchy=1`
 。然後開啓用戶權限代理：
 
@@ -461,7 +477,9 @@ Linux 有了 cgroup v2 之後，就可以通過對某些程序設置內存用量
 
 實際用法有很多，可以參考 systemd 文檔
 `man systemd.resource-control <http://www.jinbuguo.com/systemd/systemd.resource-control.html>`_
-， :fref:`xuanwo` 也 `有篇博客介紹過 <https://xuanwo.io/2018/10/30/tips-of-systemd/>`_
+， :fref:`xuanwo` 也 `有篇博客介紹過 systemd 下資源限制 <https://xuanwo.io/2018/10/30/tips-of-systemd/>`_
+， :fref:`lilydjwg` 也 `寫過用 cgroup 限制進程內存的用法 <https://blog.lilydjwg.me/2019/3/2/use-cgroups-to-limit-memory-usage-for-specific-processes.214196.html>`_
+和 `用 cgroup 之後對 CPU 調度的影響 <https://blog.lilydjwg.me/2020/5/11/priority-and-nice-value-in-linux.215304.html>`_
 。
 
 未來展望
@@ -474,8 +492,12 @@ Linux 有了 cgroup v2 之後，就可以通過對某些程序設置內存用量
 不過默認的用戶程序沒有施加多少限制。
 
 今後可以展望，桌面環境可以提供用戶友好的方式對這些桌面程序施加公平性的限制。
-不光是內存分配的大小限制，包括 CPU 和 IO 佔用方面也會更公平
-（，值得一提 ext4 和 btrfs 支持對 IO 的公平調度和 per-cgroup 限制，而 XFS
-目前好像還沒有這方面支持）。
-相信不遠的將來，複製大文件之類常見普通操作不再需要手動調用加以限制，
+不光是內存分配的大小限制，包括 CPU 和 IO 佔用方面也會更公平。
+值得一提的是傳統的 ext4/xfs/f2fs 之類的文件系統雖然支持
+`cgroup writeback 節流 <https://www.kernel.org/doc/html/latest/admin-guide/cgroup-v2.html#writeback>`_
+但是因爲他們有額外的 journaling 寫入，難以單獨針對某些 cgroup 限制 IO
+寫入帶寬（對文件系統元數據的寫入難以統計到具體某組進程）。
+而 btrfs 通過 CoW 避免了 journaling ，
+`在這方面有更好的支持 <https://facebookmicrosites.github.io/btrfs/docs/btrfs-facebook.html#io-control-with-cgroup2>`_
+。相信不遠的將來，複製大文件之類常見普通操作不再需要手動調用加以限制，
 就能避免單個程序佔用太多資源影響別的程序。
