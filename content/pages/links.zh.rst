@@ -72,11 +72,11 @@
 
 	Golang大大的漂亮Hugo博客。
 
-.. friend:: lastavengers
-	:nick: `LastAvengers 谷月轩 <http://tech.lastavenger.me/>`_
-	:gravatar: lastavengers@outlook.com
+.. friend:: silverrainz
+	:nick: `SilverRainZ 谷月轩 <https://silverrainz.me/>`_
+	:logo: https://avatars3.githubusercontent.com/u/8090459
 
-	有 `自己寫的內核 <https://github.com/LastAvenger/OS67>`_ 的厲害的LA的博客。
+	銀雨醬，有 `自己寫的內核 <https://github.com/SilverRainZ/OS67>`_ 和 `自己的 IRC 客戶端 <https://github.com/SrainApp/srain>`_ ，博客是 Sphinx 的。
 
 .. friend:: yoitsu
 	:nick: `ヨイツの賢狼ホロ <https://blog.yoitsu.moe/>`_
