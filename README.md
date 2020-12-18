@@ -1,9 +1,13 @@
 # farseerfc
 
-[![Build Status](https://travis-ci.org/farseerfc/farseerfc.svg?branch=master)](https://travis-ci.org/farseerfc/farseerfc)
+Hi there, this is farseerfc (Jiachen YANG).
 
-Pelican source for my [blog](https://farseerfc.me/). 
+[![farseerfc's github stats](https://github-readme-stats.vercel.app/api?username=farseerfc)](https://github.com/anuraghazra/github-readme-stats)
 
-## License
+I am:
+* [Arch Linux Trusted User](https://www.archlinux.org/people/trusted-users/#farseerfc)
+* A proud father of a little girl named Sakuya YANG (for real! The named is registered at the Japanese Goverment)
+* An Assistent Professor at Osaka University
+* A blogger https://farseerfc.me/ , the source code is this repo.
 
-<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="知识共享许可协议" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />本博客内容采用<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>进行许可。
+Please find my contacts on my blog.
