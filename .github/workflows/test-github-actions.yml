@@ -7,4 +7,9 @@ jobs:
       image: archlinux:latest
     steps:
       - uses: actions/checkout@v3
-      - run: pacman -Syu --noconfirm plantuml texlive-most noto-fonts-cjk yarn ditaa pelican
+      - run: pacman -Syu --noconfirm --needed plantuml texlive-most noto-fonts-cjk yarn ditaa pelican make inkscape
+      - run: git clone https://github.com/farseerfc/pelican-bootstrap3.git theme
+      - run: git clone https://github.com/farseerfc/pelican-plugins.git plugins
+      - run: install -dm755 tikz2svg /usr/local/bin/tikz2svg
+      - run: SITEURL=farseerfc.me make publish
+      - run: bash renderpdf.sh
