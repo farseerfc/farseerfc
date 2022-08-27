@@ -8,7 +8,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: pacman -Syu --noconfirm --needed plantuml texlive-most noto-fonts-cjk yarn ditaa pelican make inkscape opencc graphviz parallel optipng git
-      - run: echo -e "zh_CN.UTF-8 UTF-8\nzh_HK.UTF-8 UTF-8\n\nen_US.UTF-8 UTF-8\nja_JP.UTF-8 UTF-8" >> /etc/locale.gen && locale-gen
+      - run: echo -e "zh_CN.UTF-8 UTF-8\nzh_HK.UTF-8 UTF-8\nen_US.UTF-8 UTF-8\nja_JP.UTF-8 UTF-8" > /etc/locale.gen && cat /etc/locale.gen && locale-gen
       - run: locale -a
       - run: git clone https://github.com/farseerfc/pelican-bootstrap3.git theme
       - run: git clone https://github.com/farseerfc/pelican-plugins.git plugins
