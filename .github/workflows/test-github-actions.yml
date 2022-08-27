@@ -7,5 +7,4 @@ jobs:
       image: archlinux:latest
     steps:
       - uses: actions/checkout@v3
-      - run: pacman -Syu plantuml texlive-most noto-fonts-cjk
-      
+      - run: pacman -Syu --noconfirm plantuml texlive-most noto-fonts-cjk yarn ditaa pelican
