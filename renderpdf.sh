@@ -1,6 +1,7 @@
 #!/bin/bash -x
-cp rasterize.js output
+cp screenshot.js output
 cd output
+yarn add puppeteer
 python -m http.server &
 SERVPID=$!
 echo server pid $SERVPID
@@ -18,8 +19,8 @@ find . -iname "*.html" \
 	! -iname "archives*" \
 	! -iname "search.html" \
 	! -iname "index*.html" \
-| sed "s#\.\/##g" | xargs -n 16 phantomjs rasterize.js
+    | sed "s#\.\/##g" | xargs node screenshot.js
 sleep 30
 kill $SERVPID
-# find . -iname "*.png" | parallel optipng || true
+find . -iname "*.png" | parallel optipng || true
 

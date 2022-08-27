@@ -1,6 +1,6 @@
 PY=python3
 PELICAN?=pelican
-PELICANOPTS?=-D
+PELICANOPTS?=
 
 BASEDIR=$(CURDIR)
 INPUTDIR=$(BASEDIR)/content
@@ -47,7 +47,7 @@ cleancc: clean
 ZH=$(shell find content -iname "*.zh.rst")
 
 %.zhs.rst: %.zh.rst
-	opencc -c opencc-t2s.json -i $^ -o $@
+	opencc -c t2s.json -i $^ -o $@
 	sed -i 's/:lang: zh/:lang: zhs/g' $@
 	sed -i 's/\.zh\./\.zhs\./g' $@
 
