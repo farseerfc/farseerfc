@@ -1,0 +1,11 @@
+name: test-github-actions
+on: [push]
+jobs:
+  check-archlinux-version:
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux:latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: pacman -Syu plantuml texlive-most noto-fonts-cjk
+      
