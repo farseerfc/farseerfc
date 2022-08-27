@@ -7,7 +7,12 @@ jobs:
       image: archlinux:latest
     steps:
       - uses: actions/checkout@v3
-      - run: pacman -Syu --noconfirm --needed plantuml texlive-most noto-fonts-cjk yarn ditaa pelican make inkscape
+      - run: pacman -Syu --noconfirm --needed plantuml texlive-most noto-fonts-cjk yarn ditaa pelican make inkscape opencc graphviz parallel
+      - run: locale-gen zh_CN.UTF-8
+      - run: locale-gen zh_HK.UTF-8
+      - run: locale-gen en_US.UTF-8
+      - run: locale-gen ja_JP.UTF-8
+      - run: locale -a
       - run: git clone https://github.com/farseerfc/pelican-bootstrap3.git theme
       - run: git clone https://github.com/farseerfc/pelican-plugins.git plugins
       - run: install -dm755 tikz2svg /usr/local/bin/tikz2svg
